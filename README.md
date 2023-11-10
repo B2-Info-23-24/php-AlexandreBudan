@@ -101,14 +101,18 @@ Puis y inserer le code suivant:
 ```Makefile
 run:
 	docker-compose up -d --build
-	docker-compose exec web php ./app/Model/database.php
 
 stop:
 	docker-compose down
 
 initP:
-	cd src/
-	composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0"
+	cd src/ && composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0"
+
+initDb:
+	docker-compose exec web php ./app/Model/database.php
+
+getIp:
+	ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
 ```
 
 Si jamais vous ne souhaitez pas utiliser Makefile, vous serez amener à faire un plus grand nombres de commandes et à revenir à ce point de la documentation pour chaque lancement.
@@ -117,6 +121,22 @@ Si jamais vous ne souhaitez pas utiliser Makefile, vous serez amener à faire un
 Installez [__DockerDesktop__](https://www.docker.com/products/docker-desktop/).  
 
 Installez [__wampServer__](https://www.wampserver.com/) pour la gestion de la bdd.   
+
+Créez un fichier '__.env__' dans votre dossier '__src__' puis remplissez le avec ces informations:
+
+```bash
+DB_SERVERNAME= #Adresse Ip de votre wsl ou localhost si vous etes sur windows
+DB_USERNAME=PTG_user
+DB_PASSWORD=PTG_password
+DB_NAME=prendsTaGoDb
+```
+
+Pour récuperer l'adresse Ip de votre wsl, exécuté la commande:
+
+```bash
+make getIp
+```
+(Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
   
 Une fois cela fait, ouvrez __DockerDesktop__.  
 Initialisez votre projet précedemment installé en executant la commande:
@@ -132,6 +152,14 @@ Puis lancez votre projet en executant la commande:
 
 ```bash
 make run
+```
+(Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
+
+Une fois cela fait, ouvrez __wampServer__.  
+Puis initialisez votre Db en executant la commande:
+
+```bash
+make initDb
 ```
 (Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
 
