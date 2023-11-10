@@ -138,11 +138,11 @@ CREATE TABLE IF NOT EXISTS `Favori` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Commentary`
+-- Structure de la table `Opinion`
 --
 
-DROP TABLE IF EXISTS `Commentary`;
-CREATE TABLE IF NOT EXISTS `Commentary` (
+DROP TABLE IF EXISTS `Opinion`;
+CREATE TABLE IF NOT EXISTS `Opinion` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `carId` INT NOT NULL,
     `userId` INT NOT NULL,
