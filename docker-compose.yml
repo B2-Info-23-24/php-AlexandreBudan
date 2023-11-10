@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.web
+      dockerfile: Dockerfile
     image: php:8.0-apache
     ports:
       - "8080:80" # Expose port 8080 on WSL to port 80 in the container

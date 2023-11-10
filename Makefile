@@ -1,8 +1,10 @@
-start:
-    docker-compose up -d
+run:
+	docker-compose up -d --build
+	docker-compose exec web php ./app/Model/database.php
 
 stop:
-    docker-compose down
+	docker-compose down
 
-build:
-	docker-compose build
+initP:
+	cd src/
+	composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0"
