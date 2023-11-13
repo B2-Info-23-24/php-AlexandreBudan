@@ -14,10 +14,6 @@ RUN apt-get update && \
     apt-get install -y unzip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copiez composer.json et composer.lock pour installer les dépendances
-COPY src/composer.json /var/www/html/composer.json
-COPY src/composer.lock /var/www/html/composer.lock
-
 # Installez les dépendances avec Composer
 RUN cd /var/www/html && \
     composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fzaninotto/faker:^1.0"
