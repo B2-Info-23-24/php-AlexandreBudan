@@ -1,0 +1,7 @@
+# .env unique a chacun
+.env
+
+# fichiers et dossiers composer
+composer.json
+composer.lock
+vendor/
