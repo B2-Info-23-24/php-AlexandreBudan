@@ -16,7 +16,7 @@ RUN apt-get update && \
 
 # Installez les dépendances avec Composer
 RUN cd /var/www/html && \
-    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fzaninotto/faker:^1.0"
+    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fakerphp/faker:^1.9"
 
 # Copier les fichiers de votre application dans le conteneur
 COPY . /var/www/html/
