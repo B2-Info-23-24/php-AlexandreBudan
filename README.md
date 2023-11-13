@@ -106,7 +106,7 @@ stop:
 	docker-compose down
 
 initP:
-	cd src/ && composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0"
+	cd src/ && composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fakerphp/faker:^1.9"
 
 initDb:
 	docker-compose exec web php ./app/Model/database.php
