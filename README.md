@@ -111,6 +111,9 @@ initP:
 initDb:
 	docker-compose exec web php ./app/Model/database.php
 
+initData:
+	docker-compose exec web php ./app/Model/dataFixtures.php
+
 getIp:
 	ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
 ```
@@ -160,6 +163,13 @@ Puis initialisez votre Db en executant la commande:
 
 ```bash
 make initDb
+```
+(Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
+
+Puis si vous souhaitez initialiser des données d'essaies:
+
+```bash
+make initData
 ```
 (Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
 
