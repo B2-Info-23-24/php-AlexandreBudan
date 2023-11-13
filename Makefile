@@ -10,5 +10,8 @@ initP:
 initDb:
 	docker-compose exec web php ./app/Model/database.php
 
+initData:
+	docker-compose exec web php ./app/Model/dataFixtures.php
+
 getIp:
 	ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
