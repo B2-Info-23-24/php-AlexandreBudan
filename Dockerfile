@@ -20,7 +20,7 @@ COPY src/composer.lock /var/www/html/composer.lock
 
 # Installez les dépendances avec Composer
 RUN cd /var/www/html && \
-    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0"
+    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fzaninotto/faker:^1.0"
 
 # Copier les fichiers de votre application dans le conteneur
 COPY . /var/www/html/

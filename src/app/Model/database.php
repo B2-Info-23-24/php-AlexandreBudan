@@ -2,8 +2,12 @@
 
 require_once realpath('./vendor/autoload.php');
 
+// DotEnv
 $dotenv = Dotenv\Dotenv::createImmutable('./');
 $dotenv->load();
+
+// Faker
+$faker = Faker\Factory::create();
 
 $servername = $_ENV['DB_SERVERNAME'];
 $username = $_ENV['DB_USERNAME'];
