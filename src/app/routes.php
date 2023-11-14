@@ -13,8 +13,8 @@ if (isset($_SESSION['user'])) { // Set une session du User
         case '/profil':
             require './src/View/profil.php';
             break;
-        case '/car':
-            require './src/View/car.php';
+        case '/car/{$id}':
+            require './src/View/oneCar.php';
             break;
         case '/admin':
             if ($_SESSION['user']) { //Faire le verif Admin
@@ -39,6 +39,9 @@ if (isset($_SESSION['user'])) { // Set une session du User
             break;
         case '/register':
             require './src/View/register.php';
+            break;
+        case '/cars':
+            require './src/View/cars.php';
             break;
         default:
             http_response_code(404);
