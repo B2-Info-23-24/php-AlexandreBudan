@@ -1,0 +1,10 @@
+.contour-logo {
+    border: 2px solid white;
+    margin-right: 5px;
+}
+
+.header-container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
