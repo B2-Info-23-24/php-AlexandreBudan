@@ -6,9 +6,6 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copiez le fichier .env dans le conteneur
-COPY src/.env /var/www/html/.env
-
 # Installez Composer
 RUN apt-get update && \
     apt-get install -y unzip && \
