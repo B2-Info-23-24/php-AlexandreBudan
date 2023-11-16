@@ -25,7 +25,7 @@ class Favori
     private $status;
 
     // Constructor
-    public function __construct($id, $userId, $carId)
+    public function __construct(int $id, int $userId, int $carId)
     {
         $this->id = $id;
         $this->userId = $userId;

@@ -65,7 +65,7 @@ class Reservation
     private $status;
 
     // Constructor
-    public function __construct($id, $carId, $userId, $protection, $price, $beginning, $ending, $finish, $beginningState, $endingState, $addFees)
+    public function __construct(int $id, int $carId, int $userId, bool $protection, float $price, string $beginning, string $ending, bool $finish, string $beginningState, string $endingState, float $addFees)
     {
         $this->id = $id;
         $this->carId = $carId;

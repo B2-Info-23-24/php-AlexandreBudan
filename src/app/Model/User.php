@@ -75,7 +75,7 @@ class User
     private $status;
 
     // Constructor
-    public function __construct($id, $email, $password, $firstName, $lastName, $phone, $age, $gender, $addressId, $newsLetter, $verified, $isAdmin)
+    public function __construct(int $id, string $email, string $password, string $firstName, string $lastName, string $phone, int $age, string $gender, int $addressId, bool $newsLetter, bool $verified, bool $isAdmin)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');

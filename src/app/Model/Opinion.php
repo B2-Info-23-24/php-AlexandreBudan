@@ -45,7 +45,7 @@ class Opinion
     private $status;
 
     // Constructor
-    public function __construct($id, $carId, $userId, $reservationId, $commentary, $rank)
+    public function __construct(int $id, int $carId, int $userId, int $reservationId, string $commentary, string $rank)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');

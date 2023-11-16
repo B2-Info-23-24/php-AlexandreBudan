@@ -65,7 +65,7 @@ class Car
     private $status;
 
     // Constructor
-    public function __construct($id, $name, $brandId, $colorId, $passengerId, $price, $manual, $type, $minAge, $nbDoor, $location)
+    public function __construct(int $id, string $name, int $brandId, int $colorId, int $passengerId, float $price, bool $manual, string $type, int $minAge, int $nbDoor, string $location)
     {
         $this->id = $id;
         $this->name = $name;

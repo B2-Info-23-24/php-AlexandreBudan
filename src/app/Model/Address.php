@@ -35,7 +35,7 @@ class Address
     private $status;
 
     // Constructor
-    public function __construct($id, $address, $city, $code, $country)
+    public function __construct(int $id, string $address, string $city, string $code, string $country)
     {
         $this->id = $id;
         $this->address = $address;
