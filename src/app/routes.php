@@ -1,24 +1,35 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once('../vendor/autoload.php');
+require_once('../app/Model/User.php');
 
-# Initialisation de Twig
-$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
-$twig = new \Twig\Environment($loader);
+session_start();
 
 $request = $_SERVER['REQUEST_URI'];
-session_start();
-if (isset($_SESSION['user'])) { // Set une session du User
+
+if (isset($_SESSION['user']) && $_SESSION['user'] instanceof User) { // Set une session du User
     switch ($request) {
+        case '/':
+            require_once('../app/View/home.php');
+            break;
+        case '/login':
+            require_once('../app/View/login.php');
+            break;
+        case '/register':
+            require_once('../app/View/register.php');
+            break;
+        case '/cars':
+            require_once('../app/View/cars.php');
+            break;
         case '/profil':
-            require './src/View/profil.php';
+            require_once('../app/View/profil.php');
             break;
         case '/car/{$id}':
-            require './src/View/oneCar.php';
+            require_once('../app/View/oneCar.php');
             break;
         case '/admin':
-            if ($_SESSION['user']) { //Faire le verif Admin
-                require './src/View/admin.php';
+            if ($_SESSION['user']->isAdmin) {
+                require_once('../app/View/admin.php');
             } else {
                 http_response_code(404);
                 echo 'Page not found';
@@ -32,16 +43,16 @@ if (isset($_SESSION['user'])) { // Set une session du User
 } else {
     switch ($request) {
         case '/':
-            require './src/View/home.php';
+            require_once('../app/View/home.php');
             break;
         case '/login':
-            require './src/View/login.php';
+            require_once('../app/View/login.php');
             break;
         case '/register':
-            require './src/View/register.php';
+            require_once('../app/View/register.php');
             break;
         case '/cars':
-            require './src/View/cars.php';
+            require_once('../app/View/cars.php');
             break;
         default:
             http_response_code(404);

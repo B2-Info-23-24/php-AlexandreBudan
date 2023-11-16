@@ -25,7 +25,7 @@ class UnvailableDate
     private $ending;
 
     // Constructor
-    public function __construct($id, $carId, $beginning, $ending)
+    public function __construct(int $id, int $carId, string $beginning, string $ending)
     {
         $this->id = $id;
         $this->carId = $carId;

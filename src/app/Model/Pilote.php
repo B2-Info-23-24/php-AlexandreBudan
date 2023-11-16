@@ -40,7 +40,7 @@ class Pilote
     private $status;
 
     // Constructor
-    public function __construct($id, $reservationId, $firstName, $lastName, $email, $phone)
+    public function __construct(int $id, int $reservationId, string $firstName, string $lastName, string $email, string $phone)
     {
         $this->id = $id;
         $this->reservationId = $reservationId;

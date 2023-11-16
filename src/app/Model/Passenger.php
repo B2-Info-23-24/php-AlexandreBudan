@@ -15,7 +15,7 @@ class Passenger
     private $number;
 
     // Constructor
-    public function __construct($id, $number)
+    public function __construct(int $id, int $number)
     {
         $this->id = $id;
         $this->number = $number;
