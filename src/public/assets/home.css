@@ -1,0 +1,72 @@
+/* Styles pour la réservation de voiture */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    /* 100% de la largeur de la fenêtre */
+    height: 100vh;
+    /* 100% de la hauteur de la fenêtre */
+    background-image: url('/img/fond.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+header {
+    top: 0;
+}
+
+footer {
+    bottom: 0;
+}
+
+.bg {
+    margin-top: 13vh;
+    margin-bottom: 14vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reservation-form {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="date"],
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}

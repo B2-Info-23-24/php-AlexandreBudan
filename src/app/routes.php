@@ -11,6 +11,8 @@ if (isset($_SESSION['user']) && $_SESSION['user'] instanceof User) { // Set une 
     switch ($request) {
         case '/':
             require_once('../app/View/home.php');
+            require_once('../public/assets/home.css');
+            require_once('../public/img/logo.png');
             break;
         case '/login':
             require_once('../app/View/login.php');
