@@ -11,8 +11,8 @@ body {
     background-image: url('/img/fond2.jpg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
     background-attachment: fixed;
+    background-size: cover;
 }
 
 /* Largeur de la barre de défilement */
@@ -45,19 +45,24 @@ footer {
 
 .bg {
     margin-top: 13vh;
-    margin-bottom: 14vh;
+    margin-bottom: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.reservation-form {
-    width: 80%;
-    margin: 0 auto;
+.container {
+    width: 50%;
+    margin: 50px auto;
+    background-color: #fff;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -66,27 +71,27 @@ footer {
 
 label {
     display: block;
-    font-weight: bold;
     margin-bottom: 5px;
 }
 
-input[type="date"],
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
     width: 100%;
     padding: 8px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
-input[type="submit"] {
+button {
+    padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
-    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-input[type="submit"]:hover {
+button:hover {
     background-color: #0056b3;
 }

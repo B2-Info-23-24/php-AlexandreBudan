@@ -6,8 +6,6 @@ require_once('../vendor/autoload.php');
 $loader = new \Twig\Loader\FilesystemLoader('../app/View/templates');
 $twig = new \Twig\Environment($loader);
 
-$twig->addGlobal('session', $_SESSION);
-
 // Rendu du template Twig
 $header = $twig->render('header.twig');
 $footer = $twig->render('footer.twig');
@@ -33,7 +31,7 @@ $footer = $twig->render('footer.twig');
     <div class="bg">
         <div class="reservation-form">
             <h2>Réserver une voiture</h2>
-            <form action="/cars" method="post">
+            <form action="/vehicules" method="post">
                 <div class="form-group">
                     <label for="start-date">Date de début :</label>
                     <input type="datetime-local" id="start-date" name="start-date" required>
