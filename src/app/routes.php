@@ -19,7 +19,7 @@ switch ($request) {
     case '/profil':
         require_once('../app/View/profil.php');
         break;
-    case '/vehicule/{$id}':
+    case '/vehicule':
         require_once('../app/View/oneCar.php');
         break;
     case '/admin':

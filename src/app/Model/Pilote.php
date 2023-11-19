@@ -25,6 +25,11 @@ class Pilote
     private $lastName;
 
     /**
+     * @var int age of the Pilote
+     */
+    private $age;
+
+    /**
      * @var string email of the Pilote
      */
     private $email;
@@ -40,12 +45,13 @@ class Pilote
     private $status;
 
     // Constructor
-    public function __construct(int $id, int $reservationId, string $firstName, string $lastName, string $email, string $phone)
+    public function __construct(int $id, int $reservationId, string $firstName, string $lastName, int $age, string $email, string $phone)
     {
         $this->id = $id;
         $this->reservationId = $reservationId;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->age = $age;
         $this->email = $email;
         $this->phone = $phone;
         $this->status = true;
@@ -143,6 +149,30 @@ class Pilote
     public function setLastName(string $lastName)
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get age of the Pilote
+     *
+     * @return  int
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    /**
+     * Set age of the Pilote
+     *
+     * @param  int  $age  age of the Pilote
+     *
+     * @return  self
+     */
+    public function setAge(int $age)
+    {
+        $this->age = $age;
 
         return $this;
     }

@@ -2,10 +2,8 @@ html,
 body {
     margin: 0;
     padding: 0;
-    width: 99.5vw;
-    /* 100% de la largeur de la fenêtre */
-    height: 100vh;
-    /* 100% de la hauteur de la fenêtre */
+    width: 100%;
+    height: 100%;
     background-image: url('/img/fond2.jpg');
     background-repeat: no-repeat;
     background-position: center;
@@ -13,26 +11,21 @@ body {
     background-size: cover;
 }
 
-/* Largeur de la barre de défilement */
 ::-webkit-scrollbar {
     width: 10px;
 }
 
-/* Style de la barre de défilement */
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 
-/* Couleur de la poignée (thumb) */
 ::-webkit-scrollbar-thumb {
     background: #888;
 }
 
-/* Style lors du survol de la poignée */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-
 
 header {
     top: 0;
@@ -43,8 +36,8 @@ footer {
 }
 
 .bg {
-    margin-top: 13vh;
-    margin-bottom: 16vh;
+    margin-top: 15vh;
+    margin-bottom: 20vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -97,4 +90,9 @@ input[type="number"] {
 
 a {
     text-decoration: none;
+}
+
+h6 {
+    margin-top: 10px;
+    color: #007bff;
 }

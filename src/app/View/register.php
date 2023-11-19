@@ -4,7 +4,7 @@
 $loader = new \Twig\Loader\FilesystemLoader('../app/View/templates');
 $twig = new \Twig\Environment($loader);
 
-// Rendu du template Twig
+// Rendu des templates Twig
 $header = $twig->render('header.twig');
 $footer = $twig->render('footer.twig');
 
@@ -22,11 +22,9 @@ $footer = $twig->render('footer.twig');
 </head>
 
 <body>
-    <header>
-        <?= $header ?>
-    </header>
+    <?= $header ?>
 
-    <div class="container">
+    <div class="containerBox bg">
         <h1>Inscription</h1>
         <form action="/" method="post">
             <div class="form-group">
@@ -47,15 +45,15 @@ $footer = $twig->render('footer.twig');
             </div>
             <div class="form-group">
                 <label for="phone">Téléphone :</label>
-                <input type="tel" id="phone" name="phone" required>
+                <input type="phone" id="phone" name="phone" required>
             </div>
             <div class="form-group">
                 <label for="age">Âge :</label>
-                <input type="number" id="age" name="age" required>
+                <input type="age" id="age" name="age" required>
             </div>
             <div class="form-group">
                 <label for="gender">Genre :</label>
-                <select id="gender" name="gender" required>
+                <select type="gender" id="gender" name="gender" required>
                     <option value="homme">Homme</option>
                     <option value="femme">Femme</option>
                     <option value="autre">Autre</option>
@@ -65,9 +63,7 @@ $footer = $twig->render('footer.twig');
         </form>
     </div>
 
-    <footer class="bg-dark">
-        <?= $footer ?>
-    </footer>
+    <?= $footer ?>
 </body>
 
 </html>

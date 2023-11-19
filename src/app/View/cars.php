@@ -4,15 +4,11 @@
 $loader = new \Twig\Loader\FilesystemLoader('../app/View/templates');
 $twig = new \Twig\Environment($loader);
 
-// Rendu du template Twig
+// Rendu des templates Twig
 $header = $twig->render('header.twig');
 $footer = $twig->render('footer.twig');
 
-$redirectUrl = "/";
-
-if (isset($_SESSION['user'])) {
-    $redirectUrl = "/vehicule/1";
-}
+$redirectUrl = "/vehicule";
 
 ?>
 <!DOCTYPE html>
@@ -28,9 +24,7 @@ if (isset($_SESSION['user'])) {
 </head>
 
 <body>
-    <header>
-        <?= $header ?>
-    </header>
+    <?= $header ?>
 
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
@@ -45,6 +39,7 @@ if (isset($_SESSION['user'])) {
             <div class="filters">
                 <label id="texte" , type="price">Prix :</label>
                 <select id="price" name="price">
+                    <option value="0">-</option>
                     <option value="50">0€ - 50€</option>
                     <option value="100">50€ - 100€</option>
                     <option value="150">100€ - 150€</option>
@@ -52,6 +47,7 @@ if (isset($_SESSION['user'])) {
 
                 <label id="texte" for="brand">Marque :</label>
                 <select id="brand" name="brand">
+                    <option value="0">-</option>
                     <option value="audi">Audi</option>
                     <option value="bmw">BMW</option>
                     <option value="mercedes">Mercedes</option>
@@ -59,6 +55,7 @@ if (isset($_SESSION['user'])) {
 
                 <label id="texte" for="color">Couleur :</label>
                 <select id="color" name="color">
+                    <option value="0">-</option>
                     <option value="rouger">rouge</option>
                     <option value="bleu">bleu</option>
                     <option value="vert">vert</option>
@@ -66,6 +63,7 @@ if (isset($_SESSION['user'])) {
 
                 <label id="texte" for="passengers">Nombre de passagers :</label>
                 <select id="passengers" name="passengers">
+                    <option value="0">-</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
@@ -76,7 +74,7 @@ if (isset($_SESSION['user'])) {
             </div>
         </div>
     </div>
-    <div class="album py-5">
+    <div class="album bg">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
@@ -129,9 +127,7 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
 
-    <footer class="bg-dark">
-        <?= $footer ?>
-    </footer>
+    <?= $footer ?>
 </body>
 
 </html>

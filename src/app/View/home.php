@@ -1,12 +1,10 @@
 <?php
-// Inclure l'autoloader de Composer
-require_once('../vendor/autoload.php');
 
 // Configuration de Twig avec le répertoire des templates
 $loader = new \Twig\Loader\FilesystemLoader('../app/View/templates');
 $twig = new \Twig\Environment($loader);
 
-// Rendu du template Twig
+// Rendu des templates Twig
 $header = $twig->render('header.twig');
 $footer = $twig->render('footer.twig');
 
@@ -24,9 +22,7 @@ $footer = $twig->render('footer.twig');
 </head>
 
 <body>
-    <header>
-        <?= $header ?>
-    </header>
+    <?= $header ?>
 
     <div class="bg">
         <div class="reservation-form">
@@ -49,9 +45,7 @@ $footer = $twig->render('footer.twig');
         </div>
     </div>
 
-    <footer class="bg-dark">
-        <?= $footer ?>
-    </footer>
+    <?= $footer ?>
 </body>
 
 </html>
