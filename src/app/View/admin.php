@@ -4,12 +4,22 @@
 $loader = new \Twig\Loader\FilesystemLoader('../app/View/templates');
 $twig = new \Twig\Environment($loader);
 
-$twig->addGlobal('type', "Marques");
-
 // Rendu des templates Twig
 $header = $twig->render('header.twig');
 $footer = $twig->render('footer.twig');
-$see = $twig->render('adminSee.twig');
+
+$loadSee = $twig->load('adminSee.twig');
+$see = $loadSee->render(['type' => "Marques"]);
+
+if (isset($_POST['allCar'])) {
+    $see = $twig->render('seeAllCar.twig');
+} elseif (isset($_POST['seeBrand'])) {
+    $see = $loadSee->render(['type' => "Marques"]);
+} elseif (isset($_POST['seeColor'])) {
+    $see = $loadSee->render(['type' => "Couleurs"]);
+} elseif (isset($_POST['seePassenger'])) {
+    $see = $loadSee->render(['type' => "Passagers"]);
+}
 
 ?>
 <!DOCTYPE html>
@@ -35,11 +45,6 @@ $see = $twig->render('adminSee.twig');
         function closeSummaryModal() {
             $('#summaryModal').modal('hide');
         }
-
-        function changePage(string) {
-            document.getElementById("type1").innerHTML = string;
-            document.getElementById("type2").innerHTML = "Ajouter " + string;
-        }
     </script>
 </head>
 
@@ -60,7 +65,9 @@ $see = $twig->render('adminSee.twig');
                     </button>
                     <div class="collapse show" id="brand-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="changePage('Marques')">Tout voir</button></li>
+                            <form method="post" action="">
+                                <li><button id="texte" class="bg-dark" type="submit" name="seeBrand">Tout voir</button></li>
+                            </form>
                         </ul>
                     </div>
                 </li>
@@ -70,7 +77,9 @@ $see = $twig->render('adminSee.twig');
                     </button>
                     <div class="collapse show" id="color-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="changePage('Couleurs')">Tout voir</button></li>
+                            <form method="post" action="">
+                                <li><button id="texte" class="bg-dark" type="submit" name="seeColor">Tout voir</button></li>
+                            </form>
                         </ul>
                     </div>
                 </li>
@@ -80,7 +89,9 @@ $see = $twig->render('adminSee.twig');
                     </button>
                     <div class="collapse show" id="passenger-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="changePage('Passagers')">Tout voir</button></li>
+                            <form method="post" action="">
+                                <li><button id="texte" class="bg-dark" type="submit" name="seePassenger">Tout voir</button></li>
+                            </form>
                         </ul>
                     </div>
                 </li>
@@ -90,8 +101,10 @@ $see = $twig->render('adminSee.twig');
                     </button>
                     <div class="collapse show" id="vehicle-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="">Tout voir</button></li>
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="">Ajouter</button></li>
+                            <form method="post" action="">
+                                <li><button id="texte" class="bg-dark" type="submit" name="allCar">Tout voir</button></li>
+                                <li><button id="texte" class="bg-dark" type="submit" name="addCar">Ajouter</button></li>
+                            </form>
                         </ul>
                     </div>
                 </li>
