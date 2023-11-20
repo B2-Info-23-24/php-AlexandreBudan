@@ -273,12 +273,14 @@ function makePilote(PDO $db, Faker\Generator $faker, int $reservationId)
     $lastName = $faker->lastName;
     $email =  $firstName . "." . $lastName . "@gmail.com";
     $phone = $faker->phoneNumber;
+    $age = rand(18, 80);
 
     try {
-        $stmt = $db->prepare("INSERT INTO Pilote (reservationId, firstName, lastName, email, phone, status) VALUES (:reservationId, :firstName, :lastName, :email, :phone, 1)");
+        $stmt = $db->prepare("INSERT INTO Pilote (reservationId, firstName, lastName, age, email, phone, status) VALUES (:reservationId, :firstName, :lastName, :age, :email, :phone, 1)");
         $stmt->bindParam(':reservationId', $reservationId);
         $stmt->bindParam(':firstName', $firstName);
         $stmt->bindParam(':lastName', $lastName);
+        $stmt->bindParam(':age', $age);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':phone', $phone);
         $stmt->execute();

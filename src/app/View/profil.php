@@ -16,6 +16,9 @@ $footer = $twig->render('footer.twig');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/assets/profil.css">
     <link rel="icon" href="/img/logo.png" type="image/png">
     <title>PrendsTaGo - Profil</title>
@@ -179,31 +182,33 @@ $footer = $twig->render('footer.twig');
             <h2>Réservations</h2>
             <div class="container-fav">
                 <div class="boxbox">
-                    <a href="/">
-                        <div class="card shadow-sm">
-                            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
-                            </img>
-                            <div class="card-body">
-                                <h5>Informations Reservation</h5>
-                                <p class="card-text">- Début : 03/03/2003 15:00</p>
-                                <p class="card-text">- Fin : 03/03/2003 15:00</p>
-                                <p class="card-text">
-                                <h6>- Cout : 500€</h6>
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">BMW M3</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Noir</button>
-                                    </div>
-                                    <small class="text-body-secondary">En cours</small>
+                    <div class="card shadow-sm">
+                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
+                        </img>
+                        <div class="card-body">
+                            <h5>Informations Reservation</h5>
+                            <p class="card-text">- Début : 03/03/2003 15:00</p>
+                            <p class="card-text">- Fin : 03/03/2003 15:00</p>
+                            <p class="card-text">
+                            <h6>- Cout : 500€</h6>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">BMW M3</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Noir</button>
                                 </div>
-                                <p></p>
-                                <div class="ctr">
-                                    <button type="submit">Annuler la réservation</button>
-                                </div>
+                                <small class="text-body-secondary">En cours</small>
+                            </div>
+                            <p></p>
+                            <div class="ctr">
+                                <button type="submit">Annuler la réservation</button>
+                            </div>
+                            <p></p>
+                            <div class="ctr">
+                                <button onclick="showSummaryModal()">Voir la réservation</button>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -282,6 +287,21 @@ $footer = $twig->render('footer.twig');
                 </div>
             </div>
         </div>
+        <div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Récapitulatif de la réservation</h5>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Annuler la réservation</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?= $footer ?>
@@ -315,6 +335,18 @@ $footer = $twig->render('footer.twig');
         function closeModifAdresse() {
             var formulaire = document.getElementById('form-add');
             formulaire.classList.add('hidden');
+        }
+
+        function showSummaryModal() {
+            var carFeatures = "Informations réservation:\n- Date de début : 03/03/2003\n- Date de Fin : 03/03/2003\n- Nombres de jours : 0\n\nModèle:\n- Marque : BMW\n- Couleur : Gris\n- Manuelle / Automatique : Manuelle\n\nCaractéristiques:\n- Nombres de portes : 5\n- Age minimum : 21\n- Nombres de passagers maximum : 5\n- Protection : Protection Totale(50€)\n\nRécupération: Lyon Perrache\n\nInformations Pilote:\n- Nom : Doe\n- Prénom : John\n- Age : 21\n- Email : John.Doe@gmail.com\n- Téléphone : 00.00.00.00.00\n\nRéservation sous le compte : Aucun compte";
+
+            document.getElementById('summaryModal').getElementsByClassName('modal-body')[0].innerText = carFeatures;
+
+            $('#summaryModal').modal('show');
+        }
+
+        function closeSummaryModal() {
+            $('#summaryModal').modal('hide');
         }
     </script>
 </body>

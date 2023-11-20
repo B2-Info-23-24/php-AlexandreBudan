@@ -23,12 +23,12 @@ switch ($request) {
         require_once('../app/View/oneCar.php');
         break;
     case '/admin':
-        if ($_SESSION['user']->isAdmin) {
-            require_once('../app/View/admin.php');
-        } else {
-            http_response_code(404);
-            echo 'Page not found';
-        }
+        // if ($_SESSION['user']->isAdmin) {
+        require_once('../app/View/admin.php');
+        // } else {
+        //     http_response_code(404);
+        //     echo 'Page not found';
+        // }
         break;
     default:
         http_response_code(404);
