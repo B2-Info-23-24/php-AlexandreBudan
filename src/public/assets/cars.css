@@ -55,6 +55,8 @@ footer {
 #container-filter {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .filter-container {
@@ -95,4 +97,11 @@ a {
 h6 {
     margin-top: 10px;
     color: #007bff;
+}
+
+#container-filter input {
+    width: 50%;
+    height: 50px;
+    border-radius: 5px;
+    border: 5px solid #ccc;
 }

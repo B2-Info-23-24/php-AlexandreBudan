@@ -8,17 +8,25 @@ $twig = new \Twig\Environment($loader);
 $header = $twig->render('header.twig');
 $footer = $twig->render('footer.twig');
 
+
 $loadSee = $twig->load('adminSee.twig');
 $see = $loadSee->render(['type' => "Marques"]);
 
 if (isset($_POST['allCar'])) {
-    $see = $twig->render('seeAllCar.twig');
+    $loadSee = $twig->load('seeAllCar.twig');
+    $see = $loadSee->render(['type' => "Marques", 'car' => $twig->render('carCard.twig'), 'filter' => $twig->render('filters.twig')]);
 } elseif (isset($_POST['seeBrand'])) {
     $see = $loadSee->render(['type' => "Marques"]);
 } elseif (isset($_POST['seeColor'])) {
     $see = $loadSee->render(['type' => "Couleurs"]);
 } elseif (isset($_POST['seePassenger'])) {
     $see = $loadSee->render(['type' => "Passagers"]);
+} elseif (isset($_POST['allUsers'])) {
+    $loadSee = $twig->load('adminSee2.twig');
+    $see = $loadSee->render(['type' => "Utilisateurs"]);
+} elseif (isset($_POST['allOpinion'])) {
+    $loadSee = $twig->load('adminSee2.twig');
+    $see = $loadSee->render(['type' => "Avis"]);
 }
 
 ?>
@@ -114,7 +122,9 @@ if (isset($_POST['allCar'])) {
                     </button>
                     <div class="collapse show" id="user-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="changePage('Marques')">Tout voir</button></li>
+                            <form method="post" action="">
+                                <li><button id="texte" class="bg-dark" type="submit" name="allUsers">Tout voir</button></li>
+                            </form>
                         </ul>
                     </div>
                 </li>
@@ -124,7 +134,9 @@ if (isset($_POST['allCar'])) {
                     </button>
                     <div class="collapse show" id="opinion-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><button id="texte" class="bg-dark" type="submit" onclick="changePage('Marques')">Tout voir</button></li>
+                            <form method="post" action="">
+                                <li><button id="texte" class="bg-dark" type="submit" name="allOpinion">Tout voir</button></li>
+                            </form>
                         </ul>
                     </div>
                 </li>

@@ -6,53 +6,17 @@
 			</div>
 		</div>
 	</section>
+    {{ filter|raw }}
+    <p></p>
     <div class="container bg">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col">
-                <a href="<?= $redirectUrl ?>">
-                    <div class="card shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
-                        </img>
-                        <div class="card-body">
-                            <h5>Caractéristiques</h5>
-                            <p class="card-text">- Nombres de portes : 5</p>
-                            <p class="card-text">- Age minimum : 21</p>
-                            <p class="card-text">
-                            <h6>- A partir de 50€ / jour</h6>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">BMW</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Noir</button>
-                                </div>
-                                <small class="text-body-secondary">Manual - type</small>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col">
-                <a href="<?= $redirectUrl ?>">
-                    <div class="card shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.challenges.fr/assets/img/2023/06/14/cover-r4x3w1200-6489c67138b7f-mercedes-benz-glc-front-view.jpg">
-                        </img>
-                        <div class="card-body">
-                            <h5>Caractéristiques</h5>
-                            <p class="card-text">- Nombres de portes : 5</p>
-                            <p class="card-text">- Age minimum : 21</p>
-                            <p class="card-text">
-                            <h6>- A partir de 50€ / jour</h6>
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Mercedes</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Rouge</button>
-                                </div>
-                                <small class="text-body-secondary">Automatic - type</small>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+            <div class="admin-card">
+                {{ car|raw }}
+                <p></p>
+                <div class="btn-admin">
+                    <button style="background-color:red;">Supprimer</button>
+                    <button style="background-color:blue;">Modifier</button>
+                </div>
             </div>
         </div>
     </div>
