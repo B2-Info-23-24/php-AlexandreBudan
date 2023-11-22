@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS `User` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `firstName` VARCHAR(255) NOT NULL,
-    `lastName` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(50) NOT NULL,
+    `firstName` VARCHAR(20) NOT NULL,
+    `lastName` VARCHAR(20) NOT NULL,
+    `phone` VARCHAR(20) NOT NULL,
     `age` INT NOT NULL,
     `gender` VARCHAR(10) NOT NULL,
     `addressId` INT,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 
 CREATE TABLE IF NOT EXISTS `Brand` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL
+    `name` VARCHAR(50) NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `Brand` (
 
 CREATE TABLE IF NOT EXISTS `Color` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL
+    `name` VARCHAR(50) NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -94,16 +94,16 @@ CREATE TABLE IF NOT EXISTS `Passenger` (
 
 CREATE TABLE IF NOT EXISTS `Car` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
     `brandId` INT NOT NULL,
     `colorId` INT NOT NULL,
     `passengerId` INT NOT NULL,
     `price` FLOAT NOT NULL,
     `manual` TINYINT NOT NULL,
-    `type` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(20) NOT NULL,
     `minAge` INT,
     `nbDoor` INT NOT NULL,
-    `location` VARCHAR(255),
+    `location` VARCHAR(50),
     `status` TINYINT NOT NULL,
     FOREIGN KEY (`brandId`) REFERENCES `Brand`(`id`),
     FOREIGN KEY (`colorId`) REFERENCES `Color`(`id`),
@@ -191,11 +191,11 @@ CREATE TABLE IF NOT EXISTS `Opinion` (
 CREATE TABLE IF NOT EXISTS `Pilote` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `reservationId` INT NOT NULL,
-    `firstName` VARCHAR(255) NOT NULL,
-    `lastName` VARCHAR(255) NOT NULL,
+    `firstName` VARCHAR(20) NOT NULL,
+    `lastName` VARCHAR(20) NOT NULL,
     `age` INT NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(50) NOT NULL,
+    `phone` VARCHAR(25) NOT NULL,
     `status` TINYINT NOT NULL,
     FOREIGN KEY (`reservationId`) REFERENCES `Reservation`(`id`)
 );

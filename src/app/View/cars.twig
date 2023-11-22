@@ -1,0 +1,26 @@
+{% extends '/templates/default.html.twig' %}
+
+{% block title %}PrendsTaGo - Vehicules
+{% endblock %}
+
+{% block stylesheet %}<link rel="stylesheet" href="/assets/cars.css">
+{% endblock %}
+
+{% block content %}
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+				<h1 class="fw-light">Vehicules PrendsTaGo</h1>
+				<p id="texte" class="lead text-body-secondary">Offrez-vous une expérience inoubliable au volant de nos véhicules de prestige. Découvrez le confort, la puissance et l'élégance à chaque kilomètre parcouru. Réservez dès maintenant et transformez chaque trajet en une aventure mémorable.</p>
+			</div>
+		</div>
+	</section>
+	{{ filter|raw }}
+	<div class="album bg">
+		<div class="container">
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+				{{ car|raw }}
+			</div>
+		</div>
+	</div>
+{% endblock %}
