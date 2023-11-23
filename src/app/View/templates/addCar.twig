@@ -1,0 +1,91 @@
+<section class="py-5 text-center container">
+	<div class="row py-lg-5">
+		<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+			<h1 id="type1" class="fw-light">{{ type }}</h1>
+		</div>
+	</div>
+</section>
+<div class="col bg" style="margin-left:50px; margin-right:50px;">
+	<div class="card shadow-sm">
+		<img class="bd-placeholder-img card-img-top" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg" alt="Car Photo">
+		<div class="card-body">
+			<h5>Caractéristiques</h5>
+			<form id="carInfoForm">
+				<div class="form-group">
+					<label for="name">Nom :</label>
+					<input type="text" class="form-control" id="name" name="name" value="M3">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="doors">Nombre de portes :</label>
+					<input type="number" class="form-control" id="doors" name="doors" value="5">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="minAge">Âge minimum :</label>
+					<input type="number" class="form-control" id="minAge" name="minAge" value="21">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="maxPassengers">Nombre de passagers maximum :</label>
+					<select class="form-control" id="maxPassengers" name="maxPassengers" style="height:100%">
+						<option value="2">2</option>
+						<option value="4">4</option>
+						<option value="5" selected>5</option>
+						<option value="7">7</option>
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="brand">Marque :</label>
+					<select class="form-control" id="brand" name="brand" style="height:100%">
+						<option value="BMW" selected>BMW</option>
+						<option value="Audi">Audi</option>
+						<option value="Mercedes">Mercedes</option>
+						<option value="Tesla">Tesla</option>
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="color">Couleur :</label>
+					<select class="form-control" id="color" name="color" style="height:100%">
+						<option value="Noir" selected>Noir</option>
+						<option value="Blanc">Blanc</option>
+						<option value="Rouge">Rouge</option>
+						<option value="Bleu">Bleu</option>
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="transmission">Transmission :</label>
+					<input type="text" class="form-control" id="transmission" name="transmission" value="Manuelle">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="price">Prix à la journée :</label>
+					<input type="number" class="form-control" id="price" name="price" value="50">
+				</div>
+			</form>
+			<p></p>
+			<div class="save-btn" style="display:flex; justify-content:center;">
+				<button type="button" class="btn btn-primary">Enregistrer</button>
+			</div>
+		</div>
+	</div>
+</div>
+<p></p>
+<div class="col bg" style="margin-left:50px; margin-right:50px; margin-bottom:100px;">
+	<div class="reservation-form">
+		<h5>Ajouter une date d'indisponibilitée</h5>
+		<form id="indisponibilityDateForm">
+			<div class="form-group">
+				<label for="date">Date :</label>
+				<input type="date" class="form-control" id="date" name="date">
+			</div>
+			<p></p>
+			<div style="display:flex; justify-content:center;">
+				<button type="button" class="btn btn-primary">Ajouter</button>
+			</div>
+		</form>
+	</div>
+</div>

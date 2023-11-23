@@ -25,31 +25,38 @@ touch Dockerfile
 Puis y inserer le code suivant:
 
 ```Dockerfile
-FROM php:8.0-apache
+FROM php:8.2-apache
 
 # Install additional PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
+RUN chmod -R 777 /var/www
+
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copiez le fichier .env dans le conteneur
-COPY src/.env /var/www/html/.env
-
-# Installez Composer
+# Installer Composer
 RUN apt-get update && \
     apt-get install -y unzip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copiez composer.json et composer.lock pour installer les dépendances
-COPY src/composer.json /var/www/html/composer.json
-COPY src/composer.lock /var/www/html/composer.lock
-
-# Installez les dépendances avec Composer
+# Installer les dépendances avec Composer
 RUN cd /var/www/html && \
-    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0"
+    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fakerphp/faker:^1.9"
 
-# Copier les fichiers de votre application dans le conteneur
+RUN pecl install xdebug \
+    && apt update \
+    && apt install libzip-dev -y \
+    && docker-php-ext-enable xdebug \
+    && a2enmod rewrite \
+    && docker-php-ext-install zip \
+    && service apache2 restart
+
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Copier les fichiers de l'application dans le conteneur
 COPY . /var/www/html/
 ```
 
@@ -65,14 +72,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: php:8.0-apache
     ports:
       - "8080:80" # Expose port 8080 on WSL to port 80 in the container
     volumes:
       - ./src:/var/www/html
 
   mysql:
-    image: mysql:5.7
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
       MYSQL_DATABASE: prendsTaGoDb
@@ -107,12 +113,6 @@ stop:
 
 initP:
 	cd src/ && composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fakerphp/faker:^1.9"
-
-initDb:
-	docker-compose exec web php ./app/Model/database.php
-
-initData:
-	docker-compose exec web php ./app/Model/dataFixtures.php
 
 getIp:
 	ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
@@ -158,19 +158,6 @@ make run
 ```
 (Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
 
-Une fois cela fait, ouvrez __wampServer__.  
-Puis initialisez votre Db en executant la commande:
-
-```bash
-make initDb
-```
-(Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
-
-Puis si vous souhaitez initialiser des données d'essaies:
-
-```bash
-make initData
-```
-(Voir ci-dessus dans le dossier Makefile, les commandes a executé si jamais vous n'avez pas créé de __Makefile__)
+Une fois cela fait, ouvrez __wampServer__.
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/YbKxHPdJ)

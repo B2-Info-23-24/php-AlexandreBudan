@@ -11,7 +11,7 @@ services:
       - ./src:/var/www/html
 
   mysql:
-    image: mysql:5.7
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
       MYSQL_DATABASE: prendsTaGoDb

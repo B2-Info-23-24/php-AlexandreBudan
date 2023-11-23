@@ -1,35 +1,45 @@
 <?php
 
-require_once realpath('./vendor/autoload.php');
+namespace Config;
 
-// DotEnv
-$dotenv = Dotenv\Dotenv::createImmutable('./');
-$dotenv->load();
+use PDO;
+use PDOException;
 
-// Faker
-$faker = Faker\Factory::create();
+class DataBase
+{
+    public static function connect()
+    {
 
-$servername = $_ENV['DB_SERVERNAME'];
-$username = $_ENV['DB_USERNAME'];
-$password = $_ENV['DB_PASSWORD'];
-$dbname = $_ENV['DB_NAME'];
+        $servername = $_ENV['DB_SERVERNAME'];
+        $username = $_ENV['DB_USERNAME'];
+        $password = $_ENV['DB_PASSWORD'];
+        $dbname = $_ENV['DB_NAME'];
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Chemin vers le fichier SQL
-    $sqlFile = './db.sql';
+            return $conn;
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage() . "\n";
+        }
+    }
 
-    // Lit le contenu du fichier SQL
-    $sql = file_get_contents($sqlFile);
+    public static function create()
+    {
 
-    // Exécute les requêtes SQL
-    $conn->exec($sql);
+        try {
+            $conn = self::connect();
+            // Chemin vers le fichier SQL
+            $sqlFile = '../db.sql';
 
-    echo "Tables créées avec succès\n";
-} catch (PDOException $e) {
-    echo "Erreur : " . $e->getMessage() . "\n";
+            // Lit le contenu du fichier SQL
+            $sql = file_get_contents($sqlFile);
+
+            // Exécute les requêtes SQL
+            $conn->exec($sql);
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage() . "\n";
+        }
+    }
 }
-
-$conn = null;
