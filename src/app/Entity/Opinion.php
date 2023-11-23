@@ -1,5 +1,9 @@
 <?php
 
+namespace Entity;
+
+use DateTime;
+
 class Opinion
 {
     // Properties
@@ -45,7 +49,29 @@ class Opinion
     private $status;
 
     // Constructor
-    public function __construct(int $id, int $carId, int $userId, int $reservationId, string $commentary, string $rank)
+
+    /**
+     * Opinion constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Opinion constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  int  $carId  id Foreign Key link Car
+     * @param  int  $userId  id Foreign Key link User
+     * @param  int  $reservationId  id Foreign Key link Reservation
+     * @param  string  $commentary  comment about the reservation
+     * @param  string  $rank  rank of the reservation
+     *
+     * @return  void
+     */
+    public function Opinion(int $id, int $carId, int $userId, int $reservationId, string $commentary, string $rank)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');

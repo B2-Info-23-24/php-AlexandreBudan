@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class UnvailableDate
 {
     // Properties
@@ -25,7 +27,27 @@ class UnvailableDate
     private $ending;
 
     // Constructor
-    public function __construct(int $id, int $carId, string $beginning, string $ending)
+
+    /**
+     * UnvailableDate constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * UnvailableDate constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  int  $carId  id Foreign Key link Car
+     * @param  string  $beginning  date of the beginning of UnvailableDate
+     * @param  string  $ending  date of the ending of UnvailableDate
+     *
+     * @return  void
+     */
+    public function UnvailableDate(int $id, int $carId, string $beginning, string $ending)
     {
         $this->id = $id;
         $this->carId = $carId;

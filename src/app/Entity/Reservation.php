@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Reservation
 {
     // Properties
@@ -65,7 +67,34 @@ class Reservation
     private $status;
 
     // Constructor
-    public function __construct(int $id, int $carId, int $userId, bool $protection, float $price, string $beginning, string $ending, bool $finish, string $beginningState, string $endingState, float $addFees)
+
+    /**
+     * Reservation constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Reservation constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  int  $carId  id Foreign Key link Car
+     * @param  int  $userId  id Foreign Key link User
+     * @param  bool  $protection  protection of the Car
+     * @param  float  $price  price of the Reservation
+     * @param  string  $beginning  date of the beginning of UnvailableDate
+     * @param  string  $ending  date of the ending of UnvailableDate
+     * @param  bool  $finish  if the Reservation is finish or not
+     * @param  string  $beginningState  State of the Car at the beginning
+     * @param  string  $endingState  State of the Car at the ending
+     * @param  float  $addFees  price of the add fees
+     *
+     * @return  void
+     */
+    public function Reservation(int $id, int $carId, int $userId, bool $protection, float $price, string $beginning, string $ending, bool $finish, string $beginningState, string $endingState, float $addFees)
     {
         $this->id = $id;
         $this->carId = $carId;

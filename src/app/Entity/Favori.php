@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Favori
 {
     // Propriétés
@@ -25,7 +27,26 @@ class Favori
     private $status;
 
     // Constructor
-    public function __construct(int $id, int $userId, int $carId)
+
+    /**
+     * Favori constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Favori constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  int  $userId  id Foreign Key link User
+     * @param  int  $carId  id Foreign Key link Car
+     *
+     * @return  void
+     */
+    public function Favori(int $id, int $userId, int $carId)
     {
         $this->id = $id;
         $this->userId = $userId;

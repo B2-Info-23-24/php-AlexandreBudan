@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Car
 {
     // Properties
@@ -65,7 +67,34 @@ class Car
     private $status;
 
     // Constructor
-    public function __construct(int $id, string $name, int $brandId, int $colorId, int $passengerId, float $price, bool $manual, string $type, int $minAge, int $nbDoor, string $location)
+
+    /**
+     * Car constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Car constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  string  $name  name of the Car
+     * @param  int  $brandId  id Foreign Key link Brand
+     * @param  int  $colorId  id Foreign Key link Color
+     * @param  int  $passengerId  id Foreign Key link Passenger
+     * @param  float  $price  price of the Car por Day
+     * @param  bool  $manual  true -> manual, false -> automatic
+     * @param  string  $type  type of the Car
+     * @param  int  $minAge  minimum Age to reserve the Car
+     * @param  int  $nbDoor  numbers of Door
+     * @param  string  $location  position of the Car
+     *
+     * @return  void
+     */
+    public function Car(int $id, string $name, int $brandId, int $colorId, int $passengerId, float $price, bool $manual, string $type, int $minAge, int $nbDoor, string $location)
     {
         $this->id = $id;
         $this->name = $name;

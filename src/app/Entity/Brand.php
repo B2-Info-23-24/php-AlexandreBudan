@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Brand
 {
     // Properties
@@ -15,7 +17,25 @@ class Brand
     private $name;
 
     // Constructor
-    public function __construct(int $id, string $name)
+
+    /**
+     * Brand constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Brand constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  string  $name  name of the Brand
+     *
+     * @return  void
+     */
+    public function Brand(int $id, string $name)
     {
         $this->id = $id;
         $this->name = $name;

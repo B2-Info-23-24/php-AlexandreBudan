@@ -1,5 +1,9 @@
 <?php
 
+namespace Entity;
+
+use DateTime;
+
 class User
 {
     // Properties
@@ -75,7 +79,34 @@ class User
     private $status;
 
     // Constructor
-    public function __construct(int $id, string $email, string $password, string $firstName, string $lastName, string $phone, int $age, string $gender, int $addressId, bool $newsLetter, bool $verified, bool $isAdmin)
+
+    /**
+     * User constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * User constructor
+     *
+     * @param int $id User ID
+     * @param string $email User email
+     * @param string $password User password
+     * @param string $firstName User first name
+     * @param string $lastName User last name
+     * @param string $phone User phone number
+     * @param int $age User age
+     * @param string $gender User gender
+     * @param int $addressId User address ID
+     * @param bool $newsLetter If User wants to receive newsletter
+     * @param bool $verified If User has verified his account
+     * @param bool $isAdmin If User is an admin or not
+     * @return void
+     */
+    public function User(int $id, string $email, string $password, string $firstName, string $lastName, string $phone, int $age, string $gender, int $addressId, bool $newsLetter, bool $verified, bool $isAdmin)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');

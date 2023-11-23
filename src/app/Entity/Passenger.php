@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Passenger
 {
     // Properties
@@ -15,7 +17,25 @@ class Passenger
     private $number;
 
     // Constructor
-    public function __construct(int $id, int $number)
+
+    /**
+     * Passenger constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Passenger constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  int  $number  number of Passenger
+     *
+     * @return  void
+     */
+    public function Passenger(int $id, int $number)
     {
         $this->id = $id;
         $this->number = $number;

@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Color
 {
     // Properties
@@ -15,7 +17,25 @@ class Color
     private $name;
 
     // Constructor
-    public function __construct(int $id, string $name)
+
+    /**
+     * Color constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Color constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  string  $name  name of the Color
+     *
+     * @return  void
+     */
+    public function Color(int $id, string $name)
     {
         $this->id = $id;
         $this->name = $name;

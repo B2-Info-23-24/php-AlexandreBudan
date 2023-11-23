@@ -1,5 +1,7 @@
 <?php
 
+namespace Entity;
+
 class Address
 {
     // Properties
@@ -35,7 +37,28 @@ class Address
     private $status;
 
     // Constructor
-    public function __construct(int $id, string $address, string $city, string $code, string $country)
+
+    /**
+     * Address constructor
+     *
+     * @return  void
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Address constructor
+     *
+     * @param  int  $id  id Primary Key
+     * @param  string  $address  name of the Address
+     * @param  string  $city  city of the Address
+     * @param  string  $code  postal code of the Address
+     * @param  string  $country  country of the Address
+     *
+     * @return  void
+     */
+    public function Address(int $id, string $address, string $city, string $code, string $country)
     {
         $this->id = $id;
         $this->address = $address;

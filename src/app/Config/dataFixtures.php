@@ -15,14 +15,8 @@ class DataFixtures
         // Faker
         $faker = Factory::create();
 
-        $servername = $_ENV['DB_SERVERNAME'];
-        $username = $_ENV['DB_USERNAME'];
-        $password = $_ENV['DB_PASSWORD'];
-        $dbname = $_ENV['DB_NAME'];
-
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn = DataBase::connect();
 
             // Spécificitées des voitures
             self::makeBrand($conn);
