@@ -41,15 +41,6 @@ class Address
     /**
      * Address constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Address constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  string  $address  name of the Address
      * @param  string  $city  city of the Address
@@ -58,7 +49,7 @@ class Address
      *
      * @return  void
      */
-    public function Address(int $id, string $address, string $city, string $code, string $country)
+    public function __construct(int $id, string $address = null, string $city = null, string $code = null, string $country = null)
     {
         $this->id = $id;
         $this->address = $address;

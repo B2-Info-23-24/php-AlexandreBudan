@@ -21,21 +21,12 @@ class Color
     /**
      * Color constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Color constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  string  $name  name of the Color
      *
      * @return  void
      */
-    public function Color(int $id, string $name)
+    public function __construct(int $id, string $name = null)
     {
         $this->id = $id;
         $this->name = $name;

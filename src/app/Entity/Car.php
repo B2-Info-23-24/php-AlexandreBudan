@@ -17,19 +17,19 @@ class Car
     private $name;
 
     /**
-     * @var int id Foreign Key link Brand
+     * @var Brand brand of the Car
      */
-    private $brandId;
+    private $brand;
 
     /**
-     * @var int id Foreign Key link Color
+     * @var Color color of the Car
      */
-    private $colorId;
+    private $color;
 
     /**
-     * @var int id Foreign Key link Passenger
+     * @var Passenger number of passenger of the car
      */
-    private $passengerId;
+    private $passenger;
 
     /**
      * @var float price of the Car por Day
@@ -71,20 +71,11 @@ class Car
     /**
      * Car constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Car constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  string  $name  name of the Car
-     * @param  int  $brandId  id Foreign Key link Brand
-     * @param  int  $colorId  id Foreign Key link Color
-     * @param  int  $passengerId  id Foreign Key link Passenger
+     * @param  Brand  $brand  Brand of the Car
+     * @param  Color  $color  Color of the Car
+     * @param  Passenger  $passenger  number of Passenger of the Car
      * @param  float  $price  price of the Car por Day
      * @param  bool  $manual  true -> manual, false -> automatic
      * @param  string  $type  type of the Car
@@ -94,13 +85,13 @@ class Car
      *
      * @return  void
      */
-    public function Car(int $id, string $name, int $brandId, int $colorId, int $passengerId, float $price, bool $manual, string $type, int $minAge, int $nbDoor, string $location)
+    public function __construct(int $id, string $name = null, Brand $brand = null, Color $color = null, Passenger $passenger = null, float $price = null, bool $manual = null, string $type = null, int $minAge = null, int $nbDoor = null, string $location = null)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->brandId = $brandId;
-        $this->colorId = $colorId;
-        $this->passengerId = $passengerId;
+        $this->brand = $brand;
+        $this->color = $color;
+        $this->passenger = $passenger;
         $this->price = $price;
         $this->manual = $manual;
         $this->type = $type;
@@ -159,73 +150,73 @@ class Car
     }
 
     /**
-     * Get id Foreign Key link Brand
+     * Get Brand of the Car
      *
-     * @return  int
+     * @return  Brand
      */
-    public function getBrandId()
+    public function getBrand()
     {
-        return $this->brandId;
+        return $this->brand;
     }
 
     /**
-     * Set id Foreign Key link Brand
+     * Set Brand of the Car
      *
-     * @param  int  $brandId  id Foreign Key link Brand
+     * @param  Brand $brand brand of the Car
      *
      * @return  self
      */
-    public function setBrandId(int $brandId)
+    public function setBrand(Brand $brand)
     {
-        $this->brandId = $brandId;
+        $this->brand = $brand;
 
         return $this;
     }
 
     /**
-     * Get id Foreign Key link Color
+     * Get Color of the Car
      *
-     * @return  int
+     * @return  Color
      */
-    public function getColorId()
+    public function getColor()
     {
-        return $this->colorId;
+        return $this->color;
     }
 
     /**
-     * Set id Foreign Key link Color
+     * Set Color of the Car
      *
-     * @param  int  $colorId  id Foreign Key link Color
+     * @param  Color  $color color of the Car
      *
      * @return  self
      */
-    public function setColorId(int $colorId)
+    public function setColor(Color $color)
     {
-        $this->colorId = $colorId;
+        $this->color = $color;
 
         return $this;
     }
 
     /**
-     * Get id Foreign Key link Passenger
+     * Get number of Passenger of the Car
      *
-     * @return  int
+     * @return  Passenger
      */
-    public function getPassengerId()
+    public function getPassenger()
     {
-        return $this->passengerId;
+        return $this->passenger;
     }
 
     /**
-     * Set id Foreign Key link Passenger
+     * Set number of Passenger of the Car
      *
-     * @param  int  $passengerId  id Foreign Key link Passenger
+     * @param  Passenger  $passenger  number of Passenger of the Car
      *
      * @return  self
      */
-    public function setPassengerId(int $passengerId)
+    public function setPassenger(Passenger $passenger)
     {
-        $this->passengerId = $passengerId;
+        $this->passenger = $passenger;
 
         return $this;
     }

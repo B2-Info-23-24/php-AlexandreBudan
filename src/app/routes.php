@@ -14,6 +14,15 @@ class Routeur
         switch ($request) {
             case '/':
                 require_once("../app/Controller/HomeController.php");
+                require_once("../app/Model/UserModel.php");
+                require_once("../app/Entity/User.php");
+                require_once("../app/Entity/Address.php");
+                require_once("../app/Entity/Reservation.php");
+                require_once("../app/Entity/Car.php");
+                require_once("../app/Entity/Brand.php");
+                require_once("../app/Entity/Color.php");
+                require_once("../app/Entity/Passenger.php");
+                require_once("../app/Entity/Favori.php");
                 Controller\HomeController::index();
                 break;
             case '/connexion':

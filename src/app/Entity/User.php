@@ -2,7 +2,9 @@
 
 namespace Entity;
 
+use ArrayObject;
 use DateTime;
+use Faker\Test\Provider\Collection;
 
 class User
 {
@@ -49,9 +51,19 @@ class User
     private $gender;
 
     /**
-     * @var int id Foreign Key link Address
+     * @var Address address of the User
      */
-    private $addressId;
+    private $address;
+
+    /**
+     * @var ArrayObject reservations of the User
+     */
+    private $reservations;
+
+    /**
+     * @var ArrayObject favoris of the User
+     */
+    private $favoris;
 
     /**
      * @var string creation date of the User
@@ -83,15 +95,6 @@ class User
     /**
      * User constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * User constructor
-     *
      * @param int $id User ID
      * @param string $email User email
      * @param string $password User password
@@ -100,13 +103,13 @@ class User
      * @param string $phone User phone number
      * @param int $age User age
      * @param string $gender User gender
-     * @param int $addressId User address ID
+     * @param Address $address User address
      * @param bool $newsLetter If User wants to receive newsletter
      * @param bool $verified If User has verified his account
      * @param bool $isAdmin If User is an admin or not
      * @return void
      */
-    public function User(int $id, string $email, string $password, string $firstName, string $lastName, string $phone, int $age, string $gender, int $addressId, bool $newsLetter, bool $verified, bool $isAdmin)
+    public function __construct(int $id, string $email = null, string $password = null, string $firstName = null, string $lastName = null, string $phone = null, int $age = null, string $gender = null, Address $address = null, ArrayObject $reservations = null, ArrayObject $favoris = null, bool $newsLetter = null, bool $verified = null, bool $isAdmin = null)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');
@@ -119,7 +122,9 @@ class User
         $this->phone = $phone;
         $this->age = $age;
         $this->gender = $gender;
-        $this->addressId = $addressId;
+        $this->address = $address;
+        $this->reservations = $reservations;
+        $this->favoris = $favoris;
         $this->creationDate = $dateString;
         $this->newsLetter = $newsLetter;
         $this->verified = $verified;
@@ -288,21 +293,73 @@ class User
     }
 
     /**
-     * Get the value of addressId
+     * Get the value of address
      */
-    public function getAddressId()
+    public function getAddress()
     {
-        return $this->addressId;
+        return $this->address;
     }
 
     /**
-     * Set the value of addressId
+     * Set the value of address
      *
      * @return  self
      */
-    public function setAddressId($addressId)
+    public function setAddress($address)
     {
-        $this->addressId = $addressId;
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reservations
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
+    }
+
+    /**
+     * Set the value to reservations
+     *
+     * @return  self
+     */
+    public function setReservation($reservations)
+    {
+        $this->reservations = $reservations;
+
+        return $this;
+    }
+
+    /**
+     * Add the value to reservations
+     *
+     * @return  self
+     */
+    public function addReservation($reservation)
+    {
+        $this->reservations->append($reservation);
+
+        return $this;
+    }
+
+    /**
+     * Get the value of favoris
+     */
+    public function getFavoris()
+    {
+        return $this->favoris;
+    }
+
+    /**
+     * Add the value to favoris
+     *
+     * @return  self
+     */
+    public function addFavori($favori)
+    {
+        $this->favoris->append($favori);
 
         return $this;
     }
