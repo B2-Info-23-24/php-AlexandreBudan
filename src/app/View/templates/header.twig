@@ -1,4 +1,4 @@
-{% if session.user is defined %}
+{% if user != null %}
 	{% set redirectUrl = "/profil" %}
 {% else %}
 	{% set redirectUrl = "/connexion" %}
@@ -24,7 +24,7 @@
 							Home
 						</a>
 					</li>
-					{% if session.user.isAdmin %}
+					{% if user.isAdmin == 1 %}
 						<li>
 							<a href="/admin" class="nav-link text-white">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-speedometer2" viewbox="0 0 16 16">

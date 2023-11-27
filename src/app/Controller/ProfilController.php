@@ -2,6 +2,8 @@
 
 namespace Controller;
 
+use Model\UserModel;
+
 class ProfilController
 {
 
@@ -10,8 +12,12 @@ class ProfilController
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
 
-        $see = $twig->render('profil.twig');
+        $data = [
+            'user' => $_SESSION['user']
+        ];
 
-        echo $see;
+        $see = $twig->load('profil.twig');
+
+        echo $see->render($data);
     }
 }

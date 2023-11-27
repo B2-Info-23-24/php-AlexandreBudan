@@ -11,24 +11,16 @@ use Config\DataBase;
 use Entity\Brand;
 use Entity\Color;
 use Entity\Favori;
-use Entity\Passenger;
 use PDO;
 use PDOException;
 
 class UserModel
 {
 
-    private $conn;
-
-    public function __construct()
-    {
-        $this->conn = DataBase::connect();
-    }
-
     public function createUser(User $user, Address $address)
     {
         try {
-            $stmtUser = $this->conn->prepare("INSERT INTO User (email, password, firstName, lastName, phone, age, gender, addressId, creationDate, newsLetter, verified, isAdmin, status) 
+            $stmtUser = DataBase::connect()->prepare("INSERT INTO User (email, password, firstName, lastName, phone, age, gender, addressId, creationDate, newsLetter, verified, isAdmin, status) 
                                             VALUES (:email, :password, :firstName, :lastName, :phone, :age, :gender, :addressId, :creationDate, 0, 0, 0, 1)");
 
             $stmtUser->bindParam(":email", $user->getEmail());
@@ -63,27 +55,33 @@ class UserModel
     {
         try {
             $query = "SELECT User.id, User.email, User.password, User.firstName, User.lastName, User.phone, User.age, User.gender,
-                            'address', JSON_OBJECT('id', Address.id, 'address', Address.address, 'city', Address.city, 'code', Address.code, 'country', Address.country) AS address,
-                            'reservations', JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 
-                                'car', JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type, 
-                                    'brand', JSON_OBJECT('id', Brand.id, 'name', Brand.name),
-                                    'color', JSON_OBJECT('id', Color.id, 'name', Color.name)),
-                                'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) AS reservations,
-                            'favoris', JSON_ARRAYAGG(JSON_OBJECT('id', Favori.id,
-                                'car', JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type,
-                                    'brand', JSON_OBJECT('id', Brand.id, 'name', Brand.name),
-                                    'color', JSON_OBJECT('id', Color.id, 'name', Color.name),
-                                    'price', Car.price, 'manual', Car.manual, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor)))AS favoris, 
-                            User.creationDate, User.newsLetter, User.verified, User.isAdmin, User.status
-                        FROM User
-                        LEFT JOIN Address ON User.addressId = Address.id
-                        LEFT JOIN Reservation ON User.id = Reservation.userId
-                        LEFT JOIN Car ON Reservation.carId = Car.id
-                        LEFT JOIN Brand ON Car.brandId = Brand.id
-                        LEFT JOIN Color ON Car.colorId = Color.id
-                        LEFT JOIN Favori ON Favori.userId = User.id
-                        WHERE User.id = $id
-                        GROUP BY User.id;";
+                JSON_OBJECT('id', Address.id, 'address', Address.address, 'city', Address.city, 'code', Address.code, 'country', Address.country) AS address,
+                (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 'car', 
+                    JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type, 
+                        'brand', JSON_OBJECT('id', Brand.id, 'name', Brand.name),
+                        'color', JSON_OBJECT('id', Color.id, 'name', Color.name)),
+                        'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) 
+                FROM Reservation 
+                LEFT JOIN Car ON Reservation.carId = Car.id
+                LEFT JOIN Brand ON Car.brandId = Brand.id
+                LEFT JOIN Color ON Car.colorId = Color.id
+                WHERE User.id = Reservation.userId
+            ) AS reservations,
+            (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Favori.id,
+                    'car', JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type,
+                        'brand', JSON_OBJECT('id', Brand.id, 'name', Brand.name),
+                        'color', JSON_OBJECT('id', Color.id, 'name', Color.name),
+                        'price', Car.price, 'manual', Car.manual, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor))) 
+                FROM Favori 
+                LEFT JOIN Car ON Favori.carId = Car.id
+                LEFT JOIN Brand ON Car.brandId = Brand.id
+                LEFT JOIN Color ON Car.colorId = Color.id
+                WHERE User.id = Favori.userId
+            ) AS favoris, 
+            User.creationDate, User.newsLetter, User.verified, User.isAdmin, User.status
+            FROM User
+            JOIN Address ON User.addressId = Address.id
+            WHERE User.id = $id;";
 
             $stmt = DataBase::connect()->prepare($query);
             $stmt->execute();
@@ -115,6 +113,24 @@ class UserModel
         }
     }
 
+    public static function checkLogin(String $email, String $password)
+    {
+        try {
+            $stmt = DataBase::connect()->prepare("SELECT id, email, password FROM User WHERE email = :email");
+            $stmt->bindParam(":email", $email);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (password_verify($password, $result['password'])) {
+                return $result['id'];
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function updateUser(Int $id)
     {
         try {
@@ -129,25 +145,5 @@ class UserModel
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-    }
-
-    /**
-     * Get the value of conn
-     */
-    public function getConn()
-    {
-        return $this->conn;
-    }
-
-    /**
-     * Set the value of conn
-     *
-     * @return  self
-     */
-    public function setConn($conn)
-    {
-        $this->conn = $conn;
-
-        return $this;
     }
 }

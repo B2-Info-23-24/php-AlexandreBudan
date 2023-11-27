@@ -2,6 +2,8 @@
 
 namespace Controller;
 
+use Model\UserModel;
+
 class LoginController
 {
 
@@ -13,5 +15,16 @@ class LoginController
         $see = $twig->render('login.twig');
 
         echo $see;
+    }
+
+    public static function post()
+    {
+        $userId = UserModel::checkLogin($_POST['email'], $_POST['password']);
+        if ($userId !== false) {
+            $_SESSION['user'] = UserModel::getOneUser($userId);
+            header('Location: /profil');
+        } else {
+            header('Location: /connexion');
+        }
     }
 }

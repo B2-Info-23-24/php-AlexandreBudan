@@ -4,7 +4,6 @@ namespace Entity;
 
 use ArrayObject;
 use DateTime;
-use Faker\Test\Provider\Collection;
 
 class User
 {
