@@ -14,31 +14,22 @@ class Color
     /**
      * @var string name of the Color
      */
-    private $name;
+    private $colorName;
 
     // Constructor
 
     /**
      * Color constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Color constructor
-     *
      * @param  int  $id  id Primary Key
-     * @param  string  $name  name of the Color
+     * @param  string  $colorName  name of the Color
      *
      * @return  void
      */
-    public function Color(int $id, string $name)
+    public function __construct(int $id, string $colorName = null)
     {
         $this->id = $id;
-        $this->name = $name;
+        $this->colorName = $colorName;
     }
 
     /**
@@ -64,9 +55,9 @@ class Color
     /**
      * Get the value of name
      */
-    public function getName()
+    public function getColorName()
     {
-        return $this->name;
+        return $this->colorName;
     }
 
     /**
@@ -74,9 +65,9 @@ class Color
      *
      * @return  self
      */
-    public function setName($name)
+    public function setColorName($colorName)
     {
-        $this->name = $name;
+        $this->colorName = $colorName;
 
         return $this;
     }

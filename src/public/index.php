@@ -16,8 +16,10 @@ App\Routeur::routage();
 
 if (!isset($_SESSION['on'])) {
     // Database
-    Config\DataBase::create();
-    Config\DataFixtures::load();
+    $database = new Config\DataBase();
+    $database->create();
+    $dataFixtures = new Config\DataFixtures();
+    $dataFixtures->load();
 
     $_SESSION['on'] = true;
 }

@@ -21,21 +21,12 @@ class Passenger
     /**
      * Passenger constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Passenger constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  int  $number  number of Passenger
      *
      * @return  void
      */
-    public function Passenger(int $id, int $number)
+    public function __construct(int $id, int $number = null)
     {
         $this->id = $id;
         $this->number = $number;

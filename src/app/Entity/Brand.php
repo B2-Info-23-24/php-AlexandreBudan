@@ -14,31 +14,22 @@ class Brand
     /**
      * @var string name of the Brand
      */
-    private $name;
+    private $brandName;
 
     // Constructor
 
     /**
      * Brand constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Brand constructor
-     *
      * @param  int  $id  id Primary Key
-     * @param  string  $name  name of the Brand
+     * @param  string  $brandName  name of the Brand
      *
      * @return  void
      */
-    public function Brand(int $id, string $name)
+    public function __construct(int $id, string $brandName = null)
     {
         $this->id = $id;
-        $this->name = $name;
+        $this->brandName = $brandName;
     }
 
     /**
@@ -64,9 +55,9 @@ class Brand
     /**
      * Get the value of name
      */
-    public function getName()
+    public function getBrandName()
     {
-        return $this->name;
+        return $this->brandName;
     }
 
     /**
@@ -74,9 +65,9 @@ class Brand
      *
      * @return  self
      */
-    public function setName($name)
+    public function setBrandName($brandName)
     {
-        $this->name = $name;
+        $this->brandName = $brandName;
 
         return $this;
     }

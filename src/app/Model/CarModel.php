@@ -7,10 +7,11 @@ use Config\DataBase;
 
 class CarModel
 {
-    private $conn;
+    private static $conn;
 
     public function __construct()
     {
-        $this->conn = DataBase::connect();
+        $conn = new DataBase();
+        self::$conn = $conn->connect();
     }
 }

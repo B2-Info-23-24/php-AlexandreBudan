@@ -9,14 +9,22 @@ use DateTime;
 
 class DataFixtures
 {
-    public static function load()
+    private static $conn;
+
+    public function __construct()
+    {
+        $conn = new DataBase();
+        self::$conn = $conn->connect();
+    }
+
+    public function load()
     {
 
         // Faker
         $faker = Factory::create();
 
         try {
-            $conn = DataBase::connect();
+            $conn = self::$conn;
 
             // Spécificitées des voitures
             self::makeBrand($conn);
@@ -25,6 +33,10 @@ class DataFixtures
 
             for ($i = 0; $i < 25; $i++) {
                 self::makeUser($conn, $faker);
+                if ($i == 0) {
+                    $stmt = $conn->prepare("UPDATE User SET isAdmin = true WHERE id = $i + 1");
+                    $stmt->execute();
+                }
             }
             for ($i = 0; $i < 20; $i++) {
                 self::makeCar($conn, $faker);
@@ -34,13 +46,13 @@ class DataFixtures
         }
     }
 
-    public static function makeBrand(PDO $db)
+    public function makeBrand(PDO $db)
     {
         $brands = ['Nissan', 'Renault', 'Volvo', 'Tesla', 'Fiat', 'Peugeot', 'Volkswagen', 'Ferrari', 'Hyundai', 'Kia'];
 
         foreach ($brands as $brand) {
             try {
-                $stmt = $db->prepare("INSERT INTO Brand (name) VALUES (:brand)");
+                $stmt = $db->prepare("INSERT INTO Brand (brandName) VALUES (:brand)");
                 $stmt->bindParam(':brand', $brand);
                 $stmt->execute();
             } catch (PDOException $e) {
@@ -49,13 +61,13 @@ class DataFixtures
         }
     }
 
-    public static function makeColor(PDO $db)
+    public function makeColor(PDO $db)
     {
         $colors = ['Rouge', 'Blanc', 'Gris', 'Noir', 'Noir mat', 'Bleu turquoise', 'Bleu marine'];
 
         foreach ($colors as $color) {
             try {
-                $stmt = $db->prepare("INSERT INTO Color (name) VALUES (:color)");
+                $stmt = $db->prepare("INSERT INTO Color (colorName) VALUES (:color)");
                 $stmt->bindParam(':color', $color);
                 $stmt->execute();
             } catch (PDOException $e) {
@@ -64,7 +76,7 @@ class DataFixtures
         }
     }
 
-    public static function makePassenger(PDO $db)
+    public function makePassenger(PDO $db)
     {
         $passengers = [2, 3, 4, 5, 7, 9];
 
@@ -79,7 +91,7 @@ class DataFixtures
         }
     }
 
-    public static function makeUser(PDO $db, \Faker\Generator $faker)
+    public function makeUser(PDO $db, \Faker\Generator $faker)
     {
         $firstName = $faker->firstName;
         $lastName = $faker->lastName;
@@ -102,14 +114,9 @@ class DataFixtures
             $stmt->bindParam(':phone', $phone);
             $stmt->bindParam(':age', $age);
             $stmt->bindParam(':gender', $genders[rand(0, 2)]);
-            if ((bool)rand(0, 1)) {
-                self::makeAddress($db, $faker);
-                $id = $db->query("SELECT MAX(id) FROM Address")->fetchColumn();
-                $stmt->bindParam(':addressId', $id);
-            } else {
-                $adressId = null;
-                $stmt->bindParam(':addressId', $adressId);
-            }
+            self::makeAddress($db, $faker);
+            $id = $db->query("SELECT MAX(id) FROM Address")->fetchColumn();
+            $stmt->bindParam(':addressId', $id);
             $stmt->bindParam(':creationDate', $dateString);
             $stmt->bindParam(':newsLetter', $newsLetter);
             $stmt->bindParam(':verified', $verified);
@@ -119,7 +126,7 @@ class DataFixtures
         }
     }
 
-    public static function makeAddress(PDO $db, \Faker\Generator $faker)
+    public function makeAddress(PDO $db, \Faker\Generator $faker)
     {
         $address =  $faker->address;
         $city = $faker->city;
@@ -138,7 +145,7 @@ class DataFixtures
         }
     }
 
-    public static function makeCar(PDO $db, \Faker\Generator $faker)
+    public function makeCar(PDO $db, \Faker\Generator $faker)
     {
         $types = ["Car", "Van", "Luxury"];
         $type = $types[rand(0, 2)];
@@ -202,7 +209,7 @@ class DataFixtures
         }
     }
 
-    public static function makeUnvailableDate(PDO $db, int $carId, string $beginningDate, string $endingDate)
+    public function makeUnvailableDate(PDO $db, int $carId, string $beginningDate, string $endingDate)
     {
         try {
             $stmt = $db->prepare("INSERT INTO UnvailableDate (carId, beginning, ending) VALUES (:carId, :beginning, :ending)");
@@ -215,7 +222,7 @@ class DataFixtures
         }
     }
 
-    public static function makeFavori(PDO $db, int $carId, int $userId)
+    public function makeFavori(PDO $db, int $carId, int $userId)
     {
         try {
             $stmt = $db->prepare("INSERT INTO Favori (userId, carId, status) VALUES (:userId, :carId, 1)");
@@ -227,7 +234,7 @@ class DataFixtures
         }
     }
 
-    public static function makeReservation(PDO $db, \Faker\Generator $faker, int $carId, int $userId, float $price, DateTime $beginningDate, DateTime $endingDate)
+    public function makeReservation(PDO $db, \Faker\Generator $faker, int $carId, int $userId, float $price, DateTime $beginningDate, DateTime $endingDate)
     {
         $interval = $beginningDate->diff($endingDate);
         $day = $interval->days;
@@ -267,7 +274,7 @@ class DataFixtures
         self::makeOpinion($db, $faker, $carId, $userId, $reservationId);
     }
 
-    public static function makePilote(PDO $db, \Faker\Generator $faker, int $reservationId)
+    public function makePilote(PDO $db, \Faker\Generator $faker, int $reservationId)
     {
         $firstName = $faker->firstName;
         $lastName = $faker->lastName;
@@ -289,7 +296,7 @@ class DataFixtures
         }
     }
 
-    public static function makeOpinion(PDO $db, \Faker\Generator $faker, int $carId, int $userId, int $reservationId)
+    public function makeOpinion(PDO $db, \Faker\Generator $faker, int $carId, int $userId, int $reservationId)
     {
         $commentary = $faker->text(200);
         $rank = rand(0, 5);

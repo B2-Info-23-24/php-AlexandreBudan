@@ -53,15 +53,6 @@ class Opinion
     /**
      * Opinion constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Opinion constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  int  $carId  id Foreign Key link Car
      * @param  int  $userId  id Foreign Key link User
@@ -71,7 +62,7 @@ class Opinion
      *
      * @return  void
      */
-    public function Opinion(int $id, int $carId, int $userId, int $reservationId, string $commentary, string $rank)
+    public function __construct(int $id, int $carId = null, int $userId = null, int $reservationId = null, string $commentary = null, string $rank = null)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');

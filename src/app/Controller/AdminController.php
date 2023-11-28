@@ -2,10 +2,14 @@
 
 namespace Controller;
 
+use Model\BrandModel;
+use Model\ColorModel;
+use Model\PassengerModel;
+
 class AdminController
 {
 
-    public static function index()
+    public function index(string $type = "Marques", $err = null, $err2 = null)
     {
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
@@ -13,7 +17,31 @@ class AdminController
         $loadSee = $twig->load('admin.twig');
 
         $loadTemp = $twig->load('/templates/adminSee.twig');
-        $seeTemp = $loadTemp->render(['type' => "Marques"]);
+
+        $data = null;
+
+        switch ($type) {
+            case 'Marques':
+                $brandModel = new BrandModel();
+                $data = $brandModel->getAllBrand();
+                break;
+            case 'Couleurs':
+                $colorModel = new ColorModel();
+                $data = $colorModel->getAllColor();
+                break;
+            case 'Passagers':
+                $passengerModel = new PassengerModel();
+                $data = $passengerModel->getAllPassenger();
+                break;
+        }
+
+        if ($err != null) {
+            $seeTemp = $loadTemp->render(['data' => $data, 'type' => $type, 'error' => "err"]);
+        } elseif ($err2 != null) {
+            $seeTemp = $loadTemp->render(['data' => $data, 'type' => $type, 'error2' => "err2"]);
+        } else {
+            $seeTemp = $loadTemp->render(['data' => $data, 'type' => "Marques"]);
+        }
 
         $see = $loadSee->render(['see' => $seeTemp]);
 
@@ -27,15 +55,30 @@ class AdminController
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['seeBrand'])) {
             $loadTemp = $twig->load('/templates/adminSee.twig');
-            $seeTemp = $loadTemp->render(['type' => "Marques"]);
+            $brandModel = new BrandModel();
+            $data = $brandModel->getAllBrand();
+            $seeTemp = $loadTemp->render([
+                'data' => $data,
+                'type' => "Marques"
+            ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['seeColor'])) {
             $loadTemp = $twig->load('/templates/adminSee.twig');
-            $seeTemp = $loadTemp->render(['type' => "Couleurs"]);
+            $colorModel = new ColorModel();
+            $data = $colorModel->getAllColor();
+            $seeTemp = $loadTemp->render([
+                'data' => $data,
+                'type' => "Couleurs"
+            ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['seePassenger'])) {
             $loadTemp = $twig->load('/templates/adminSee.twig');
-            $seeTemp = $loadTemp->render(['type' => "Passagers"]);
+            $passengerModel = new PassengerModel();
+            $data = $passengerModel->getAllPassenger();
+            $seeTemp = $loadTemp->render([
+                'data' => $data,
+                'type' => "Passagers"
+            ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['allUsers'])) {
             $loadTemp = $twig->load('/templates/adminSee2.twig');
@@ -62,5 +105,67 @@ class AdminController
         }
 
         echo $see;
+    }
+
+    public function post()
+    {
+        if (isset($_POST['supp'])) {
+            $array = explode("-", $_POST['supp']);
+            switch ($array[0]) {
+                case 'brand':
+                    $brandModel = new BrandModel();
+                    if ($brandModel->deleteBrand($array[1]) != false) {
+                        self::index();
+                    } else {
+                        self::index("Marques", "error");
+                    }
+                    break;
+                case 'color':
+                    $colorModel = new ColorModel();
+                    if ($colorModel->deleteColor($array[1]) != false) {
+                        self::index();
+                    } else {
+                        self::index("Couleurs", "error");
+                    }
+                    break;
+                case 'passenger':
+                    $passengerModel = new PassengerModel();
+                    if ($passengerModel->deletePassenger($array[1]) != false) {
+                        self::index();
+                    } else {
+                        self::index("Passagers", "error");
+                    }
+                    break;
+            }
+        } elseif (isset($_POST['add'])) {
+            switch ($_POST['add']) {
+                case 'brand':
+                    $brandModel = new BrandModel();
+                    if ($brandModel->createBrand($_POST['addvalue']) != false) {
+                        self::index();
+                    } else {
+                        self::index("Marques", null, "error");
+                    }
+                    break;
+                case 'color':
+                    $colorModel = new ColorModel();
+                    if ($colorModel->createColor($_POST['addvalue']) != false) {
+                        self::index();
+                    } else {
+                        self::index("Couleurs", null, "error");
+                    }
+                    break;
+                case 'passenger':
+                    $passengerModel = new PassengerModel();
+                    if ($passengerModel->createPassenger($_POST['addvalue']) != false) {
+                        self::index();
+                    } else {
+                        self::index("Passagers", null, "error");
+                    }
+                    break;
+            }
+        } else {
+            self::index();
+        }
     }
 }

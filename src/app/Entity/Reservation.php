@@ -12,14 +12,14 @@ class Reservation
     private $id;
 
     /**
-     * @var int id Foreign Key link Car
+     * @var Car car of the Reservation
      */
-    private $carId;
+    private $car;
 
     /**
-     * @var int id Foreign Key link User
+     * @var User user of the Reservation
      */
-    private $userId;
+    private $user;
 
     /**
      * @var bool protection of the Car
@@ -71,15 +71,6 @@ class Reservation
     /**
      * Reservation constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Reservation constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  int  $carId  id Foreign Key link Car
      * @param  int  $userId  id Foreign Key link User
@@ -94,11 +85,11 @@ class Reservation
      *
      * @return  void
      */
-    public function Reservation(int $id, int $carId, int $userId, bool $protection, float $price, string $beginning, string $ending, bool $finish, string $beginningState, string $endingState, float $addFees)
+    public function __construct(int $id, Car $car = null, User $user = null, bool $protection = null, float $price = null, string $beginning = null, string $ending = null, bool $finish = null, string $beginningState = null, string $endingState = null, float $addFees = null)
     {
         $this->id = $id;
-        $this->carId = $carId;
-        $this->userId = $userId;
+        $this->car = $car;
+        $this->user = $user;
         $this->protection = $protection;
         $this->price = $price;
         $this->beginning = $beginning;
@@ -135,49 +126,49 @@ class Reservation
     }
 
     /**
-     * Get id Foreign Key link Car
+     * Get car of the Reservation
      *
-     * @return  int
+     * @return  Car
      */
-    public function getCarId()
+    public function getCar()
     {
-        return $this->carId;
+        return $this->car;
     }
 
     /**
-     * Set id Foreign Key link Car
+     * Set car of the Reservation
      *
-     * @param  int  $carId  id Foreign Key link Car
+     * @param  Car  $car car of the Reservation
      *
      * @return  self
      */
-    public function setCarId(int $carId)
+    public function setCar(Car $car)
     {
-        $this->carId = $carId;
+        $this->car = $car;
 
         return $this;
     }
 
     /**
-     * Get id Foreign Key link User
+     * Get user of the Reservation
      *
-     * @return  int
+     * @return  User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * Set id Foreign Key link User
+     * Set user of the Reservation
      *
-     * @param  int  $userId  id Foreign Key link User
+     * @param  user  $user user of the Reservation
      *
      * @return  self
      */
-    public function setUserId(int $userId)
+    public function setUser(User $user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }

@@ -51,15 +51,6 @@ class Pilote
     /**
      * Pilote constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Pilote constructor
-     *
      * @param  int  $id  id Primary Key
      * @param  int  $reservationId  id Foreign Key link Reservation
      * @param  string  $firstName  firstName of the Pilote
@@ -70,7 +61,7 @@ class Pilote
      *
      * @return  void
      */
-    public function Pilote(int $id, int $reservationId, string $firstName, string $lastName, int $age, string $email, string $phone)
+    public function __construct(int $id, int $reservationId = null, string $firstName = null, string $lastName = null, int $age = null, string $email = null, string $phone = null)
     {
         $this->id = $id;
         $this->reservationId = $reservationId;

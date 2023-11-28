@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 
 CREATE TABLE IF NOT EXISTS `Brand` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(50) NOT NULL
+    `brandName` VARCHAR(50) NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `Brand` (
 
 CREATE TABLE IF NOT EXISTS `Color` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(50) NOT NULL
+    `colorName` VARCHAR(50) NOT NULL
 );
 
 -- --------------------------------------------------------

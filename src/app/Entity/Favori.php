@@ -12,14 +12,14 @@ class Favori
     private $id;
 
     /**
-     * @var int id Foreign Key link User
+     * @var User User of the Favori
      */
-    private $userId;
+    private $user;
 
     /**
-     * @var int id Foreign Key link Car
+     * @var Car Car of the Favori
      */
-    private $carId;
+    private $car;
 
     /**
      * @var bool status for Data Management
@@ -31,26 +31,17 @@ class Favori
     /**
      * Favori constructor
      *
-     * @return  void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Favori constructor
-     *
      * @param  int  $id  id Primary Key
-     * @param  int  $userId  id Foreign Key link User
-     * @param  int  $carId  id Foreign Key link Car
+     * @param  User  $user  User of the Favori
+     * @param  Car  $car  Car of the Favori
      *
      * @return  void
      */
-    public function Favori(int $id, int $userId, int $carId)
+    public function __construct(int $id, user $user = null, Car $car = null)
     {
         $this->id = $id;
-        $this->userId = $userId;
-        $this->carId = $carId;
+        $this->user = $user;
+        $this->car = $car;
         $this->status = true;
     }
 
@@ -79,49 +70,49 @@ class Favori
     }
 
     /**
-     * Get id Foreign Key link User
+     * Get User of the Favori
      *
-     * @return  int
+     * @return  User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * Set id Foreign Key link User
+     * Set User of the Favori
      *
-     * @param  int  $userId  id Foreign Key link User
+     * @param  User  $user  User of the Favori
      *
      * @return  self
      */
-    public function setUserId(int $userId)
+    public function setUser(User $user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get id Foreign Key link Car
+     * Get Car of the Favori
      *
-     * @return  int
+     * @return  Car
      */
-    public function getCarId()
+    public function getCar()
     {
-        return $this->carId;
+        return $this->car;
     }
 
     /**
-     * Set id Foreign Key link Car
+     * Set Car of the Favori
      *
-     * @param  int  $carId  id Foreign Key link Car
+     * @param  Car  $car  Car of the Favori
      *
      * @return  self
      */
-    public function setCarId(int $carId)
+    public function setCar(Car $car)
     {
-        $this->carId = $carId;
+        $this->car = $car;
 
         return $this;
     }

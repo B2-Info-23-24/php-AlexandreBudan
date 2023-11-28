@@ -7,23 +7,30 @@
 		</div>
 	</section>
 	<div id="data-container">
+		{% if error is defined %}
+			{{ type }}
+			attribué à un véhicule, impossible de le supprimer.
+		{% endif %}
+		<p></p>
 		<ul id="data-list">
-			<div class="mini-box">
-				<h5>Tesla</h5>
-				<button type="submit">❌</button>
-			</div>
-			<p></p>
-			<div class="mini-box">
-				<h5>Nissan</h5>
-				<button type="submit">❌</button>
-			</div>
-			<p></p>
-			<div class="mini-box">
-				<h5>BMW</h5>
-				<button type="submit">❌</button>
-			</div>
-			<p></p>
-			<button class="btn-add" type="submit" onclick="showSummaryModal()">Ajouter</button>
+			<form method="post" style="width:100%;">
+				{% for one in data %}
+					<div class="mini-box">
+						{% if one.brandName is defined %}
+							<h5>{{ one.brandName }}</h5>
+							<button type="submit" name="supp" value="brand-{{ one.id }}">❌</button>
+						{% elseif one.colorName is defined %}
+							<h5>{{ one.colorName }}</h5>
+							<button type="submit" name="supp" value="color-{{ one.id }}">❌</button>
+						{% elseif one.number is defined %}
+							<h5>{{ one.number }}</h5>
+							<button type="submit" name="supp" value="passenger-{{ one.id }}">❌</button>
+						{% endif %}
+					</div>
+					<p></p>
+				{% endfor %}
+			</form>
+			<button class="btn-add" onclick="showSummaryModal()">Ajouter</button>
 		</ul>
 	</div>
 	<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
@@ -34,10 +41,22 @@
 						{{ type }}</h5>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="summaryModalTitle" class="form-control" aria-describedby="basic-addon1">
+					<input type="text" name"addvalue" id="summaryModalTitle" class="form-control" aria-describedby="basic-addon1" required>
 				</div>
+				{% if error is defined %}
+					<p></p>
+					{{ type }}
+					déjà existant.
+					<p></p>
+				{% endif %}
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Ajouter</button>
+					{% if data[0].brandName is defined %}
+						<button type="submit" class="btn btn-secondary" data-dismiss="modal" name="add" onclick="closeSummaryModal()" value="brand">Ajouter</button>
+					{% elseif data[0].colorName is defined %}
+						<button type="submit" class="btn btn-secondary" data-dismiss="modal" name="add" onclick="closeSummaryModal()" value="color">Ajouter</button>
+					{% elseif data[0].number is defined %}
+						<button type="submit" class="btn btn-secondary" data-dismiss="modal" name="add" onclick="closeSummaryModal()" value="passenger">Ajouter</button>
+					{% endif %}
 					<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Fermer</button>
 				</div>
 			</div>
