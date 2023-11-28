@@ -9,7 +9,6 @@ use Controller\CarsController;
 use Controller\ProfilController;
 use Controller\OneCarController;
 use Controller\AdminController;
-use Entity\User;
 
 class Routeur
 {
@@ -34,13 +33,27 @@ class Routeur
                     }
                     break;
                 case '/inscription':
-                    RegisterController::index();
+                    switch ($method) {
+                        case 'GET':
+                            RegisterController::index();
+                            break;
+                        case 'POST':
+                            RegisterController::post();
+                            break;
+                    }
                     break;
                 case '/vehicules':
                     CarsController::index();
                     break;
                 case '/profil':
-                    ProfilController::index();
+                    switch ($method) {
+                        case 'GET':
+                            ProfilController::index();
+                            break;
+                        case 'POST':
+                            ProfilController::post();
+                            break;
+                    }
                     break;
                 case '/vehicule':
                     OneCarController::index();
@@ -74,7 +87,14 @@ class Routeur
                     }
                     break;
                 case '/inscription':
-                    RegisterController::index();
+                    switch ($method) {
+                        case 'GET':
+                            RegisterController::index();
+                            break;
+                        case 'POST':
+                            RegisterController::post();
+                            break;
+                    }
                     break;
                 case '/vehicules':
                     OneCarController::index();

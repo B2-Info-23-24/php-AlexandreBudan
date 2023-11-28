@@ -30,7 +30,7 @@
 		</div>
 		<p></p>
 		<div class="box">
-			<button id="modifNP">Modifier Nom et Prénom</button>
+			<button id="modifNP" name="ModifMdp">Modifier Nom et Prénom</button>
 		</div>
 		<p></p>
 		<div id="form-NP" class="hidden">
@@ -44,7 +44,7 @@
 					<label for="lastName">Nom :</label>
 					<input type="text" id="lastName" name="lastName" value="{{ user.lastName }}" required>
 				</div>
-				<button type="submit">Enregistrer</button>
+				<button type="submit" name="NP">Enregistrer</button>
 			</form>
 		</div>
 		<p></p>
@@ -60,8 +60,11 @@
 		</div>
 		<p></p>
 		<div class="box">
-			<button id="ModifMdp">Modifier Mot de passe</button>
+			<button id="ModifMdp" name="ModifMdp">Modifier Mot de passe</button>
 		</div>
+		{% if error is defined %}
+			Mauvais Mot De Passe
+		{% endif %}
 		<p></p>
 		<div id="form-mdp" class="hidden">
 			<form action="" method="post">
@@ -74,7 +77,7 @@
 					<label for="newPass">Nouveau mot de passe :</label>
 					<input type="password" id="newPass" name="newPass" required>
 				</div>
-				<button type="submit">Enregistrer</button>
+				<button type="submit" name="mdp">Enregistrer</button>
 			</form>
 		</div>
 		<p></p>
@@ -102,11 +105,11 @@
 			</div>
 			<p></p>
 			<div class="box">
-				<button id="modifAdd">Modifier Adresse</button>
+				<button id="modifAdd" name="modifAdd">Modifier Adresse</button>
 			</div>
 			<p></p>
 			<div id="form-add" class="hidden">
-				<form action="" method="post">
+				<form method="post">
 					<h2>Modifier adresse</h2>
 					<div class="form-group">
 						<label for="address">Adresse :</label>
@@ -124,7 +127,7 @@
 						<label for="country">Pays :</label>
 						<input type="text" id="country" name="country" required>
 					</div>
-					<button type="submit">Enregistrer</button>
+					<button type="submit" name="add">Enregistrer</button>
 				</form>
 			</div>
 			<p></p>
@@ -229,6 +232,11 @@
 				</div>
 			</div>
 		</div>
+		<form method="post">
+			<div style="display:flex; justify-content:center;">
+				<button type="submit" style="background-color:red;">Deconnecter</button>
+			</div>
+		</form>
 	</div>
 {% endblock %}
 
@@ -236,29 +244,48 @@
 	<script>
 		var formNP = document.getElementById('form-NP');
 var modifNP = document.getElementById('modifNP');
+var formMdp = document.getElementById('form-mdp');
+var modifMdp = document.getElementById('modifMdp');
+var formAdd = document.getElementById('form-add');
+var modifAdd = document.getElementById('modifAdd');
+
 modifNP.addEventListener("click", function (event) {
 if (formNP.classList.contains('hidden')) {
 formNP.classList.remove('hidden');
+if (!formMdp.classList.contains('hidden')) {
+formMdp.classList.add('hidden');
+}
+if (!formAdd.classList.contains('hidden')) {
+formAdd.classList.add('hidden');
+}
 } else {
 formNP.classList.add('hidden');
 }
 });
 
-var formMdp = document.getElementById('form-mdp');
-var modifMdp = document.getElementById('modifMdp');
 ModifMdp.addEventListener("click", function (event) {
 if (formMdp.classList.contains('hidden')) {
 formMdp.classList.remove('hidden');
+if (!formNP.classList.contains('hidden')) {
+formNP.classList.add('hidden');
+}
+if (!formAdd.classList.contains('hidden')) {
+formAdd.classList.add('hidden');
+}
 } else {
 formMdp.classList.add('hidden');
 }
 });
 
-var formAdd = document.getElementById('form-add');
-var modifAdd = document.getElementById('modifAdd');
 modifAdd.addEventListener("click", function (event) {
 if (formAdd.classList.contains('hidden')) {
 formAdd.classList.remove('hidden');
+if (!formMdp.classList.contains('hidden')) {
+formMdp.classList.add('hidden');
+}
+if (!formNP.classList.contains('hidden')) {
+formNP.classList.add('hidden');
+}
 } else {
 formAdd.classList.add('hidden');
 }

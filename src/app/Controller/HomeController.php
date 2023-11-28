@@ -11,7 +11,7 @@ class HomeController
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
 
-        if (!isset($_SESSION['user'])) {
+        if (isset($_SESSION['user'])) {
             $data = [
                 'user' => $_SESSION['user']
             ];
