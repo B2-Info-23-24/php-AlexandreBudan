@@ -7,7 +7,7 @@ use Model\UserModel;
 class ProfilController
 {
 
-    public static function index($err = null)
+    public function index($err = null)
     {
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
@@ -28,20 +28,23 @@ class ProfilController
         echo $see->render($data);
     }
 
-    public static function post()
+    public function post()
     {
+        $userModel = new UserModel();
         $user = $_SESSION['user'];
+        $userId = $user->getId() ?? $user['id'];
         if (isset($_POST['NP'])) {
-            UserModel::updateUser($user['id'], 1, [$_POST['firstName'], $_POST['lastName']]);
+            $userModel->updateUser($userId, 1, [$_POST['firstName'], $_POST['lastName']]);
             header('Location: /profil');
         } elseif (isset($_POST['mdp'])) {
-            if (UserModel::updateUser($user['id'], 2, [$_POST['currentPass'], $_POST['newPass']]) !== null) {
+            if ($userModel->updateUser($userId, 2, [$_POST['currentPass'], $_POST['newPass']]) !== null) {
                 self::index(true);
             } else {
                 self::index();
             }
         } elseif (isset($_POST['add'])) {
-            UserModel::updateUser($user['address']->getId(), 3, [$_POST['address'], $_POST['city'], $_POST['postalCode'], $_POST['country']]);
+            $userId = $user->getAddress()->getId() ?? $user['address_id'];
+            $userModel->updateUser($userId, 3, [$_POST['address'], $_POST['city'], $_POST['postalCode'], $_POST['country']]);
             header('Location: /profil');
         } else {
             $_SESSION['user'] = null;

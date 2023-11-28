@@ -7,7 +7,7 @@ use PDOException;
 
 class DataBase
 {
-    public static function connect()
+    public function connect()
     {
 
         $servername = $_ENV['DB_SERVERNAME'];
@@ -25,7 +25,7 @@ class DataBase
         }
     }
 
-    public static function create()
+    public function create()
     {
 
         try {

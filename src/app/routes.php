@@ -20,47 +20,65 @@ class Routeur
         if (isset($_SESSION['user'])) {
             switch ($request) {
                 case '/':
-                    HomeController::index();
+                    $controller = new HomeController();
+                    $controller->index();
                     break;
                 case '/connexion':
                     switch ($method) {
                         case 'GET':
-                            LoginController::index();
+                            $controller = new LoginController();
+                            $controller->index();
                             break;
                         case 'POST':
-                            LoginController::post();
+                            $controller = new LoginController();
+                            $controller->post();
                             break;
                     }
                     break;
                 case '/inscription':
                     switch ($method) {
                         case 'GET':
-                            RegisterController::index();
+                            $controller = new RegisterController();
+                            $controller->index();
                             break;
                         case 'POST':
-                            RegisterController::post();
+                            $controller = new RegisterController();
+                            $controller->post();
                             break;
                     }
                     break;
                 case '/vehicules':
-                    CarsController::index();
+                    $controller = new CarsController();
+                    $controller->index();
                     break;
                 case '/profil':
                     switch ($method) {
                         case 'GET':
-                            ProfilController::index();
+                            $controller = new ProfilController();
+                            $controller->index();
                             break;
                         case 'POST':
-                            ProfilController::post();
+                            $controller = new ProfilController();
+                            $controller->post();
                             break;
                     }
                     break;
                 case '/vehicule':
-                    OneCarController::index();
+                    $controller = new OneCarController();
+                    $controller->index();
                     break;
                 case '/admin':
-                    if ($_SESSION['user']->isAdmin) {
-                        AdminController::index();
+                    if ($_SESSION['user']->getIsAdmin()) {
+                        switch ($method) {
+                            case 'GET':
+                                $controller = new AdminController();
+                                $controller->index();
+                                break;
+                            case 'POST':
+                                $controller = new AdminController();
+                                $controller->post();
+                                break;
+                        }
                     } else {
                         http_response_code(404);
                         echo 'Page not found';
@@ -74,30 +92,36 @@ class Routeur
         } else {
             switch ($request) {
                 case '/':
-                    HomeController::index();
+                    $controller = new HomeController();
+                    $controller->index();
                     break;
                 case '/connexion':
                     switch ($method) {
                         case 'GET':
-                            LoginController::index();
+                            $controller = new LoginController();
+                            $controller->index();
                             break;
                         case 'POST':
-                            LoginController::post();
+                            $controller = new LoginController();
+                            $controller->post();
                             break;
                     }
                     break;
                 case '/inscription':
                     switch ($method) {
                         case 'GET':
-                            RegisterController::index();
+                            $controller = new RegisterController();
+                            $controller->index();
                             break;
                         case 'POST':
-                            RegisterController::post();
+                            $controller = new RegisterController();
+                            $controller->post();
                             break;
                     }
                     break;
                 case '/vehicules':
-                    OneCarController::index();
+                    $controller = new OneCarController();
+                    $controller->index();
                     break;
                 default:
                     http_response_code(404);

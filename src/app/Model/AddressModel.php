@@ -8,7 +8,15 @@ use PDOException;
 
 class AddressModel
 {
-    public static function createAddress(Address $address)
+    private static $conn;
+
+    public function __construct()
+    {
+        $conn = new DataBase();
+        self::$conn = $conn->connect();
+    }
+
+    public function createAddress(Address $address)
     {
         try {
             $addressAdd = $address->getAddress();
@@ -16,7 +24,7 @@ class AddressModel
             $code = $address->getCode();
             $country = $address->getCountry();
 
-            $stmtAddress = DataBase::connect()->prepare("INSERT INTO Address (address, city, code, country, status) 
+            $stmtAddress = self::$conn->prepare("INSERT INTO Address (address, city, code, country, status) 
                                             VALUES (:address, :city, :code, :country, 1)");
             $stmtAddress->bindParam(":address", $addressAdd);
             $stmtAddress->bindParam(":city", $city);
@@ -25,7 +33,7 @@ class AddressModel
 
             $stmtAddress->execute();
 
-            $addressid = DataBase::connect()->query("SELECT MAX(id) FROM Address")->fetchColumn();
+            $addressid = self::$conn->query("SELECT MAX(id) FROM Address")->fetchColumn();
 
             return $addressid;
         } catch (PDOException $e) {

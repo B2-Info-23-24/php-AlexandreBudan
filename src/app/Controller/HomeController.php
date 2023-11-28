@@ -5,7 +5,7 @@ namespace Controller;
 class HomeController
 {
 
-    public static function index()
+    public function index()
     {
 
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');

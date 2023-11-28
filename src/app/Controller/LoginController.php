@@ -7,7 +7,7 @@ use Model\UserModel;
 class LoginController
 {
 
-    public static function index()
+    public function index()
     {
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
@@ -17,11 +17,13 @@ class LoginController
         echo $see;
     }
 
-    public static function post()
+    public function post()
     {
-        $userId = UserModel::checkLogin($_POST['email'], $_POST['password']);
+        $userModel = new UserModel();
+        $userId = $userModel->checkLogin($_POST['email'], $_POST['password']);
         if ($userId !== false) {
-            $_SESSION['user'] = UserModel::getOneUser($userId);
+            $user = $userModel->getOneUser($userId);
+            $_SESSION['user'] = $user;
             header('Location: /profil');
         } else {
             header('Location: /connexion');
