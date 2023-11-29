@@ -2,7 +2,6 @@
 
 namespace Entity;
 
-use ArrayObject;
 use DateTime;
 
 class User

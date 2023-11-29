@@ -2,7 +2,6 @@
 
 namespace Model;
 
-use ArrayObject;
 use Config\DataBase;
 use PDO;
 use PDOException;
