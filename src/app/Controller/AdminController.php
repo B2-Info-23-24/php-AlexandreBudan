@@ -115,7 +115,7 @@ class AdminController
                 case 'brand':
                     $brandModel = new BrandModel();
                     if ($brandModel->deleteBrand($array[1]) != false) {
-                        self::index();
+                        self::index("Marques");
                     } else {
                         self::index("Marques", "error");
                     }
@@ -123,7 +123,7 @@ class AdminController
                 case 'color':
                     $colorModel = new ColorModel();
                     if ($colorModel->deleteColor($array[1]) != false) {
-                        self::index();
+                        self::index("Couleurs");
                     } else {
                         self::index("Couleurs", "error");
                     }
@@ -131,19 +131,17 @@ class AdminController
                 case 'passenger':
                     $passengerModel = new PassengerModel();
                     if ($passengerModel->deletePassenger($array[1]) != false) {
-                        self::index();
+                        self::index("Passagers");
                     } else {
                         self::index("Passagers", "error");
                     }
                     break;
             }
         } elseif (isset($_POST['add'])) {
-            var_dump($_POST['add']);
-            $values = explode("-", $_POST['add']);
-            switch ($values[0]) {
+            switch ($_POST['add']) {
                 case 'brand':
                     $brandModel = new BrandModel();
-                    if ($brandModel->createBrand($values[1]) != false) {
+                    if ($brandModel->createBrand($_POST['val']) != false) {
                         self::index("Marques");
                     } else {
                         self::index("Marques", null, "error");
@@ -151,7 +149,7 @@ class AdminController
                     break;
                 case 'color':
                     $colorModel = new ColorModel();
-                    if ($colorModel->createColor($values[1]) != false) {
+                    if ($colorModel->createColor($_POST['val']) != false) {
                         self::index("Couleurs");
                     } else {
                         self::index("Couleurs", null, "error");
@@ -159,7 +157,7 @@ class AdminController
                     break;
                 case 'passenger':
                     $passengerModel = new PassengerModel();
-                    if ($passengerModel->createPassenger($values[1]) != false) {
+                    if ($passengerModel->createPassenger($_POST['val']) != false) {
                         self::index("Passagers");
                     } else {
                         self::index("Passagers", null, "error");

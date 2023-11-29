@@ -40,11 +40,11 @@
 					<div class="modal-header">
 						<h5 id="type2" class="modal-title">Ajouter
 							{{ type }}</h5>
-						</div>
-					<div class="modal-body">
-						<input type="text" name"val" id="summaryModalTitle" class="form-control" aria-describedby="basic-addon1" required>
 					</div>
-					{% if error is defined %}
+					<div class="modal-body">
+						<input type="text" name="val" id="summaryModalTitle" class="form-control" aria-describedby="basic-addon1" required>
+					</div>
+					{% if error2 != null %}
 						<p></p>
 						{{ type }}
 						déjà existant.
