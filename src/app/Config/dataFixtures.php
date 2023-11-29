@@ -170,7 +170,7 @@ class DataFixtures
             $name = $type . strval($id);
             $location = strval($faker->latitude) . ":" . strval($faker->longitude);
             $manual =  rand(0, 1);
-            $minAge =  array_rand([null, 18]);
+            $minAge =  rand(18, 80);
 
             $stmt = $db->prepare("INSERT INTO Car (name, brandId, colorId, passengerId, price, manual, type, minAge, nbDoor, location, status) VALUES (:name, :brandId, :colorId, :passengerId, :price, :manual, :type, :minAge, :nbDoor, :location, 1)");
             $stmt->bindParam(':name', $name);

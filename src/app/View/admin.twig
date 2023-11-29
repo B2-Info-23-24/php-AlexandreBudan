@@ -135,6 +135,10 @@ $('#summaryModal').modal('show');
 }
 
 function closeSummaryModal() {
+	var inputValue = document.getElementById('summaryModalTitle').value;
+			var btnValue = document.getElementById('btnValue');
+			btnValue.value = btn.value + inputValue;
+
 $('#summaryModal').modal('hide');
 }
 	</script>

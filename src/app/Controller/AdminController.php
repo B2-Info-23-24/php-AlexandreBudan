@@ -138,27 +138,29 @@ class AdminController
                     break;
             }
         } elseif (isset($_POST['add'])) {
-            switch ($_POST['add']) {
+            var_dump($_POST['add']);
+            $values = explode("-", $_POST['add']);
+            switch ($values[0]) {
                 case 'brand':
                     $brandModel = new BrandModel();
-                    if ($brandModel->createBrand($_POST['addvalue']) != false) {
-                        self::index();
+                    if ($brandModel->createBrand($values[1]) != false) {
+                        self::index("Marques");
                     } else {
                         self::index("Marques", null, "error");
                     }
                     break;
                 case 'color':
                     $colorModel = new ColorModel();
-                    if ($colorModel->createColor($_POST['addvalue']) != false) {
-                        self::index();
+                    if ($colorModel->createColor($values[1]) != false) {
+                        self::index("Couleurs");
                     } else {
                         self::index("Couleurs", null, "error");
                     }
                     break;
                 case 'passenger':
                     $passengerModel = new PassengerModel();
-                    if ($passengerModel->createPassenger($_POST['addvalue']) != false) {
-                        self::index();
+                    if ($passengerModel->createPassenger($values[1]) != false) {
+                        self::index("Passagers");
                     } else {
                         self::index("Passagers", null, "error");
                     }
