@@ -2,7 +2,6 @@
 
 namespace Controller;
 
-use ArrayObject;
 use DateTime;
 use Entity\Address;
 use Entity\User;
