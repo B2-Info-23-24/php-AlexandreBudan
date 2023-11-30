@@ -134,11 +134,14 @@
 $('#summaryModal').modal('show');
 }
 
-function closeSummaryModal() {
-	var inputValue = document.getElementById('summaryModalTitle').value;
-			var btnValue = document.getElementById('btnValue');
-			btnValue.value = btn.value + inputValue;
+function showEditModal() {
+$('#editModal').modal('show');
+}
+function closeEditModal() {
+$('#editModal').modal('hide');
+}
 
+function closeSummaryModal() {
 $('#summaryModal').modal('hide');
 }
 	</script>

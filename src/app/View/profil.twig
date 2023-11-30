@@ -137,7 +137,7 @@
 					<div class="boxbox">
 						<div class="card shadow-sm">
 							<a href="/vehicule/{{ reservation.id }}">
-								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
+								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ reservation.car.picture }}">
 							</a>
 							<div class="card-body">
 								<h5>Informations Reservation</h5>
@@ -185,7 +185,7 @@
 					<div class="boxbox">
 						<a href="/vehicule/{{ favori.id }}">
 							<div class="card shadow-sm">
-								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
+								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ favori.car.picture }}">
 								<div class="card-body">
 									<h5>Caractéristiques</h5>
 									<p class="card-text">- Nombres de portes :
@@ -252,10 +252,10 @@ var modifAdd = document.getElementById('modifAdd');
 modifNP.addEventListener("click", function (event) {
 if (formNP.classList.contains('hidden')) {
 formNP.classList.remove('hidden');
-if (!formMdp.classList.contains('hidden')) {
+if (! formMdp.classList.contains('hidden')) {
 formMdp.classList.add('hidden');
 }
-if (!formAdd.classList.contains('hidden')) {
+if (! formAdd.classList.contains('hidden')) {
 formAdd.classList.add('hidden');
 }
 } else {
@@ -266,10 +266,10 @@ formNP.classList.add('hidden');
 ModifMdp.addEventListener("click", function (event) {
 if (formMdp.classList.contains('hidden')) {
 formMdp.classList.remove('hidden');
-if (!formNP.classList.contains('hidden')) {
+if (! formNP.classList.contains('hidden')) {
 formNP.classList.add('hidden');
 }
-if (!formAdd.classList.contains('hidden')) {
+if (! formAdd.classList.contains('hidden')) {
 formAdd.classList.add('hidden');
 }
 } else {
@@ -280,10 +280,10 @@ formMdp.classList.add('hidden');
 modifAdd.addEventListener("click", function (event) {
 if (formAdd.classList.contains('hidden')) {
 formAdd.classList.remove('hidden');
-if (!formMdp.classList.contains('hidden')) {
+if (! formMdp.classList.contains('hidden')) {
 formMdp.classList.add('hidden');
 }
-if (!formNP.classList.contains('hidden')) {
+if (! formNP.classList.contains('hidden')) {
 formNP.classList.add('hidden');
 }
 } else {

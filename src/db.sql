@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `Car` (
     `brandId` INT NOT NULL,
     `colorId` INT NOT NULL,
     `passengerId` INT NOT NULL,
+    `picture` VARCHAR(255) NOT NULL,
     `price` FLOAT NOT NULL,
     `manual` TINYINT NOT NULL,
     `type` VARCHAR(20) NOT NULL,

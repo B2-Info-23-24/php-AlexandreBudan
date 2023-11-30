@@ -233,3 +233,16 @@ input[type="number"] {
     border-radius: 5px;
     border: 5px solid #ccc;
 }
+
+.container-button {
+    display: flex;
+    justify-content: center;
+}
+
+.addCar {
+    width: 30%;
+    size: 30px;
+    border-radius: 5px;
+    border: 5px solid blue;
+    background-color: #007bff;
+}

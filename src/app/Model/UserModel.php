@@ -23,7 +23,7 @@ class UserModel
         self::$conn = $conn->connect();
     }
 
-    public function createUser(User $user, Address $address)
+    public function createUser(User $user)
     {
         $email = $user->getEmail();
         $password = password_hash($user->getPassword(), PASSWORD_DEFAULT);
@@ -33,6 +33,7 @@ class UserModel
         $age = $user->getAge();
         $gender = $user->getGender();
         $creationDate = $user->getCreationDate();
+        $address = $user->getAddress();
 
         try {
             $stmtUser = self::$conn->prepare("INSERT INTO User (email, password, firstName, lastName, phone, age, gender, addressId, creationDate, newsLetter, verified, isAdmin, status) 
@@ -79,7 +80,7 @@ class UserModel
                 (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 'car', 
                     JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type, 
                         'brand', JSON_OBJECT('id', Brand.id, 'brandName', Brand.brandName),
-                        'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName)),
+                        'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName), 'picture', Car.picture),
                         'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) 
                 FROM Reservation 
                 LEFT JOIN Car ON Reservation.carId = Car.id
@@ -91,7 +92,7 @@ class UserModel
                     'car', JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type,
                         'brand', JSON_OBJECT('id', Brand.id, 'brandName', Brand.brandName),
                         'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName),
-                        'price', Car.price, 'manual', Car.manual, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor))) 
+                        'picture', Car.picture, 'price', Car.price, 'manual', Car.manual, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor))) 
                 FROM Favori 
                 LEFT JOIN Car ON Favori.carId = Car.id
                 LEFT JOIN Brand ON Car.brandId = Brand.id

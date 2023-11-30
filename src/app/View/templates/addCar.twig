@@ -5,20 +5,23 @@
 		</div>
 	</div>
 </section>
-<div class="col bg" style="margin-left:50px; margin-right:50px;">
-	<div class="card shadow-sm">
-		<img class="bd-placeholder-img card-img-top" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg" alt="Car Photo">
-		<div class="card-body">
-			<h5>Caractéristiques</h5>
-			<form id="carInfoForm">
+<div class="col bg" style="margin-left:50px; margin-right:50px; margin-bottom:100px;">
+	<form action="" method="post" enctype="multipart/form-data">
+		<div class="card shadow-sm">
+			<div id="drop-area" style="border: 2px dashed #ccc; padding: 20px; text-align: center; height:1000px;">
+				<input type="file" id="file-input" name="file-input" accept="image/*"/>
+				<img id="preview-image" style="width:100%; height:100%"/>
+			</div>
+			<div class="card-body">
+				<h5>Caractéristiques</h5>
 				<div class="form-group">
 					<label for="name">Nom :</label>
 					<input type="text" class="form-control" id="name" name="name" value="M3">
 				</div>
 				<p></p>
 				<div class="form-group">
-					<label for="doors">Nombre de portes :</label>
-					<input type="number" class="form-control" id="doors" name="doors" value="5">
+					<label for="nbDoor">Nombre de portes :</label>
+					<input type="number" class="form-control" id="nbDoor" name="nbDoor" value="5">
 				</div>
 				<p></p>
 				<div class="form-group">
@@ -27,65 +30,86 @@
 				</div>
 				<p></p>
 				<div class="form-group">
-					<label for="maxPassengers">Nombre de passagers maximum :</label>
-					<select class="form-control" id="maxPassengers" name="maxPassengers" style="height:100%">
-						<option value="2">2</option>
-						<option value="4">4</option>
-						<option value="5" selected>5</option>
-						<option value="7">7</option>
+					<label for="passenger">Nombre de passagers maximum :</label>
+					<select class="form-control" id="passenger" name="passenger" style="height:100%">
+						{% for passenger in passengers %}
+							<option value="{{ passenger.id }}">{{ passenger.number }}</option>
+						{% endfor %}
 					</select>
 				</div>
 				<p></p>
 				<div class="form-group">
 					<label for="brand">Marque :</label>
 					<select class="form-control" id="brand" name="brand" style="height:100%">
-						<option value="BMW" selected>BMW</option>
-						<option value="Audi">Audi</option>
-						<option value="Mercedes">Mercedes</option>
-						<option value="Tesla">Tesla</option>
+						{% for brand in brands %}
+							<option value="{{ brand.id }}">{{ brand.brandName }}</option>
+						{% endfor %}
 					</select>
 				</div>
 				<p></p>
 				<div class="form-group">
 					<label for="color">Couleur :</label>
 					<select class="form-control" id="color" name="color" style="height:100%">
-						<option value="Noir" selected>Noir</option>
-						<option value="Blanc">Blanc</option>
-						<option value="Rouge">Rouge</option>
-						<option value="Bleu">Bleu</option>
+						{% for color in colors %}
+							<option value="{{ color.id }}">{{ color.colorName }}</option>
+						{% endfor %}
 					</select>
 				</div>
 				<p></p>
 				<div class="form-group">
-					<label for="transmission">Transmission :</label>
-					<input type="text" class="form-control" id="transmission" name="transmission" value="Manuelle">
+					<label for="transmition">Transmission :</label>
+					<select class="form-control" id="transmition" name="transmition" style="height:100%">
+						<option value="true">Manuelle</option>
+						<option value="false">Automatique</option>
+					</select>
 				</div>
 				<p></p>
 				<div class="form-group">
 					<label for="price">Prix à la journée :</label>
 					<input type="number" class="form-control" id="price" name="price" value="50">
 				</div>
-			</form>
-			<p></p>
-			<div class="save-btn" style="display:flex; justify-content:center;">
-				<button type="button" class="btn btn-primary">Enregistrer</button>
+				<div class="form-group">
+					<label for="type">Type :</label>
+					<input type="text" class="form-control" id="type" name="type" value="Sportive">
+				</div>
+				<div class="form-group">
+					<label for="location">Location : (En Longitude et Latitude)</label>
+					<input type="text" class="form-control" id="location" name="location" value="-70.700639:-24.414263">
+				</div>
+				<p></p>
+				<div class="save-btn" style="display:flex; justify-content:center;">
+					<button type="submit" name="saveButton" class="btn btn-primary">Enregistrer</button>
+				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 </div>
-<p></p>
-<div class="col bg" style="margin-left:50px; margin-right:50px; margin-bottom:100px;">
-	<div class="reservation-form">
-		<h5>Ajouter une date d'indisponibilitée</h5>
-		<form id="indisponibilityDateForm">
-			<div class="form-group">
-				<label for="date">Date :</label>
-				<input type="date" class="form-control" id="date" name="date">
-			</div>
-			<p></p>
-			<div style="display:flex; justify-content:center;">
-				<button type="button" class="btn btn-primary">Ajouter</button>
-			</div>
-		</form>
-	</div>
-</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+var fileInput = document.getElementById('file-input');
+var previewImage = document.getElementById('preview-image');
+
+fileInput.addEventListener('change', function () {
+var files = fileInput.files;
+
+if (files.length > 0) {
+var reader = new FileReader();
+
+reader.onload = function (event) {
+var img = new Image();
+img.src = event.target.result;
+img.style.width = '100%';
+img.style.height = '100%';
+
+previewImage.src = img.src;
+
+// Masquer l'input
+fileInput.style.display = 'none';
+};
+
+reader.readAsDataURL(files[0]);
+}
+});
+});
+</script>

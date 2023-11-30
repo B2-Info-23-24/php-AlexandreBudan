@@ -4,6 +4,7 @@ namespace Model;
 
 use Entity\Passenger;
 use Config\DataBase;
+use PDO;
 use PDOException;
 
 class PassengerModel
@@ -24,8 +25,24 @@ class PassengerModel
             $stmtPassenger->bindParam(":number", $number);
 
             $stmtPassenger->execute();
+            return true;
         } catch (PDOException $e) {
             return false;
+        }
+    }
+
+    public function getOnePassenger($id)
+    {
+        try {
+            $stmtPassenger = self::$conn->query("SELECT * FROM Passenger WHERE id = $id");
+
+            $result = $stmtPassenger->fetch(PDO::FETCH_ASSOC);
+
+            $passenger = new Passenger(...$result);
+
+            return $passenger;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -56,8 +73,25 @@ class PassengerModel
             $stmtPassenger = self::$conn->prepare("DELETE FROM Passenger WHERE id = :id");
             $stmtPassenger->bindParam(":id", $id);
             $stmtPassenger->execute();
+            return true;
         } catch (PDOException $e) {
             return false;
+        }
+    }
+
+    public function checkCreate($number)
+    {
+        try {
+            $stmtPassenger = self::$conn->prepare("SELECT * FROM Passenger WHERE number = :number");
+            $stmtPassenger->bindParam(":number", $number);
+            $stmtPassenger->execute();
+            if ($stmtPassenger->rowCount() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 }

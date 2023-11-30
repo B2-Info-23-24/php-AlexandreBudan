@@ -48,8 +48,16 @@ class Routeur
                     }
                     break;
                 case '/vehicules':
-                    $controller = new CarsController();
-                    $controller->index();
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new CarsController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new CarsController();
+                            $controller->post();
+                            break;
+                    }
                     break;
                 case '/profil':
                     switch ($method) {
