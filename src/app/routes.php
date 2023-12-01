@@ -128,8 +128,16 @@ class Routeur
                     }
                     break;
                 case '/vehicules':
-                    $controller = new OneCarController();
-                    $controller->index();
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new CarsController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new CarsController();
+                            $controller->post();
+                            break;
+                    }
                     break;
                 default:
                     http_response_code(404);

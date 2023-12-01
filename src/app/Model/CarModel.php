@@ -20,7 +20,7 @@ class CarModel
         self::$conn = $conn->connect();
     }
 
-    public function createCar(Car $car)
+    public function createCar(Car $car, $status)
     {
         $name = $car->getName();
         $brandId = $car->getBrand()->getId();
@@ -33,10 +33,11 @@ class CarModel
         $minAge = $car->getMinAge();
         $nbDoor = $car->getNbDoor();
         $location = $car->getLocation();
+        $status = $status == "true" ? 1 : 0;
 
         try {
             $stmtCar = self::$conn->prepare("INSERT INTO Car (name, brandId, colorId, passengerId, picture, price, manual, type, minAge, nbDoor, location, status) 
-                                            VALUES (:name, :brandId, :colorId, :passengerId, :picture, :price, :manual, :type, :minAge, :nbDoor, :location, 1)");
+                                            VALUES (:name, :brandId, :colorId, :passengerId, :picture, :price, :manual, :type, :minAge, :nbDoor, :location, :status)");
 
             $stmtCar->bindParam(":name", $name);
             $stmtCar->bindParam(":brandId", $brandId);
@@ -49,6 +50,7 @@ class CarModel
             $stmtCar->bindParam(":minAge", $minAge);
             $stmtCar->bindParam(":nbDoor", $nbDoor);
             $stmtCar->bindParam(":location", $location);
+            $stmtCar->bindParam(":status", $status);
 
             $stmtCar->execute();
 
@@ -74,7 +76,7 @@ class CarModel
                 FROM Passenger P
                 WHERE P.id = Car.passengerId
                 ) AS passenger,
-                Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location
+                Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location, Car.status
             FROM Car
             WHERE Car.id = $carId";
 
@@ -93,7 +95,7 @@ class CarModel
         }
     }
 
-    public function getAllCar()
+    public function getAllCar($admin = false)
     {
         try {
             $query = "SELECT Car.id, Car.name,
@@ -109,9 +111,11 @@ class CarModel
                 FROM Passenger P
                 WHERE P.id = Car.passengerId
                 ) AS passenger,
-                Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location
-            FROM Car
-            WHERE Car.status = 1";
+                Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location, Car.status
+            FROM Car";
+            if (!$admin) {
+                $query .= " WHERE Car.status = 1";
+            }
 
             $stmt = self::$conn->prepare($query);
             $stmt->execute();
@@ -132,9 +136,9 @@ class CarModel
         }
     }
 
-    public function getCarsByFilter($search, $price, $brandId, $colorId, $passengerId)
+    public function getCarsByFilter($search, $price, $brandId, $colorId, $passengerId, $admin = false)
     {
-        $data = self::getAllCar();
+        $data = self::getAllCar($admin);
         if ($search != null) {
             $tempData = [];
             foreach ($data as $one) {
@@ -185,7 +189,7 @@ class CarModel
         return $data;
     }
 
-    public function updateCar($carId, Car $car)
+    public function updateCar($carId, Car $car, $status)
     {
         $name = $car->getName();
         $brandId = $car->getBrand()->getId();
@@ -198,8 +202,9 @@ class CarModel
         $minAge = $car->getMinAge();
         $nbDoor = $car->getNbDoor();
         $location = $car->getLocation();
+        $status = $status == "true" ? 1 : 0;
 
-        $stmtCar = self::$conn->prepare("UPDATE Car SET name = :name, brandId = :brandId, colorId = :colorId, passengerId = :passengerId, picture = :picture, price = :price, manual = :manual, type = :type, minAge = :minAge, nbDoor = :nbDoor, location = :location WHERE id = :carId");
+        $stmtCar = self::$conn->prepare("UPDATE Car SET name = :name, brandId = :brandId, colorId = :colorId, passengerId = :passengerId, picture = :picture, price = :price, manual = :manual, type = :type, minAge = :minAge, nbDoor = :nbDoor, location = :location, status = :status WHERE id = :carId");
         $stmtCar->bindParam(":name", $name);
         $stmtCar->bindParam(":brandId", $brandId);
         $stmtCar->bindParam(":colorId", $colorId);
@@ -211,6 +216,7 @@ class CarModel
         $stmtCar->bindParam(":minAge", $minAge);
         $stmtCar->bindParam(":nbDoor", $nbDoor);
         $stmtCar->bindParam(":location", $location);
+        $stmtCar->bindParam(":status", $status);
         $stmtCar->bindParam(":carId", $carId, PDO::PARAM_INT);
         $stmtCar->execute();
     }

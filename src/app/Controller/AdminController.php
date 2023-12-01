@@ -51,11 +51,11 @@ class AdminController
                 break;
             case 'Cars':
                 $carModel = new CarModel();
-                $data = $carModel->getAllCar();
+                $data = $carModel->getAllCar(true);
                 break;
             case 'filter':
                 $carModel = new CarModel();
-                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers']);
+                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], true);
                 $type = 'Cars';
                 break;
         }
@@ -84,7 +84,7 @@ class AdminController
             $passengerModel = new PassengerModel();
             $passengers = $passengerModel->getAllPassenger();
             $carModel = new CarModel();
-            $data = $carModel->getAllCar();
+            $data = $carModel->getAllCar(true);
             $seeTemp = $loadTemp->render([
                 'data' => $data,
                 'type' => 'Cars',
@@ -250,7 +250,7 @@ class AdminController
                 $colorModel = new ColorModel();
                 $passengerModel = new PassengerModel();
                 $car = new Car(0, $_POST['name'], $brandModel->getOneBrand($_POST['brand']), $colorModel->getOneColor($_POST['color']), $passengerModel->getOnePassenger($_POST['passenger']), '/img/' . $uploadedFile['name'], $_POST['price'], $_POST['transmition'], $_POST['type'], $_POST['minAge'], $_POST['nbDoor'], $_POST['location']);
-                $carModel->createCar($car);
+                $carModel->createCar($car, $_POST['status']);
                 self::index("Cars");
             } else {
                 echo 'Erreur lors de l\'enregistrement de l\'image.';
@@ -284,7 +284,7 @@ class AdminController
                 $colorModel = new ColorModel();
                 $passengerModel = new PassengerModel();
                 $car = new Car(0, $_POST['name'], $brandModel->getOneBrand($_POST['brand']), $colorModel->getOneColor($_POST['color']), $passengerModel->getOnePassenger($_POST['passenger']), $img, $_POST['price'], $_POST['transmition'], $_POST['type'], $_POST['minAge'], $_POST['nbDoor'], $_POST['location']);
-                $carModel->updateCar($_POST['id'], $car);
+                $carModel->updateCar($_POST['id'], $car, $_POST['status']);
                 self::index("Cars");
             } else {
                 echo 'Erreur lors de l\'enregistrement de l\'image.';

@@ -91,7 +91,7 @@ class Car
      *
      * @return  void
      */
-    public function __construct(int $id, string $name = null, Brand $brand = null, Color $color = null, Passenger $passenger = null, string $picture = null, float $price = null, bool $manual = null, string $type = null, int $minAge = null, int $nbDoor = null, string $location = null)
+    public function __construct(int $id, string $name = null, Brand $brand = null, Color $color = null, Passenger $passenger = null, string $picture = null, float $price = null, bool $manual = null, string $type = null, int $minAge = null, int $nbDoor = null, string $location = null, bool $status = true)
     {
         $this->id = $id;
         $this->name = $name;
@@ -105,7 +105,7 @@ class Car
         $this->minAge = $minAge;
         $this->nbDoor = $nbDoor;
         $this->location = $location;
-        $this->status = true;
+        $this->status = $status;
     }
 
     /**
