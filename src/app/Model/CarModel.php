@@ -170,8 +170,8 @@ class CarModel
                         Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location, Car.status
                     FROM Car
                     WHERE 
-                    SUBSTRING_INDEX(Car.location, ':', 1) BETWEEN $minLat AND $maxLat
-                    AND SUBSTRING_INDEX(Car.location, ':', -1) BETWEEN $minLng AND $maxLng";
+                    SUBSTRING_INDEX(Car.location, ',', 1) BETWEEN $minLat AND $maxLat
+                    AND SUBSTRING_INDEX(Car.location, ',', -1) BETWEEN $minLng AND $maxLng";
 
             $stmt = self::$conn->prepare($query);
             $stmt->execute();

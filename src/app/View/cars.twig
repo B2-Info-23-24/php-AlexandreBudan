@@ -72,7 +72,16 @@
 						<div class="col">
 							<div class="card shadow-sm">
 								{% if user != null %}
-									<div class="star" id="star{{ one.id }}" onclick="test({{ one.id }})" data-value="0">&#9733;</div>
+									{% set conditionValidee = false %}
+									{% for userFavorie in userFavories %}
+										{% if userFavorie.car.id == one.id %}
+											<div class="star yellow" id="star{{ one.id }}" onclick="test({{ one.id }})" data-value="1">&#9733;</div>
+											{% set conditionValidee = true %}
+										{% endif %}
+									{% endfor %}
+									{% if conditionValidee != true %}
+										<div class="star" id="star{{ one.id }}" onclick="test({{ one.id }})" data-value="0">&#9733;</div>
+									{% endif %}
 								{% endif %}
 								{% if user == null %}
 									<a href="/connexion">
@@ -125,22 +134,28 @@
 			</div>
 		</div>
 		<p></p>
+	{% endblock %}
+
+	{% block script %}
 		<script>
 			function test(id) {
-console.log(id);
 const star = document.getElementById('star' + String(id));
 
-const starValue = parseInt(star.getAttribute('data-value'), 10);
+if (star.getAttribute('data-value') == 1) {
+star.classList.remove('yellow');
 
-star.classList.toggle('yellow');
+star.setAttribute('data-value', 0);
 
-star.setAttribute('data-value', (starValue + 1) % 2);
+document.getElementById('starValue').value = "0/" + id;
+} else {
+star.classList.add('yellow');
 
-document.getElementById('starValue').value = id;
+star.setAttribute('data-value', 1);
 
-const form = document.getElementById('starForm');
+document.getElementById('starValue').value = "1/" + id;
+}
 
-form.submit();
+document.getElementById('starValue').click();
 }
 		</script>
 	{% endblock %}

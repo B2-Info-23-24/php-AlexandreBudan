@@ -51,11 +51,11 @@ class AdminController
                 break;
             case 'Cars':
                 $carModel = new CarModel();
-                $data = $carModel->getAllCar(true);
+                $data = $carModel->getAllCar(true, null);
                 break;
             case 'filter':
                 $carModel = new CarModel();
-                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], null, true);
+                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
                 $type = 'Cars';
                 break;
         }
@@ -84,7 +84,7 @@ class AdminController
             $passengerModel = new PassengerModel();
             $passengers = $passengerModel->getAllPassenger();
             $carModel = new CarModel();
-            $data = $carModel->getAllCar(true);
+            $data = $carModel->getAllCar(true, null);
             $seeTemp = $loadTemp->render([
                 'data' => $data,
                 'type' => 'Cars',

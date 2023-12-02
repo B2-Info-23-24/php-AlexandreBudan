@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use Model\FavoriModel;
 use Model\UserModel;
 
 class ProfilController
@@ -11,6 +12,9 @@ class ProfilController
     {
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
+
+        $userModel = new UserModel();
+        $_SESSION['user'] = $userModel->getOneUser($_SESSION['user']->getId());
 
         if ($err != null) {
             $data = [
@@ -46,6 +50,11 @@ class ProfilController
             $userId = $user->getAddress()->getId() ?? $user['address_id'];
             $userModel->updateUser($userId, 3, [$_POST['address'], $_POST['city'], $_POST['postalCode'], $_POST['country']]);
             header('Location: /profil');
+        } elseif (isset($_POST['starValue'])) {
+            $carId = $_POST['starValue'];
+            $favoriModel = new FavoriModel();
+            $favoriModel->deleteFavori($_SESSION['user'], $carId);
+            self::index();
         } else {
             $_SESSION['user'] = null;
             header('Location: /');

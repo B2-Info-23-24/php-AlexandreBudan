@@ -25,11 +25,6 @@ class CarsController
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
 
-        if (isset($_SESSION['user'])) {
-            $user = $_SESSION['user'];
-        } else {
-            $user = null;
-        }
         $carModel = new CarModel();
 
         $request = explode("?", $_SERVER['REQUEST_URI']);
@@ -41,6 +36,16 @@ class CarsController
                 $data = $carModel->getAllCar();
                 $count = ceil(self::$conn->query("SELECT COUNT(*) AS total FROM Car")->fetchColumn() / 9);
             }
+        }
+
+        $userFavories = null;
+
+        if (isset($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+            $favoriModel = new FavoriModel();
+            $userFavories = $favoriModel->getAllFavoriOfUser($_SESSION['user']->getId());
+        } else {
+            $user = null;
         }
 
         $seeLoad = $twig->load('cars.twig');
@@ -60,7 +65,8 @@ class CarsController
             'passengers' => $passengers,
             'filters' => $twig->render('/templates/filters.twig'),
             'request' => $request,
-            'count' => $count
+            'count' => $count,
+            'userFavories' => $userFavories
         ]);
 
         echo $see;
@@ -77,20 +83,19 @@ class CarsController
             $data = $carModel->getAllCar(false, $_POST['pagination']);
             self::index($data, ceil(self::$conn->query("SELECT COUNT(*) AS total FROM Car")->fetchColumn() / 9));
         } elseif (isset($_POST['starValue'])) {
-            var_dump("test");
-            $carId = $_POST['starValue'];
-            $favoriModel = new FavoriModel();
-            $userFavories = $favoriModel->getAllFavoriOfUser($_SESSION['user']->getId());
-            foreach ($userFavories as $userFavories) {
-                if ($userFavories->getCar()->getId() == $carId && $userFavories->getUser()->getId() == $_SESSION['user']->getId()) {
-                    $favoriModel->deleteFavori($_SESSION['user']->getId(), $carId);
-                    return;
-                }
+            $carId = explode("/", $_POST['starValue'])[1];
+            $delAdd = strval(explode("/", $_POST['starValue'])[0]);
+            if ($delAdd == "0") {
+                $favoriModel = new FavoriModel();
+                $favoriModel->deleteFavori($_SESSION['user'], $carId);
+            } else {
+                $favoriModel = new FavoriModel();
+                $favori = new Favori(0, $_SESSION['user'], $carModel->getOneCar($carId));
+                $favoriModel->createFavori($favori);
             }
-            $favori = new Favori(0, $_SESSION['user'], $carModel->getOneCar($carId));
-            $favoriModel->createFavori($favori);
-            return;
+            self::index();
         } else {
+            var_dump($_POST);
             self::index();
         }
     }

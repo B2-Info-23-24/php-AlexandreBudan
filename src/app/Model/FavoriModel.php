@@ -75,18 +75,14 @@ class FavoriModel
     public function deleteFavori(User $user, int $carId)
     {
         $userId = $user->getId();
-        if (self::$conn->query("SELECT * FROM Favori WHERE userId = $userId AND carId = $carId")->fetchColumn() == 0) {
-            try {
-                $stmtFavori = self::$conn->prepare("DELETE FROM Favori WHERE userId = :userId AND carId = :carId");
-                $stmtFavori->bindParam(":userId", $userId);
-                $stmtFavori->bindParam(":carId", $carId);
+        try {
+            $stmtFavori = self::$conn->prepare("DELETE FROM Favori WHERE userId = :userId AND carId = :carId");
+            $stmtFavori->bindParam(":userId", $userId);
+            $stmtFavori->bindParam(":carId", $carId);
 
-                $stmtFavori->execute();
-                return true;
-            } catch (PDOException $e) {
-                return false;
-            }
-        } else {
+            $stmtFavori->execute();
+            return true;
+        } catch (PDOException $e) {
             return false;
         }
     }

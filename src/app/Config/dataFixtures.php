@@ -206,7 +206,7 @@ class DataFixtures
             $longitude = $faker->longitude(4.5, 5.2);
 
 
-            $location = strval($latitude) . ":" . strval($longitude);;
+            $location = strval($latitude) . "," . strval($longitude);;
             $manual =  rand(0, 1);
             $minAge =  rand(18, 80);
 

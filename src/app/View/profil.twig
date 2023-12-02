@@ -130,15 +130,16 @@
 					<button type="submit" name="add">Enregistrer</button>
 				</form>
 			</div>
+		</div>
+		<p></p>
+		<div class="reservation">
 			<p></p>
 			<h2>Réservations</h2>
 			<div class="container-fav">
 				{% for reservation in user.reservations %}
 					<div class="boxbox">
 						<div class="card shadow-sm">
-							<a href="/vehicule/{{ reservation.id }}">
-								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ reservation.car.picture }}">
-							</a>
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ reservation.car.picture }}">
 							<div class="card-body">
 								<h5>Informations Reservation</h5>
 								<p class="card-text">- Début :
@@ -178,56 +179,59 @@
 					</div>
 				{% endfor %}
 			</div>
-
+		</div>
+		<p></p>
+		<div class="favoris">
 			<h2>Favoris</h2>
 			<div class="container-fav">
+				<form method="post" id="starForm" style="display:none;">
+					<input type="submit" id="starValue" name="starValue" value="0">
+				</form>
 				{% for favori in user.favoris %}
 					<div class="boxbox">
-						<a href="/vehicule/{{ favori.id }}">
-							<div class="card shadow-sm">
-								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ favori.car.picture }}">
-								<div class="card-body">
-									<h5>Caractéristiques</h5>
-									<p class="card-text">- Nombres de portes :
-										{{ favori.car.nbDoor }}</p>
-									<p class="card-text">- Age minimum :
-										{{ favori.car.minAge }}</p>
-									<p class="card-text">
-										<h6>- A partir de
-											{{ favori.car.price | number_format(2, '.', ',') }}
-											€ / jour</h6>
-									</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.brand.brandName }}</button>
-											<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.color.colorName }}</button>
-										</div>
-										<small class="text-body-secondary">
-											{% if favori.car.manual %}
-												Manuelle
-											{% else %}
-												Automatique
-											{% endif %}
-										</small>
+						<div class="card shadow-sm">
+							<div class="star yellow" id="star{{ favori.car.id }}" onclick="test({{ favori.car.id }})" data-value="1">&#9733;</div>
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ favori.car.picture }}">
+							<div class="card-body">
+								<h5>Caractéristiques</h5>
+								<p class="card-text">- Nombres de portes :
+									{{ favori.car.nbDoor }}</p>
+								<p class="card-text">- Age minimum :
+									{{ favori.car.minAge }}</p>
+								<p class="card-text">
+									<h6>- A partir de
+										{{ favori.car.price | number_format(2, '.', ',') }}
+										€ / jour</h6>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.brand.brandName }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.color.colorName }}</button>
 									</div>
+									<small class="text-body-secondary">
+										{% if favori.car.manual %}
+											Manuelle
+										{% else %}
+											Automatique
+										{% endif %}
+									</small>
 								</div>
 							</div>
-						</a>
+						</div>
 					</div>
 				{% endfor %}
 			</div>
-
-			<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Récapitulatif de la réservation</h5>
-						</div>
-						<div class="modal-body"></div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Annuler la réservation</button>
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Fermer</button>
-						</div>
+		</div>
+		<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Récapitulatif de la réservation</h5>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Annuler la réservation</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Fermer</button>
 					</div>
 				</div>
 			</div>
@@ -303,5 +307,17 @@ var closeResa = document.getElementById('closeResa');
 closeResa.addEventListener("click", function (event) {
 $('#summaryModal').modal('hide');
 });
+
+function test(id) {
+const star = document.getElementById('star' + String(id));
+
+star.classList.remove('yellow');
+
+star.setAttribute('data-value', 0);
+
+document.getElementById('starValue').value = id;
+
+document.getElementById('starValue').click();
+}
 	</script>
 {% endblock %}
