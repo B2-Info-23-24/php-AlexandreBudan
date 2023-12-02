@@ -55,7 +55,7 @@ class AdminController
                 break;
             case 'filter':
                 $carModel = new CarModel();
-                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], true);
+                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], null, true);
                 $type = 'Cars';
                 break;
         }

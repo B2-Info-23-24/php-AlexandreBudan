@@ -77,11 +77,11 @@ class UserModel
         try {
             $query = "SELECT User.id, User.email, User.password, User.firstName, User.lastName, User.phone, User.age, User.gender,
                 JSON_OBJECT('id', Address.id, 'address', Address.address, 'city', Address.city, 'code', Address.code, 'country', Address.country) AS address,
-                (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 'car', 
+                (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 'car',
                     JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type, 
                         'brand', JSON_OBJECT('id', Brand.id, 'brandName', Brand.brandName),
                         'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName), 'picture', Car.picture),
-                        'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) 
+                        'user', null, 'hash', Reservation.hash, 'protection', Reservation.protection, 'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) 
                 FROM Reservation 
                 LEFT JOIN Car ON Reservation.carId = Car.id
                 LEFT JOIN Brand ON Car.brandId = Brand.id

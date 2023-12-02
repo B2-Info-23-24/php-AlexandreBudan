@@ -150,6 +150,7 @@ CREATE TABLE IF NOT EXISTS `Reservation` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `carId` INT NOT NULL,
     `userId` INT NOT NULL,
+    `hash` VARCHAR(255) NOT NULL,
     `protection` TINYINT NOT NULL,
     `price` FLOAT NOT NULL,
     `beginning` DATE NOT NULL,

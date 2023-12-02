@@ -21,7 +21,7 @@ class DataFixtures
     {
 
         // Faker
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
         try {
             $conn = self::$conn;
@@ -38,7 +38,7 @@ class DataFixtures
                     $stmt->execute();
                 }
             }
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < 50; $i++) {
                 self::makeCar($conn, $faker);
             }
         } catch (PDOException $e) {
@@ -130,8 +130,8 @@ class DataFixtures
     {
         $address =  $faker->address;
         $city = $faker->city;
-        $code = $faker->countryCode;
-        $country = $faker->country;
+        $code = $faker->postcode;
+        $country = "France";
 
         try {
             $stmt = $db->prepare("INSERT INTO Address (address, city, code, country, status) VALUES (:address, :city, :code, :country, 1)");
@@ -202,7 +202,11 @@ class DataFixtures
             $picture = $pictures[$numb];
             $idForParams = strval(floor($numb / 3) + 1);
             $brandId = $db->query("SELECT id FROM Brand WHERE id = $idForParams")->fetchColumn();
-            $location = strval($faker->latitude) . ":" . strval($faker->longitude);
+            $latitude = $faker->latitude(45.5, 46);
+            $longitude = $faker->longitude(4.5, 5.2);
+
+
+            $location = strval($latitude) . ":" . strval($longitude);;
             $manual =  rand(0, 1);
             $minAge =  rand(18, 80);
 
@@ -279,11 +283,13 @@ class DataFixtures
         $endingState = $faker->text(100);
         $beginningString = $beginningDate->format('Y-m-d H:i:s');
         $endingString = $endingDate->format('Y-m-d H:i:s');
+        $hash = strtr(base64_encode(random_bytes(18)), '/+', '_-');
 
         try {
-            $stmt = $db->prepare("INSERT INTO Reservation (carId, userId, protection, price, beginning, ending, finish, beginningState, endingState, addFees, status) VALUES (:carId, :userId, :protection, :price, :beginning, :ending, 0, :beginningState, :endingState, :addFees, 1)");
+            $stmt = $db->prepare("INSERT INTO Reservation (carId, userId, hash, protection, price, beginning, ending, finish, beginningState, endingState, addFees, status) VALUES (:carId, :userId, :hash, :protection, :price, :beginning, :ending, 0, :beginningState, :endingState, :addFees, 1)");
             $stmt->bindParam(':carId', $carId);
             $stmt->bindParam(':userId', $userId);
+            $stmt->bindParam(':hash', $hash);
             $stmt->bindParam(':protection', $protection);
             $stmt->bindParam(':beginning', $beginningString);
             $stmt->bindParam(':ending', $endingString);

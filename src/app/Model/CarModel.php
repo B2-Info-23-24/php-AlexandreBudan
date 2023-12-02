@@ -95,7 +95,7 @@ class CarModel
         }
     }
 
-    public function getAllCar($admin = false)
+    public function getAllCar($admin = false, $page = 1)
     {
         try {
             $query = "SELECT Car.id, Car.name,
@@ -115,6 +115,9 @@ class CarModel
             FROM Car";
             if (!$admin) {
                 $query .= " WHERE Car.status = 1";
+            }
+            if ($page != null) {
+                $query .= " LIMIT 9 OFFSET " . (($page - 1) * 9);
             }
 
             $stmt = self::$conn->prepare($query);
@@ -136,9 +139,66 @@ class CarModel
         }
     }
 
-    public function getCarsByFilter($search, $price, $brandId, $colorId, $passengerId, $admin = false)
+    public function getAllCarByLocation($location)
     {
-        $data = self::getAllCar($admin);
+
+        $loc = explode("x", $location)[0];
+        $param = explode("x", $location)[1];
+        $coordinates = explode(",", $loc);
+        $lat = $coordinates[0];
+        $lng = $coordinates[1];
+
+        $minLat = $lat - ($param / 1000);
+        $maxLat = $lat + ($param / 1000);
+        $minLng = $lng - ($param / 1000);
+        $maxLng = $lng + ($param / 1000);
+
+        try {
+            $query = "SELECT Car.id, Car.name,
+                        (SELECT JSON_OBJECT('id', B.id, 'brandName', B.brandName)
+                        FROM Brand B
+                        WHERE B.id = Car.brandId
+                        ) AS brand,
+                        (SELECT JSON_OBJECT('id', C.id, 'colorName', C.colorName)
+                        FROM Color C
+                        WHERE C.id = Car.colorId
+                        ) AS color,
+                        (SELECT JSON_OBJECT('id', P.id, 'number', P.number)
+                        FROM Passenger P
+                        WHERE P.id = Car.passengerId
+                        ) AS passenger,
+                        Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location, Car.status
+                    FROM Car
+                    WHERE 
+                    SUBSTRING_INDEX(Car.location, ':', 1) BETWEEN $minLat AND $maxLat
+                    AND SUBSTRING_INDEX(Car.location, ':', -1) BETWEEN $minLng AND $maxLng";
+
+            $stmt = self::$conn->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $allCar = [];
+            foreach ($result as $car) {
+                $car['brand'] = new Brand(...get_object_vars(json_decode($car['brand'])));
+                $car['color'] = new Color(...get_object_vars(json_decode($car['color'])));
+                $car['passenger'] = new Passenger(...get_object_vars(json_decode($car['passenger'])));
+                $oneCar = new Car(...$car);
+                array_push($allCar, $oneCar);
+            }
+
+            return $allCar;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function getCarsByFilter($search, $price, $brandId, $colorId, $passengerId, $location, $admin = false)
+    {
+        if ($location != "none") {
+            $data = self::getAllCarByLocation($location);
+        } else {
+            $data = self::getAllCar($admin, null);
+        }
         if ($search != null) {
             $tempData = [];
             foreach ($data as $one) {

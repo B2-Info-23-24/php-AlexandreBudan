@@ -22,6 +22,11 @@ class Reservation
     private $user;
 
     /**
+     * @var string hash of the Reservation
+     */
+    private $hash;
+
+    /**
      * @var bool protection of the Car
      */
     private $protection;
@@ -72,8 +77,9 @@ class Reservation
      * Reservation constructor
      *
      * @param  int  $id  id Primary Key
-     * @param  int  $carId  id Foreign Key link Car
-     * @param  int  $userId  id Foreign Key link User
+     * @param  Car  $car  Car Foreign Key link Car
+     * @param  User  $user  User Foreign Key link User
+     * @param  string  $hash  hash of the Reservation
      * @param  bool  $protection  protection of the Car
      * @param  float  $price  price of the Reservation
      * @param  string  $beginning  date of the beginning of UnvailableDate
@@ -85,11 +91,12 @@ class Reservation
      *
      * @return  void
      */
-    public function __construct(int $id, Car $car = null, User $user = null, bool $protection = null, float $price = null, string $beginning = null, string $ending = null, bool $finish = null, string $beginningState = null, string $endingState = null, float $addFees = null)
+    public function __construct(int $id, Car $car = null, User $user = null, string $hash, bool $protection = null, float $price = null, string $beginning = null, string $ending = null, bool $finish = null, string $beginningState = null, string $endingState = null, float $addFees = null)
     {
         $this->id = $id;
         $this->car = $car;
         $this->user = $user;
+        $this->hash = $hash;
         $this->protection = $protection;
         $this->price = $price;
         $this->beginning = $beginning;
@@ -385,6 +392,26 @@ class Reservation
     public function setStatus(bool $status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of hash
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * Set the value of hash
+     *
+     * @return  self
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
 
         return $this;
     }
