@@ -2,11 +2,15 @@
 
 namespace Controller;
 
+use DateTime;
+use Entity\Address;
 use Entity\Car;
+use Entity\User;
 use Model\BrandModel;
 use Model\CarModel;
 use Model\ColorModel;
 use Model\PassengerModel;
+use Model\UserModel;
 
 class AdminController
 {
@@ -22,10 +26,16 @@ class AdminController
         $brands = null;
         $colors = null;
         $passengers = null;
+        $oneUser = null;
 
 
         if ($type == 'Marques' || $type == 'Couleurs' || $type == 'Passagers') {
             $loadTemp = $twig->load('/templates/adminSee.twig');
+        } elseif ($type == 'Utilisateurs' || $type == 'OneUser') {
+            $loadTemp = $twig->load('/templates/adminSee2.twig');
+        } elseif ($type == 'newUser') {
+            $type = "Ajouter un User";
+            $loadTemp = $twig->load('/templates/addUser.twig');
         } elseif ($type == 'Cars' || $type == 'filter') {
             $brandModel = new BrandModel();
             $brands = $brandModel->getAllBrand();
@@ -58,6 +68,16 @@ class AdminController
                 $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
                 $type = 'Cars';
                 break;
+            case 'Utilisateurs':
+                $userModel = new UserModel();
+                $data = $userModel->getAllUser();
+                break;
+            case 'OneUser':
+                $type = 'Utilisateurs';
+                $userModel = new UserModel();
+                $data = $userModel->getAllUser();
+                $oneUser = $userModel->getOneUser($_POST['modifUser']);
+                break;
         }
 
         $seeTemp = $loadTemp->render([
@@ -70,7 +90,8 @@ class AdminController
             'error' => $err,
             'error2' => $err2,
             'error3' => $err3,
-            'oneCar' => $oneCar
+            'oneCar' => $oneCar,
+            'oneUser' => $oneUser
         ]);
 
         $see = $loadSee->render(['see' => $seeTemp]);
@@ -131,7 +152,12 @@ class AdminController
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['allUsers'])) {
             $loadTemp = $twig->load('/templates/adminSee2.twig');
-            $seeTemp = $loadTemp->render(['type' => "Utilisateurs"]);
+            $userModel = new UserModel();
+            $data = $userModel->getAllUser();
+            $seeTemp = $loadTemp->render([
+                'data' => $data,
+                'type' => "Utilisateurs"
+            ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['allOpinion'])) {
             $loadTemp = $twig->load('/templates/opinion.twig');
@@ -153,6 +179,12 @@ class AdminController
                 'brands' => $brands,
                 'colors' => $colors,
                 'passengers' => $passengers
+            ]);
+            $see = $loadSee->render(['see' => $seeTemp]);
+        } elseif (isset($_POST['addUser'])) {
+            $loadTemp = $twig->load('/templates/addUser.twig');
+            $seeTemp = $loadTemp->render([
+                'type' => "Ajouter un User"
             ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['allResa'])) {
@@ -289,6 +321,49 @@ class AdminController
             } else {
                 echo 'Erreur lors de l\'enregistrement de l\'image.';
             }
+        } elseif (isset($_POST['suppUser'])) {
+            $userModel = new UserModel();
+            $userModel->deleteUser($_POST['suppUser']);
+            self::index("Utilisateurs");
+        } elseif (isset($_POST['unSuppUser'])) {
+            $userModel = new UserModel();
+            $userModel->unDeleteUser($_POST['unSuppUser']);
+            self::index("Utilisateurs");
+        } elseif (isset($_POST['modifUser'])) {
+            self::index("OneUser");
+        } elseif (isset($_POST['NP'])) {
+            $userModel = new UserModel();
+            $userModel->updateUser(intval($_POST['NP']), 1, [$_POST['firstName'], $_POST['lastName']]);
+            self::index("Utilisateurs");
+        } elseif (isset($_POST['newUser'])) {
+            $userModel = new UserModel();
+            $address = new Address(0, $_POST['address'], $_POST['city'], $_POST['postalCode'], $_POST['country']);
+            $date = new DateTime();
+            $admin = false;
+            if ($_POST['admin'] == "true") {
+                $admin = true;
+            }
+            $user = new User(0, $_POST['email'], $_POST['password'], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['age'], $_POST['gender'], $address, [], [], $date->format('Y-m-d H:i:s'), false, false, $admin);
+            if ($userModel->checkRegister($user->getEmail())) {
+                $userModel->createUser($user, $address);
+                self::index("Utilisateurs");
+            } else {
+                self::index("newUser", "error");
+            }
+            // } elseif (isset($_POST['suppOpinion'])) {
+            //     $carModel = new CarModel();
+            //     if ($carModel->deleteOpinion($_POST['suppOpinion'])) {
+            //         self::index("Avis");
+            //     } else {
+            //         self::index("Avis", null, "error");
+            //     }
+            // } elseif (isset($_POST['suppResa'])) {
+            //     $carModel = new CarModel();
+            //     if ($carModel->deleteReservation($_POST['suppResa'])) {
+            //         self::index("Reservations");
+            //     } else {
+            //         self::index("Reservations", null, "error");
+            //     }
         } else {
             self::index();
         }

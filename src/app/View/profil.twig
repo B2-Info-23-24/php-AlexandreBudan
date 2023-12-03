@@ -167,13 +167,15 @@
 									</small>
 								</div>
 								<p></p>
-								<div class="ctr">
-									<button type="submit">Annuler la réservation</button>
-								</div>
-								<p></p>
-								<div class="ctr">
-									<button id="showResa">Voir la réservation</button>
-								</div>
+								<form method="post">
+									<div class="ctr">
+										<button type="submit" name="deleteResa" value={{ reservation.id }}>Annuler la reservation (Irreversible)</button>
+									</div>
+									<p></p>
+									<div class="ctr">
+										<button id="showResa" name="showResa" value="{{ reservation.id }}">Voir la réservation</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -228,9 +230,68 @@
 					<div class="modal-header">
 						<h5 class="modal-title">Récapitulatif de la réservation</h5>
 					</div>
-					<div class="modal-body"></div>
+					<div class="modal-body">
+						<div>
+							<h4>Informations réservation:</h4>
+							<p>- Date de début :
+								{{ reservation.beginning }}</p>
+							<p>- Date de Fin :
+								{{ reservation.ending }}</p>
+							{% if reservation.protection == true %}
+								{% if reservation.addFees == 10 %}
+									<p>- Protection : Protection Partielle(10€)</p>
+								{% elseif reservation.addFees == 30 %}
+									<p>- Protection : Protection Moyenne(30€)</p>
+								{% else %}
+									<p>- Protection : Protection Total(50€)</p>
+								{% endif %}
+							{% else %}
+								<p>- Protection : Aucune Protection</p>
+							{% endif %}
+						</div>
+						<div>
+							<h4>Caractéristiques:</h4>
+							<p>- Nom de la voiture :
+								{{ reservation.car.name }}</p>
+							<p>- Nombres de portes :
+								{{ reservation.car.nbDoor }}</p>
+							<p>- Age minimum :
+								{{ reservation.car.minAge }}</p>
+							<p>- Nombres de passagers maximum :
+								{{ reservation.car.passenger.number }}</p>
+							<p>- Marque :
+								{{ reservation.car.brand.brandName }}</p>
+							<p>- Couleur :
+								{{ reservation.car.color.colorName }}</p>
+							{% if reservation.car.manual == true %}
+								<p>- Manuelle / Automatique : Manuelle</p>
+							{% else %}
+								<p>- Manuelle / Automatique : Automatique</p>
+							{% endif %}
+						</div>
+						<div>
+							<h4>Récupération:
+								{{ reservation.car.location }}</h4>
+						</div>
+						<div>
+							<h4>Informations Pilote:</h4>
+							<p>- Nom :
+								{{ reservation.pilote.lastName }}</p>
+							<p>- Prénom :
+								{{ reservation.pilote.firstName }}</p>
+							<p>- Age :
+								{{ reservation.pilote.age }}</p>
+							<p>- Email :
+								{{ reservation.pilote.email }}</p>
+							<p>- Téléphone :
+								{{ reservation.pilote.phone }}</p>
+						</div>
+						<div>
+							<h4>Réservation sous le compte :
+								{{ reservation.user.email }}</h4>
+						</div>
+					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Annuler la réservation</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Fermer</button>
 					</div>
 				</div>
@@ -293,15 +354,7 @@ formNP.classList.add('hidden');
 } else {
 formAdd.classList.add('hidden');
 }
-});
-
-var showResa = document.getElementById('showResa');
-showResa.addEventListener("click", function (event) {
-var carFeatures = "Informations réservation:\n- Date de début : 03/03/2003\n- Date de Fin : 03/03/2003\n- Nombres de jours : 0\n\nModèle:\n- Marque : BMW\n- Couleur : Gris\n- Manuelle / Automatique : Manuelle\n\nCaractéristiques:\n- Nombres de portes : 5\n- Age minimum : 21\n- Nombres de passagers maximum : 5\n- Protection : Protection Totale(50€)\n\nRécupération: Lyon Perrache\n\nInformations Pilote:\n- Nom : Doe\n- Prénom : John\n- Age : 21\n- Email : John.Doe@gmail.com\n- Téléphone : 00.00.00.00.00\n\nRéservation sous le compte : Aucun compte";
-document.getElementById('summaryModal').getElementsByClassName('modal-body')[0].innerText = carFeatures;
-$('#summaryModal').modal('show');
-});
-
+});{% if reservation != null %}$('#summaryModal').modal('show');{% endif %};
 
 var closeResa = document.getElementById('closeResa');
 closeResa.addEventListener("click", function (event) {

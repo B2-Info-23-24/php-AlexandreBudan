@@ -3,33 +3,36 @@
 namespace Controller;
 
 use Model\FavoriModel;
+use Model\ReservationModel;
 use Model\UserModel;
 
 class ProfilController
 {
 
-    public function index($err = null)
+    public function index($err = null, $reservation = null)
     {
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
+
+        $loadSee = $twig->load('profil.twig');
 
         $userModel = new UserModel();
         $_SESSION['user'] = $userModel->getOneUser($_SESSION['user']->getId());
 
         if ($err != null) {
-            $data = [
+            $see = $loadSee->render([
                 'user' => $_SESSION['user'],
-                'error' => "Mauvais Mot de Passe"
-            ];
+                'error' => "Mauvais Mot de Passe",
+                'reservation' => $reservation
+            ]);
         } else {
-            $data = [
-                'user' => $_SESSION['user']
-            ];
+            $see = $loadSee->render([
+                'user' => $_SESSION['user'],
+                'reservation' => $reservation
+            ]);
         }
 
-        $see = $twig->load('profil.twig');
-
-        echo $see->render($data);
+        echo $see;
     }
 
     public function post()
@@ -54,6 +57,16 @@ class ProfilController
             $carId = $_POST['starValue'];
             $favoriModel = new FavoriModel();
             $favoriModel->deleteFavori($_SESSION['user'], $carId);
+            self::index();
+        } elseif (isset($_POST['showResa'])) {
+            $reservationId = $_POST['showResa'];
+            $reservationModel = new ReservationModel();
+            $reservation = $reservationModel->getOneReservation($reservationId);
+            self::index(null, $reservation);
+        } elseif (isset($_POST['deleteResa'])) {
+            $reservationId = $_POST['deleteResa'];
+            $reservationModel = new ReservationModel();
+            $reservationModel->deleteReservation($reservationId);
             self::index();
         } else {
             $_SESSION['user'] = null;

@@ -22,6 +22,11 @@ class Reservation
     private $user;
 
     /**
+     * @var Pilote pilote of the Reservation
+     */
+    private $pilote;
+
+    /**
      * @var string hash of the Reservation
      */
     private $hash;
@@ -79,6 +84,7 @@ class Reservation
      * @param  int  $id  id Primary Key
      * @param  Car  $car  Car Foreign Key link Car
      * @param  User  $user  User Foreign Key link User
+     * @param  Pilote  $pilote  Pilote Foreign Key link Pilote
      * @param  string  $hash  hash of the Reservation
      * @param  bool  $protection  protection of the Car
      * @param  float  $price  price of the Reservation
@@ -91,11 +97,12 @@ class Reservation
      *
      * @return  void
      */
-    public function __construct(int $id, Car $car = null, User $user = null, string $hash, bool $protection = null, float $price = null, string $beginning = null, string $ending = null, bool $finish = null, string $beginningState = null, string $endingState = null, float $addFees = null)
+    public function __construct(int $id, Car $car = null, User $user = null, Pilote $pilote = null, string $hash, bool $protection = null, float $price = null, string $beginning = null, string $ending = null, bool $finish = null, string $beginningState = null, string $endingState = null, float $addFees = null)
     {
         $this->id = $id;
         $this->car = $car;
         $this->user = $user;
+        $this->pilote = $pilote;
         $this->hash = $hash;
         $this->protection = $protection;
         $this->price = $price;
@@ -412,6 +419,26 @@ class Reservation
     public function setHash($hash)
     {
         $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of pilote
+     */
+    public function getPilote()
+    {
+        return $this->pilote;
+    }
+
+    /**
+     * Set the value of pilote
+     *
+     * @return  self
+     */
+    public function setPilote($pilote)
+    {
+        $this->pilote = $pilote;
 
         return $this;
     }

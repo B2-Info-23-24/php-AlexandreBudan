@@ -109,7 +109,7 @@ class User
      * @param bool $isAdmin If User is an admin or not
      * @return void
      */
-    public function __construct(int $id, string $email = null, string $password = null, string $firstName = null, string $lastName = null, string $phone = null, int $age = null, string $gender = null, Address $address = null, array $reservations = [], array $favoris = [], string $creationDate = null, bool $newsLetter = null, bool $verified = null, bool $isAdmin = null)
+    public function __construct(int $id, string $email = null, string $password = null, string $firstName = null, string $lastName = null, string $phone = null, int $age = null, string $gender = null, Address $address = null, array $reservations = [], array $favoris = [], string $creationDate = null, bool $newsLetter = null, bool $verified = null, bool $isAdmin = null, bool $status = true)
     {
         if ($creationDate == null) {
             $date = new DateTime();
@@ -133,7 +133,7 @@ class User
         $this->newsLetter = $newsLetter;
         $this->verified = $verified;
         $this->isAdmin = $isAdmin;
-        $this->status = true;
+        $this->status = $status;
     }
 
     /**

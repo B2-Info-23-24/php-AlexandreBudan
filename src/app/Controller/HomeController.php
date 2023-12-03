@@ -54,7 +54,7 @@ class HomeController
             } else {
                 $random_base64 = strtr(base64_encode(random_bytes(18)), '/+', '_-');
 
-                $resa = new Reservation(0, null, $user, $random_base64, null, null, $_POST['beginning'], $_POST['ending'], null, null, null, null);
+                $resa = new Reservation(0, null, $user, null, $random_base64, null, null, $_POST['beginning'], $_POST['ending'], null, null, null, null);
                 $_SESSION['reservation'] = $resa;
                 $location = $_POST['location'] . "x" . $_POST['param'];
 

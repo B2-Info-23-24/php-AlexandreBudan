@@ -278,7 +278,11 @@ class DataFixtures
         $interval = $beginningDate->diff($endingDate);
         $day = $interval->days;
         $protection = rand(0, 1);
-        $addFees = (float)(rand(3000, 10000) / 100);
+        if ($protection == 1) {
+            $addFees = [10, 30, 50][rand(0, 2)];
+        } else {
+            $addFees = null;
+        }
         $beginningState = $faker->text(100);
         $endingState = $faker->text(100);
         $beginningString = $beginningDate->format('Y-m-d H:i:s');
@@ -295,14 +299,13 @@ class DataFixtures
             $stmt->bindParam(':ending', $endingString);
             $stmt->bindParam(':beginningState', $beginningState);
             $stmt->bindParam(':endingState', $endingState);
-            if ($protection) {
+            if ($protection == 1) {
                 $price = ($price + $addFees) * $day;
                 $stmt->bindParam(':addFees', $addFees);
                 $stmt->bindParam(':price', $price);
             } else {
                 $price = $price * $day;
-                $addF = null;
-                $stmt->bindParam(':addFees', $addF);
+                $stmt->bindParam(':addFees', $addFees);
                 $stmt->bindParam(':price', $price);
             }
             $stmt->execute();
