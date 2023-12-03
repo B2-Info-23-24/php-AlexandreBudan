@@ -9,6 +9,7 @@ use Entity\User;
 use Model\BrandModel;
 use Model\CarModel;
 use Model\ColorModel;
+use Model\OpinionModel;
 use Model\PassengerModel;
 use Model\UserModel;
 
@@ -27,12 +28,21 @@ class AdminController
         $colors = null;
         $passengers = null;
         $oneUser = null;
+        $opinions = null;
 
 
         if ($type == 'Marques' || $type == 'Couleurs' || $type == 'Passagers') {
             $loadTemp = $twig->load('/templates/adminSee.twig');
         } elseif ($type == 'Utilisateurs' || $type == 'OneUser') {
             $loadTemp = $twig->load('/templates/adminSee2.twig');
+        } elseif ($type == 'opinionFilter' || $type == 'opinionCar' || $type == 'opinion') {
+            $brandModel = new BrandModel();
+            $brands = $brandModel->getAllBrand();
+            $colorModel = new ColorModel();
+            $colors = $colorModel->getAllColor();
+            $passengerModel = new PassengerModel();
+            $passengers = $passengerModel->getAllPassenger();
+            $loadTemp = $twig->load('/templates/seeOpinion.twig');
         } elseif ($type == 'newUser') {
             $type = "Ajouter un User";
             $loadTemp = $twig->load('/templates/addUser.twig');
@@ -78,12 +88,28 @@ class AdminController
                 $data = $userModel->getAllUser();
                 $oneUser = $userModel->getOneUser($_POST['modifUser']);
                 break;
+            case 'opinionFilter':
+                $carModel = new CarModel();
+                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
+                $type = 'Opinions';
+                break;
+            case 'opinion':
+                $carModel = new CarModel();
+                $data = $carModel->getAllCar(true, null);
+                $type = 'Opinions';
+                break;
+            case 'opinionCar':
+                $opinionModel = new OpinionModel();
+                $opinions = $opinionModel->getOpinionsByCarId($_POST['seeOpinion']);
+                $carModel = new CarModel();
+                $data = $carModel->getAllCar(true, null);
+                $type = 'Opinions';
+                break;
         }
 
         $seeTemp = $loadTemp->render([
             'data' => $data,
             'type' => $type,
-            'filters' => $twig->render('/templates/filters.twig'),
             'brands' => $brands,
             'colors' => $colors,
             'passengers' => $passengers,
@@ -91,7 +117,8 @@ class AdminController
             'error2' => $err2,
             'error3' => $err3,
             'oneCar' => $oneCar,
-            'oneUser' => $oneUser
+            'oneUser' => $oneUser,
+            'opinions' => $opinions
         ]);
 
         $see = $loadSee->render(['see' => $seeTemp]);
@@ -109,7 +136,6 @@ class AdminController
             $seeTemp = $loadTemp->render([
                 'data' => $data,
                 'type' => 'Cars',
-                'filters' => $twig->render('/templates/filters.twig'),
                 'brands' => $brands,
                 'colors' => $colors,
                 'passengers' => $passengers,
@@ -160,10 +186,21 @@ class AdminController
             ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['allOpinion'])) {
-            $loadTemp = $twig->load('/templates/opinion.twig');
+            $loadTemp = $twig->load('/templates/seeOpinion.twig');
+            $brandModel = new BrandModel();
+            $brands = $brandModel->getAllBrand();
+            $colorModel = new ColorModel();
+            $colors = $colorModel->getAllColor();
+            $passengerModel = new PassengerModel();
+            $passengers = $passengerModel->getAllPassenger();
+            $carModel = new CarModel();
+            $data = $carModel->getAllCar(true, null);
             $seeTemp = $loadTemp->render([
-                'type' => "Avis",
-                'car' => $twig->render('/templates/carCard.twig')
+                'data' => $data,
+                'type' => 'Opinions',
+                'brands' => $brands,
+                'colors' => $colors,
+                'passengers' => $passengers
             ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['addCar'])) {
@@ -289,6 +326,8 @@ class AdminController
             }
         } elseif (isset($_POST['launch'])) {
             self::index("filter");
+        } elseif (isset($_POST['opinionLaunch'])) {
+            self::index("opinionFilter");
         } elseif (isset($_POST['modifCar'])) {
             $carModel = new CarModel();
             $oneCar = $carModel->getOneCar($_POST['modifCar']);
@@ -350,13 +389,12 @@ class AdminController
             } else {
                 self::index("newUser", "error");
             }
-            // } elseif (isset($_POST['suppOpinion'])) {
-            //     $carModel = new CarModel();
-            //     if ($carModel->deleteOpinion($_POST['suppOpinion'])) {
-            //         self::index("Avis");
-            //     } else {
-            //         self::index("Avis", null, "error");
-            //     }
+        } elseif (isset($_POST['seeOpinion'])) {
+            self::index("opinionCar");
+        } elseif (isset($_POST['suppOpinion'])) {
+            $opinionModel = new OpinionModel();
+            $opinionModel->deleteOpinion($_POST['suppOpinion']);
+            self::index("opinion");
             // } elseif (isset($_POST['suppResa'])) {
             //     $carModel = new CarModel();
             //     if ($carModel->deleteReservation($_POST['suppResa'])) {

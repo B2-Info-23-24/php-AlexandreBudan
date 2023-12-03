@@ -348,7 +348,7 @@ class DataFixtures
         $dateString = $date->format('Y-m-d H:i:s');
 
         try {
-            $stmt = $db->prepare("INSERT INTO Opinion (carId, userId, reservationId, commentary, rank, creationDate, status) VALUES (:userId, :carId, :reservationId, :commentary, :rank, :creationDate, 1)");
+            $stmt = $db->prepare("INSERT INTO Opinion (carId, userId, reservationId, commentary, `rank`, creationDate, status) VALUES (:carId, :userId, :reservationId, :commentary, :rank, :creationDate, 1)");
             $stmt->bindParam(':carId', $carId);
             $stmt->bindParam(':userId', $userId);
             $stmt->bindParam(':reservationId', $reservationId);
@@ -357,6 +357,7 @@ class DataFixtures
             $stmt->bindParam(':creationDate', $dateString);
             $stmt->execute();
         } catch (PDOException $e) {
+            echo "Erreur11 : " . $e->getMessage() . "\n";
             return;
         }
     }
