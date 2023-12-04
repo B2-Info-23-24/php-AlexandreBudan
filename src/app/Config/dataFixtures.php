@@ -41,6 +41,8 @@ class DataFixtures
             for ($i = 0; $i < 50; $i++) {
                 self::makeCar($conn, $faker);
             }
+
+            error_log("\033[34mDataFixtures created successfully\033[0m");
         } catch (PDOException $e) {
             echo "Erreur : " . $e->getMessage() . "\n";
         }

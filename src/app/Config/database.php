@@ -31,13 +31,15 @@ class DataBase
         try {
             $conn = self::connect();
             // Chemin vers le fichier SQL
-            $sqlFile = '../db.sql';
+            $sqlFile = 'db.sql';
 
             // Lit le contenu du fichier SQL
             $sql = file_get_contents($sqlFile);
 
             // Exécute les requêtes SQL
             $conn->exec($sql);
+
+            error_log("\033[34mTables created successfully\033[0m");
         } catch (PDOException $e) {
             echo "Erreur : " . $e->getMessage() . "\n";
         }
