@@ -2,7 +2,6 @@
 
 namespace Model;
 
-use Entity\Address;
 use Config\DataBase;
 use Entity\Brand;
 use Entity\Car;
@@ -30,20 +29,22 @@ class ReservationModel
             $userId = $reservation->getUser()->getId();
             $carId = $reservation->getCar()->getId();
             $hash = $reservation->getHash();
+            $protection = (int)$reservation->getProtection();
             $price = $reservation->getPrice();
             $beginning = $reservation->getBeginning();
             $ending = $reservation->getEnding();
-            $finish = $reservation->getFinish();
+            $finish = (int)$reservation->getFinish();
             $beginningState = $reservation->getBeginningState();
             $endingState = $reservation->getEndingState();
             $addFees = $reservation->getAddFees();
 
-            $stmtReservation = self::$conn->prepare("INSERT INTO Reservation (userId, carId, hash, price, beginning, ending, finish, beginningState, endingState, addFees, status) 
-                                            VALUES (:userId, :carId, :hash, :price, :beginning, :ending, :finish, :beginningState, :endingState, :addFees, 1)");
+            $stmtReservation = self::$conn->prepare("INSERT INTO Reservation (userId, carId, hash, protection, price, beginning, ending, finish, beginningState, endingState, addFees, status) 
+                                            VALUES (:userId, :carId, :hash, :protection, :price, :beginning, :ending, :finish, :beginningState, :endingState, :addFees, 1)");
 
             $stmtReservation->bindParam(":userId", $userId);
             $stmtReservation->bindParam(":carId", $carId);
             $stmtReservation->bindParam(":hash", $hash);
+            $stmtReservation->bindParam(":protection", $protection);
             $stmtReservation->bindParam(":price", $price);
             $stmtReservation->bindParam(":beginning", $beginning);
             $stmtReservation->bindParam(":ending", $ending);
@@ -54,6 +55,7 @@ class ReservationModel
 
             $stmtReservation->execute();
 
+            $reservationId = self::$conn->query("SELECT MAX(id) FROM Reservation")->fetchColumn();
             $pilote = $reservation->getPilote();
             $piloteFirstName = $pilote->getFirstName();
             $piloteLastName = $pilote->getLastName();
@@ -72,16 +74,14 @@ class ReservationModel
 
             $stmtPilote->execute();
 
-            $stmtUnvailableDate = self::$conn->prepare("INSERT INTO UnvailableDate (carId, beginning, ending, status) 
-                                            VALUES (:carId, :beginning, :ending, 1)");
-            
+            $stmtUnvailableDate = self::$conn->prepare("INSERT INTO UnvailableDate (carId, beginning, ending) 
+                                            VALUES (:carId, :beginning, :ending)");
+
             $stmtUnvailableDate->bindParam(":carId", $carId);
             $stmtUnvailableDate->bindParam(":beginning", $beginning);
             $stmtUnvailableDate->bindParam(":ending", $ending);
 
             $stmtUnvailableDate->execute();
-
-            $reservationId = self::$conn->query("SELECT MAX(id) FROM Reservation")->fetchColumn();
 
             return $reservationId;
         } catch (PDOException $e) {

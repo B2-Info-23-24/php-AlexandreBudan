@@ -168,9 +168,23 @@
 								</div>
 								<p></p>
 								<form method="post">
-									<div class="ctr">
-										<button type="submit" name="deleteResa" value={{ reservation.id }}>Annuler la reservation (Irreversible)</button>
-									</div>
+									{% if reservation.ending > "now"|date %}
+										{% set hasOpinion = false %}
+										{% for opinion in user.opinions %}
+											{% if opinion.reservationId == reservation.id %}
+												{% set hasOpinion = true %}
+											{% endif %}
+										{% endfor %}
+										{% if not hasOpinion %}
+											<div class="ctr">
+												<button type="submit" id="createOpinion" name="createOpinion" value="{{ reservation.id }}-{{ reservation.car.id }}">Laisser un commentaire</button>
+											</div>
+										{% endif %}
+									{% elseif reservation.beginning < "now"|date %}
+										<div class="ctr">
+											<button type="submit" name="deleteResa" value="{{ reservation.id }}-{{ reservation.car.id }}">Annuler la reservation (Irreversible)</button>
+										</div>
+									{% endif %}
 									<p></p>
 									<div class="ctr">
 										<button id="showResa" name="showResa" value="{{ reservation.id }}">Voir la réservation</button>
@@ -297,6 +311,31 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal" id="editModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<form method="post">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Commentaire de la réservation</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="rating">Note sur 5 :</label>
+								<input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+							</div>
+							<div class="form-group">
+								<label for="comment">Commentaire :</label>
+								<textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name"create">Valider</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeReview">Fermer</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 		<form method="post">
 			<div style="display:flex; justify-content:center;">
 				<button type="submit" style="background-color:red;">Deconnecter</button>
@@ -359,8 +398,10 @@ formAdd.classList.add('hidden');
 var closeResa = document.getElementById('closeResa');
 closeResa.addEventListener("click", function (event) {
 $('#summaryModal').modal('hide');
+});{% if opinion != null %}$('#editModal').modal('show');{% endif %}var closeReview = document.getElementById('closeReview');
+closeReview.addEventListener("click", function (event) {
+$('#editModal').modal('hide');
 });
-
 function test(id) {
 const star = document.getElementById('star' + String(id));
 

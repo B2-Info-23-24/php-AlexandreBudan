@@ -421,7 +421,7 @@ class AdminController
             if ($_POST['admin'] == "true") {
                 $admin = true;
             }
-            $user = new User(0, $_POST['email'], $_POST['password'], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['age'], $_POST['gender'], $address, [], [], $date->format('Y-m-d H:i:s'), false, false, $admin);
+            $user = new User(0, $_POST['email'], $_POST['password'], $_POST['firstName'], $_POST['lastName'], $_POST['phone'], $_POST['age'], $_POST['gender'], $address, [], [], [], $date->format('Y-m-d H:i:s'), false, false, $admin);
             if ($userModel->checkRegister($user->getEmail())) {
                 $userModel->createUser($user, $address);
                 self::index("Utilisateurs");

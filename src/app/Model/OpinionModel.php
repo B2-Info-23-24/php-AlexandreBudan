@@ -18,6 +18,23 @@ class OpinionModel
         self::$conn = $conn->connect();
     }
 
+    public function createOpinion(Opinion $opinion)
+    {
+        try {
+            $stmtOpinion = self::$conn->prepare("INSERT INTO Opinion (carId, userId, reservationId, commentary, rank)
+                                    VALUES (:carId, :userId, :reservationId, :commentary, :rank)");
+            $stmtOpinion->bindParam(":carId", $opinion->getCarId());
+            $stmtOpinion->bindParam(":userId", $opinion->getUser()->getId());
+            $stmtOpinion->bindParam(":reservationId", $opinion->getReservationId());
+            $stmtOpinion->bindParam(":commentary", $opinion->getCommentary());
+            $stmtOpinion->bindParam(":rank", $opinion->getRank());
+            $stmtOpinion->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function getOpinionsByCarId($id)
     {
         try {

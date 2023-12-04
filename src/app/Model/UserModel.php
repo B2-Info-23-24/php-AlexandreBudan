@@ -12,6 +12,7 @@ use Entity\Car;
 use Entity\Brand;
 use Entity\Color;
 use Entity\Favori;
+use Entity\Opinion;
 
 class UserModel
 {
@@ -114,7 +115,14 @@ class UserModel
                 LEFT JOIN Brand ON Car.brandId = Brand.id
                 LEFT JOIN Color ON Car.colorId = Color.id
                 WHERE User.id = Favori.userId
-            ) AS favoris, 
+            ) AS favoris,
+            (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Opinion.id,
+                    'carId', Opinion.carId,
+                    'reservationId', Opinion.reservationId,
+                    'commentary', Opinion.commentary, 'rank', Opinion.rank))
+                FROM Opinion
+                WHERE User.id = Opinion.userId
+            ) AS opinions,
             User.creationDate, User.newsLetter, User.verified, User.isAdmin, User.status
             FROM User
             JOIN Address ON User.addressId = Address.id
@@ -152,6 +160,16 @@ class UserModel
                 }
             } else {
                 $result['favoris'] = [];
+            }
+
+            if ($result['opinions'] != null) {
+                $result['opinions'] = json_decode($result['opinions'], true);
+
+                for ($i = 0; $i < sizeof($result['opinions']); $i++) {
+                    $result['opinions'][$i] = new Opinion(...$result['opinions'][$i]);
+                }
+            } else {
+                $result['opinions'] = [];
             }
 
             array_pop($result);

@@ -2,19 +2,23 @@
 
 namespace Controller;
 
+use Entity\Opinion;
 use Model\FavoriModel;
+use Model\OpinionModel;
 use Model\ReservationModel;
 use Model\UserModel;
 
 class ProfilController
 {
 
-    public function index($err = null, $reservation = null)
+    public function index($err = null, $reservation = null, $opinion = null)
     {
         $loader = new \Twig\Loader\FilesystemLoader('../app/View');
         $twig = new \Twig\Environment($loader);
 
         $loadSee = $twig->load('profil.twig');
+
+        $_SESSION['opinion'] = $opinion;
 
         $userModel = new UserModel();
         $_SESSION['user'] = $userModel->getOneUser($_SESSION['user']->getId());
@@ -23,12 +27,14 @@ class ProfilController
             $see = $loadSee->render([
                 'user' => $_SESSION['user'],
                 'error' => "Mauvais Mot de Passe",
-                'reservation' => $reservation
+                'reservation' => $reservation,
+                'opinion' => $opinion
             ]);
         } else {
             $see = $loadSee->render([
                 'user' => $_SESSION['user'],
-                'reservation' => $reservation
+                'reservation' => $reservation,
+                'opinion' => $opinion
             ]);
         }
 
@@ -64,9 +70,21 @@ class ProfilController
             $reservation = $reservationModel->getOneReservation($reservationId);
             self::index(null, $reservation);
         } elseif (isset($_POST['deleteResa'])) {
-            $reservationId = $_POST['deleteResa'];
+            $reservationId = explode("-", $_POST['deleteResa'])[0];
+            $carId = explode("-", $_POST['deleteResa'])[1];
             $reservationModel = new ReservationModel();
-            $reservationModel->deleteReservation($reservationId);
+            $reservationModel->deleteReservation($reservationId, $carId);
+            self::index();
+        } elseif (isset($_POST['createOpinion'])) {
+            $opinion = new Opinion(0, explode("-", $_POST['createOpinion'])[1], $_SESSION['user'], explode("-", $_POST['createOpinion'])[0], null, null);
+            $_SESSION['opinion'] = $opinion;
+            self::index(null, null, $opinion);
+        } elseif (isset($_POST['create'])) {
+            $opinion = $_SESSION['opinion'];
+            $opinion->setCommentary($_POST['comment']);
+            $opinion->setRank($_POST['ranking']);
+            $opinionModel = new OpinionModel();
+            $opinionModel->createOpinion($opinion);
             self::index();
         } else {
             $_SESSION['user'] = null;

@@ -31,7 +31,7 @@ class CarsController
         if ($data == null) {
 
             if (explode("=", $request[1])[1] != "none") {
-                $data = $carModel->getAllCarByLocation(explode("=", $request[1])[1]);
+                $data = $carModel->getAllCarByLocation(explode("=", $request[1])[1], $_SESSION['reservation']->getBeginning(), $_SESSION['reservation']->getEnding());
             } else {
                 $data = $carModel->getAllCar();
                 $count = ceil(self::$conn->query("SELECT COUNT(*) AS total FROM Car")->fetchColumn() / 9);

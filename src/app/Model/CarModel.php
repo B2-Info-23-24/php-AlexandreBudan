@@ -139,7 +139,7 @@ class CarModel
         }
     }
 
-    public function getAllCarByLocation($location)
+    public function getAllCarByLocation($location, $beginning, $ending)
     {
 
         $loc = explode("x", $location)[0];
@@ -155,23 +155,28 @@ class CarModel
 
         try {
             $query = "SELECT Car.id, Car.name,
-                        (SELECT JSON_OBJECT('id', B.id, 'brandName', B.brandName)
-                        FROM Brand B
-                        WHERE B.id = Car.brandId
-                        ) AS brand,
-                        (SELECT JSON_OBJECT('id', C.id, 'colorName', C.colorName)
-                        FROM Color C
-                        WHERE C.id = Car.colorId
-                        ) AS color,
-                        (SELECT JSON_OBJECT('id', P.id, 'number', P.number)
-                        FROM Passenger P
-                        WHERE P.id = Car.passengerId
-                        ) AS passenger,
-                        Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location, Car.status
+                    (SELECT JSON_OBJECT('id', B.id, 'brandName', B.brandName)
+                    FROM Brand B
+                    WHERE B.id = Car.brandId
+                    ) AS brand,
+                    (SELECT JSON_OBJECT('id', C.id, 'colorName', C.colorName)
+                    FROM Color C
+                    WHERE C.id = Car.colorId
+                    ) AS color,
+                    (SELECT JSON_OBJECT('id', P.id, 'number', P.number)
+                    FROM Passenger P
+                    WHERE P.id = Car.passengerId
+                    ) AS passenger,
+                    Car.picture, Car.price, Car.manual, Car.type, Car.minAge, Car.nbDoor, Car.location, Car.status
                     FROM Car
                     WHERE 
                     SUBSTRING_INDEX(Car.location, ',', 1) BETWEEN $minLat AND $maxLat
-                    AND SUBSTRING_INDEX(Car.location, ',', -1) BETWEEN $minLng AND $maxLng";
+                    AND SUBSTRING_INDEX(Car.location, ',', -1) BETWEEN $minLng AND $maxLng
+                    AND Car.id NOT IN (SELECT DISTINCT U.carId
+                        FROM UnvailableDate U
+                        WHERE U.carId = Car.id
+                            AND ('$beginning' BETWEEN U.beginning AND U.ending
+                            OR '$ending' BETWEEN U.beginning AND U.ending))";
 
             $stmt = self::$conn->prepare($query);
             $stmt->execute();
@@ -195,7 +200,7 @@ class CarModel
     public function getCarsByFilter($search, $price, $brandId, $colorId, $passengerId, $location, $admin = false)
     {
         if ($location != "none") {
-            $data = self::getAllCarByLocation($location);
+            $data = self::getAllCarByLocation($location, $_SESSION['reservation']->getBeginning(), $_SESSION['reservation']->getEnding());
         } else {
             $data = self::getAllCar($admin, null);
         }

@@ -64,6 +64,11 @@ class User
     private $favoris;
 
     /**
+     * @var array opinions of the User
+     */
+    private $opinions;
+
+    /**
      * @var string creation date of the User
      */
     private $creationDate;
@@ -104,12 +109,13 @@ class User
      * @param Address $address User address
      * @param array $reservations User reservations
      * @param array $favoris User favoris
+     * @param array $opinions User opinions
      * @param bool $newsLetter If User wants to receive newsletter
      * @param bool $verified If User has verified his account
      * @param bool $isAdmin If User is an admin or not
      * @return void
      */
-    public function __construct(int $id, string $email = null, string $password = null, string $firstName = null, string $lastName = null, string $phone = null, int $age = null, string $gender = null, Address $address = null, array $reservations = [], array $favoris = [], string $creationDate = null, bool $newsLetter = null, bool $verified = null, bool $isAdmin = null, bool $status = true)
+    public function __construct(int $id, string $email = null, string $password = null, string $firstName = null, string $lastName = null, string $phone = null, int $age = null, string $gender = null, Address $address = null, array $reservations = [], array $favoris = [], array $opinions = [], string $creationDate = null, bool $newsLetter = null, bool $verified = null, bool $isAdmin = null, bool $status = true)
     {
         if ($creationDate == null) {
             $date = new DateTime();
@@ -129,6 +135,7 @@ class User
         $this->address = $address;
         $this->reservations = $reservations;
         $this->favoris = $favoris;
+        $this->opinions = $opinions;
         $this->creationDate = $dateString;
         $this->newsLetter = $newsLetter;
         $this->verified = $verified;
@@ -464,6 +471,26 @@ class User
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of opinions
+     */
+    public function getOpinions()
+    {
+        return $this->opinions;
+    }
+
+    /**
+     * Set the value of opinions
+     *
+     * @return  self
+     */
+    public function setOpinions($opinions)
+    {
+        $this->opinions = $opinions;
 
         return $this;
     }
