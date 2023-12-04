@@ -4,6 +4,7 @@ namespace Model;
 
 use Entity\Color;
 use Config\DataBase;
+use PDO;
 use PDOException;
 
 class ColorModel
@@ -24,8 +25,24 @@ class ColorModel
             $stmtColor->bindParam(":colorName", $colorName);
 
             $stmtColor->execute();
+            return true;
         } catch (PDOException $e) {
             return false;
+        }
+    }
+
+    public function getOneColor($id)
+    {
+        try {
+            $stmtColor = self::$conn->query("SELECT * FROM Color WHERE id = $id");
+
+            $result = $stmtColor->fetch(PDO::FETCH_ASSOC);
+
+            $color = new Color(...$result);
+
+            return $color;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -56,8 +73,25 @@ class ColorModel
             $stmtColor = self::$conn->prepare("DELETE FROM Color WHERE id = :id");
             $stmtColor->bindParam(":id", $id);
             $stmtColor->execute();
+            return true;
         } catch (PDOException $e) {
             return false;
+        }
+    }
+
+    public function checkCreate($colorName)
+    {
+        try {
+            $stmtColor = self::$conn->prepare("SELECT * FROM Color WHERE colorName = :colorName");
+            $stmtColor->bindParam(":colorName", $colorName);
+            $stmtColor->execute();
+            if ($stmtColor->rowCount() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 }

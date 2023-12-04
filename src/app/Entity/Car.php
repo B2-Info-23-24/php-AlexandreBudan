@@ -32,6 +32,11 @@ class Car
     private $passenger;
 
     /**
+     * @var string url of picture of the car
+     */
+    private $picture;
+
+    /**
      * @var float price of the Car por Day
      */
     private $price;
@@ -76,6 +81,7 @@ class Car
      * @param  Brand  $brand  Brand of the Car
      * @param  Color  $color  Color of the Car
      * @param  Passenger  $passenger  number of Passenger of the Car
+     * @param  string  $picture  picture of the Car
      * @param  float  $price  price of the Car por Day
      * @param  bool  $manual  true -> manual, false -> automatic
      * @param  string  $type  type of the Car
@@ -85,20 +91,21 @@ class Car
      *
      * @return  void
      */
-    public function __construct(int $id, string $name = null, Brand $brand = null, Color $color = null, Passenger $passenger = null, float $price = null, bool $manual = null, string $type = null, int $minAge = null, int $nbDoor = null, string $location = null)
+    public function __construct(int $id, string $name = null, Brand $brand = null, Color $color = null, Passenger $passenger = null, string $picture = null, float $price = null, bool $manual = null, string $type = null, int $minAge = null, int $nbDoor = null, string $location = null, bool $status = true)
     {
         $this->id = $id;
         $this->name = $name;
         $this->brand = $brand;
         $this->color = $color;
         $this->passenger = $passenger;
+        $this->picture = $picture;
         $this->price = $price;
         $this->manual = $manual;
         $this->type = $type;
         $this->minAge = $minAge;
         $this->nbDoor = $nbDoor;
         $this->location = $location;
-        $this->status = true;
+        $this->status = $status;
     }
 
     /**
@@ -385,6 +392,26 @@ class Car
     public function setStatus(bool $status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of picture
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * Set the value of picture
+     *
+     * @return  self
+     */
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
 
         return $this;
     }

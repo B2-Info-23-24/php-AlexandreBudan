@@ -87,6 +87,9 @@
 								<li>
 									<button id="texte" class="bg-dark" type="submit" name="allUsers">Tout voir</button>
 								</li>
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="addUser">Ajouter</button>
+								</li>
 							</form>
 						</ul>
 					</div>
@@ -132,6 +135,13 @@
 	<script>
 		function showSummaryModal() {
 $('#summaryModal').modal('show');
+}
+
+function showEditModal() {
+$('#editModal').modal('show');
+}
+function closeEditModal() {
+$('#editModal').modal('hide');
 }
 
 function closeSummaryModal() {

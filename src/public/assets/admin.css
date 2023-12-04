@@ -233,3 +233,101 @@ input[type="number"] {
     border-radius: 5px;
     border: 5px solid #ccc;
 }
+
+.container-button {
+    display: flex;
+    justify-content: center;
+}
+
+.addCar {
+    width: 30%;
+    size: 30px;
+    border-radius: 5px;
+    border: 5px solid blue;
+    background-color: #007bff;
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.box-body {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-evenly;
+}
+
+.box-label {
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #555;
+    background-color: #fff;
+}
+
+.userModal {
+    display: flex;
+    justify-content: center;
+    width: 150%;
+    padding: 50px;
+}
+
+.hidden {
+    display: none;
+}
+
+.containerBox {
+    width: 20%;
+    margin: 50px auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="phone"],
+input[type="age"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+select[type="admin"],
+select[type="gender"] {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

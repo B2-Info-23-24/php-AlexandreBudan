@@ -4,7 +4,9 @@ namespace Model;
 
 use Entity\Brand;
 use Config\DataBase;
+use PDO;
 use PDOException;
+use ReturnTypeWillChange;
 
 class BrandModel
 {
@@ -24,9 +26,25 @@ class BrandModel
             $stmtBrand->bindParam(":brandName", $brandName);
 
             $stmtBrand->execute();
+            return true;
         } catch (PDOException $e) {
             echo $e->getMessage();
             return false;
+        }
+    }
+
+    public function getOnebrand($id)
+    {
+        try {
+            $stmtBrand = self::$conn->query("SELECT * FROM Brand WHERE id = $id");
+
+            $result = $stmtBrand->fetch(PDO::FETCH_ASSOC);
+
+            $brand = new Brand(...$result);
+
+            return $brand;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -57,8 +75,25 @@ class BrandModel
             $stmtBrand = self::$conn->prepare("DELETE FROM Brand WHERE id = :id");
             $stmtBrand->bindParam(":id", $id);
             $stmtBrand->execute();
+            return true;
         } catch (PDOException $e) {
             return false;
+        }
+    }
+
+    public function checkCreate($brandName)
+    {
+        try {
+            $stmtBrand = self::$conn->prepare("SELECT * FROM Brand WHERE brandName = :brandName");
+            $stmtBrand->bindParam(":brandName", $brandName);
+            $stmtBrand->execute();
+            if ($stmtBrand->rowCount() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
     }
 }

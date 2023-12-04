@@ -12,6 +12,7 @@ use Entity\Car;
 use Entity\Brand;
 use Entity\Color;
 use Entity\Favori;
+use Entity\Opinion;
 
 class UserModel
 {
@@ -23,7 +24,7 @@ class UserModel
         self::$conn = $conn->connect();
     }
 
-    public function createUser(User $user, Address $address)
+    public function createUser(User $user)
     {
         $email = $user->getEmail();
         $password = password_hash($user->getPassword(), PASSWORD_DEFAULT);
@@ -33,10 +34,12 @@ class UserModel
         $age = $user->getAge();
         $gender = $user->getGender();
         $creationDate = $user->getCreationDate();
+        $address = $user->getAddress();
+        $isAdmin = $user->getIsAdmin();
 
         try {
             $stmtUser = self::$conn->prepare("INSERT INTO User (email, password, firstName, lastName, phone, age, gender, addressId, creationDate, newsLetter, verified, isAdmin, status) 
-                                            VALUES (:email, :password, :firstName, :lastName, :phone, :age, :gender, :addressId, :creationDate, 0, 0, 0, 1)");
+                                            VALUES (:email, :password, :firstName, :lastName, :phone, :age, :gender, :addressId, :creationDate, 0, 0, :isAdmin, 1)");
 
             $stmtUser->bindParam(":email", $email);
             $stmtUser->bindParam(":password", $password);
@@ -46,6 +49,7 @@ class UserModel
             $stmtUser->bindParam(":age", $age);
             $stmtUser->bindParam(":gender", $gender);
             $stmtUser->bindParam(":creationDate", $creationDate);
+            $stmtUser->bindParam(":isAdmin", $isAdmin);
 
             if ($address != null) {
                 $initAddress = new AddressModel();
@@ -63,9 +67,23 @@ class UserModel
         }
     }
 
-    public function getAllUsers()
+    public function getAllUser()
     {
         try {
+            $query = "SELECT User.id, User.email, User.status FROM User ORDER BY User.email ASC";
+
+            $stmt = self::$conn->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $userList = [];
+
+            foreach ($result as $user) {
+                $user = new User(...$user);
+                array_push($userList, $user);
+            }
+
+            return $userList;
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -76,11 +94,11 @@ class UserModel
         try {
             $query = "SELECT User.id, User.email, User.password, User.firstName, User.lastName, User.phone, User.age, User.gender,
                 JSON_OBJECT('id', Address.id, 'address', Address.address, 'city', Address.city, 'code', Address.code, 'country', Address.country) AS address,
-                (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 'car', 
+                (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Reservation.id, 'car',
                     JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type, 
                         'brand', JSON_OBJECT('id', Brand.id, 'brandName', Brand.brandName),
-                        'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName)),
-                        'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) 
+                        'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName), 'picture', Car.picture),
+                        'user', null, 'pilote', null, 'hash', Reservation.hash, 'protection', Reservation.protection, 'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish)) 
                 FROM Reservation 
                 LEFT JOIN Car ON Reservation.carId = Car.id
                 LEFT JOIN Brand ON Car.brandId = Brand.id
@@ -91,13 +109,20 @@ class UserModel
                     'car', JSON_OBJECT('id', Car.id, 'name', Car.name, 'type', Car.type,
                         'brand', JSON_OBJECT('id', Brand.id, 'brandName', Brand.brandName),
                         'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName),
-                        'price', Car.price, 'manual', Car.manual, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor))) 
+                        'picture', Car.picture, 'price', Car.price, 'manual', Car.manual, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor))) 
                 FROM Favori 
                 LEFT JOIN Car ON Favori.carId = Car.id
                 LEFT JOIN Brand ON Car.brandId = Brand.id
                 LEFT JOIN Color ON Car.colorId = Color.id
                 WHERE User.id = Favori.userId
-            ) AS favoris, 
+            ) AS favoris,
+            (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', Opinion.id,
+                    'carId', Opinion.carId,
+                    'reservationId', Opinion.reservationId,
+                    'commentary', Opinion.commentary, 'rank', Opinion.rank))
+                FROM Opinion
+                WHERE User.id = Opinion.userId
+            ) AS opinions,
             User.creationDate, User.newsLetter, User.verified, User.isAdmin, User.status
             FROM User
             JOIN Address ON User.addressId = Address.id
@@ -137,6 +162,16 @@ class UserModel
                 $result['favoris'] = [];
             }
 
+            if ($result['opinions'] != null) {
+                $result['opinions'] = json_decode($result['opinions'], true);
+
+                for ($i = 0; $i < sizeof($result['opinions']); $i++) {
+                    $result['opinions'][$i] = new Opinion(...$result['opinions'][$i]);
+                }
+            } else {
+                $result['opinions'] = [];
+            }
+
             array_pop($result);
             $result = new User(...$result);
 
@@ -149,13 +184,17 @@ class UserModel
     public function checkLogin(String $email, String $password)
     {
         try {
-            $stmt = self::$conn->prepare("SELECT id, email, password FROM User WHERE email = :email");
+            $stmt = self::$conn->prepare("SELECT id, email, password, status FROM User WHERE email = :email");
             $stmt->bindParam(":email", $email);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($result != false && password_verify($password, $result['password'])) {
-                return $result['id'];
+            if ($result['status'] != 0) {
+                if ($result != false && password_verify($password, $result['password'])) {
+                    return $result['id'];
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -233,6 +272,28 @@ class UserModel
     public function deleteUser(Int $id)
     {
         try {
+            $stmt = self::$conn->prepare("UPDATE User SET status = 0 WHERE id = $id");
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function unDeleteUser(Int $id)
+    {
+        try {
+            $stmt = self::$conn->prepare("UPDATE User SET status = 1 WHERE id = $id");
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function removeUser(Int $id)
+    {
+        try {
+            $stmt = self::$conn->prepare("DELETE FROM User WHERE id = $id");
+            $stmt->execute();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }

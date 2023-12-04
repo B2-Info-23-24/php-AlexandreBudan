@@ -19,9 +19,9 @@ class Opinion
     private $carId;
 
     /**
-     * @var int id Foreign Key link User
+     * @var User user linked to the opinion
      */
-    private $userId;
+    private $user;
 
     /**
      * @var int id Foreign Key link Reservation
@@ -55,21 +55,21 @@ class Opinion
      *
      * @param  int  $id  id Primary Key
      * @param  int  $carId  id Foreign Key link Car
-     * @param  int  $userId  id Foreign Key link User
+     * @param  User  $user  user Foreign Key link User
      * @param  int  $reservationId  id Foreign Key link Reservation
      * @param  string  $commentary  comment about the reservation
      * @param  string  $rank  rank of the reservation
      *
      * @return  void
      */
-    public function __construct(int $id, int $carId = null, int $userId = null, int $reservationId = null, string $commentary = null, string $rank = null)
+    public function __construct(int $id, int $carId = null, User $user = null, int $reservationId = null, string $commentary = null, string $rank = null)
     {
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');
 
         $this->id = $id;
         $this->carId = $carId;
-        $this->userId = $userId;
+        $this->user = $user;
         $this->reservationId = $reservationId;
         $this->commentary = $commentary;
         $this->rank = $rank;
@@ -97,54 +97,6 @@ class Opinion
     public function setId(int $id)
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id Foreign Key link Car
-     *
-     * @return  int
-     */
-    public function getCarId()
-    {
-        return $this->carId;
-    }
-
-    /**
-     * Set id Foreign Key link Car
-     *
-     * @param  int  $carId  id Foreign Key link Car
-     *
-     * @return  self
-     */
-    public function setCarId(int $carId)
-    {
-        $this->carId = $carId;
-
-        return $this;
-    }
-
-    /**
-     * Get id Foreign Key link User
-     *
-     * @return  int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set id Foreign Key link User
-     *
-     * @param  int  $userId  id Foreign Key link User
-     *
-     * @return  self
-     */
-    public function setUserId(int $userId)
-    {
-        $this->userId = $userId;
 
         return $this;
     }
@@ -265,6 +217,46 @@ class Opinion
     public function setStatus(bool $status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set the value of user
+     *
+     * @return  self
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of carId
+     */
+    public function getCarId()
+    {
+        return $this->carId;
+    }
+
+    /**
+     * Set the value of carId
+     *
+     * @return  self
+     */
+    public function setCarId($carId)
+    {
+        $this->carId = $carId;
 
         return $this;
     }

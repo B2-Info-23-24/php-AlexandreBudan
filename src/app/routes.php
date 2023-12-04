@@ -20,8 +20,16 @@ class Routeur
         if (isset($_SESSION['user'])) {
             switch ($request) {
                 case '/':
-                    $controller = new HomeController();
-                    $controller->index();
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new HomeController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new HomeController();
+                            $controller->post();
+                            break;
+                    }
                     break;
                 case '/connexion':
                     switch ($method) {
@@ -47,10 +55,6 @@ class Routeur
                             break;
                     }
                     break;
-                case '/vehicules':
-                    $controller = new CarsController();
-                    $controller->index();
-                    break;
                 case '/profil':
                     switch ($method) {
                         case 'GET':
@@ -62,10 +66,6 @@ class Routeur
                             $controller->post();
                             break;
                     }
-                    break;
-                case '/vehicule':
-                    $controller = new OneCarController();
-                    $controller->index();
                     break;
                 case '/admin':
                     if ($_SESSION['user']->getIsAdmin()) {
@@ -84,6 +84,30 @@ class Routeur
                         echo 'Page not found';
                     }
                     break;
+                case '/reservation/' . explode("/", $_SERVER['REQUEST_URI'])[2]:
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new CarsController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new CarsController();
+                            $controller->post();
+                            break;
+                    }
+                    break;
+                case '/reservation/' . $_SESSION['reservation']->getHash() . '/' . explode("/", $_SERVER['REQUEST_URI'])[3] . '/' . explode("/", $_SERVER['REQUEST_URI'])[4]:
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new OneCarController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new OneCarController();
+                            $controller->post();
+                            break;
+                    }
+                    break;
                 default:
                     http_response_code(404);
                     echo 'Page not found';
@@ -92,8 +116,16 @@ class Routeur
         } else {
             switch ($request) {
                 case '/':
-                    $controller = new HomeController();
-                    $controller->index();
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new HomeController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new HomeController();
+                            $controller->post();
+                            break;
+                    }
                     break;
                 case '/connexion':
                     switch ($method) {
@@ -119,9 +151,17 @@ class Routeur
                             break;
                     }
                     break;
-                case '/vehicules':
-                    $controller = new OneCarController();
-                    $controller->index();
+                case '/reservation/' . explode("/", $_SERVER['REQUEST_URI'])[2]:
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new CarsController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new CarsController();
+                            $controller->post();
+                            break;
+                    }
                     break;
                 default:
                     http_response_code(404);

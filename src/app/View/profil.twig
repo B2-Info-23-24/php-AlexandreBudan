@@ -130,15 +130,16 @@
 					<button type="submit" name="add">Enregistrer</button>
 				</form>
 			</div>
+		</div>
+		<p></p>
+		<div class="reservation">
 			<p></p>
 			<h2>Réservations</h2>
 			<div class="container-fav">
 				{% for reservation in user.reservations %}
 					<div class="boxbox">
 						<div class="card shadow-sm">
-							<a href="/vehicule/{{ reservation.id }}">
-								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
-							</a>
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ reservation.car.picture }}">
 							<div class="card-body">
 								<h5>Informations Reservation</h5>
 								<p class="card-text">- Début :
@@ -152,13 +153,13 @@
 								</p>
 								<div class="d-flex justify-content-between align-items-center">
 									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">{{ reservation.car.brand.name }}</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">{{ reservation.car.color.name }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ reservation.car.brand.brandName }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ reservation.car.color.colorName }}</button>
 									</div>
 									<small class="text-body-secondary">
-										{% if reservation.ending < "now"|date %}
+										{% if reservation.ending > "now"|date %}
 											Terminé
-										{% elseif reservation.beginning > "now"|date %}
+										{% elseif reservation.beginning < "now"|date %}
 											Pas commencé
 										{% else %}
 											En cours
@@ -166,70 +167,173 @@
 									</small>
 								</div>
 								<p></p>
-								<div class="ctr">
-									<button type="submit">Annuler la réservation</button>
-								</div>
-								<p></p>
-								<div class="ctr">
-									<button id="showResa">Voir la réservation</button>
-								</div>
+								<form method="post">
+									{% if reservation.ending > "now"|date %}
+										{% set hasOpinion = false %}
+										{% for opinion in user.opinions %}
+											{% if opinion.reservationId == reservation.id %}
+												{% set hasOpinion = true %}
+											{% endif %}
+										{% endfor %}
+										{% if not hasOpinion %}
+											<div class="ctr">
+												<button type="submit" id="createOpinion" name="createOpinion" value="{{ reservation.id }}-{{ reservation.car.id }}">Laisser un commentaire</button>
+											</div>
+										{% endif %}
+									{% elseif reservation.beginning < "now"|date %}
+										<div class="ctr">
+											<button type="submit" name="deleteResa" value="{{ reservation.id }}-{{ reservation.car.id }}">Annuler la reservation (Irreversible)</button>
+										</div>
+									{% endif %}
+									<p></p>
+									<div class="ctr">
+										<button id="showResa" name="showResa" value="{{ reservation.id }}">Voir la réservation</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
 				{% endfor %}
 			</div>
-
+		</div>
+		<p></p>
+		<div class="favoris">
 			<h2>Favoris</h2>
 			<div class="container-fav">
+				<form method="post" id="starForm" style="display:none;">
+					<input type="submit" id="starValue" name="starValue" value="0">
+				</form>
 				{% for favori in user.favoris %}
 					<div class="boxbox">
-						<a href="/vehicule/{{ favori.id }}">
-							<div class="card shadow-sm">
-								<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="https://www.automobile-magazine.fr/asset/cms/198854/config/146547/p90462506-highres.jpg">
-								<div class="card-body">
-									<h5>Caractéristiques</h5>
-									<p class="card-text">- Nombres de portes :
-										{{ favori.car.nbDoor }}</p>
-									<p class="card-text">- Age minimum :
-										{{ favori.car.minAge }}</p>
-									<p class="card-text">
-										<h6>- A partir de
-											{{ favori.car.price | number_format(2, '.', ',') }}
-											€ / jour</h6>
-									</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.brand.name }}</button>
-											<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.color.name }}</button>
-										</div>
-										<small class="text-body-secondary">
-											{% if favori.car.manual %}
-												Manuelle
-											{% else %}
-												Automatique
-											{% endif %}
-										</small>
+						<div class="card shadow-sm">
+							<div class="star yellow" id="star{{ favori.car.id }}" onclick="test({{ favori.car.id }})" data-value="1">&#9733;</div>
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ favori.car.picture }}">
+							<div class="card-body">
+								<h5>Caractéristiques</h5>
+								<p class="card-text">- Nombres de portes :
+									{{ favori.car.nbDoor }}</p>
+								<p class="card-text">- Age minimum :
+									{{ favori.car.minAge }}</p>
+								<p class="card-text">
+									<h6>- A partir de
+										{{ favori.car.price | number_format(2, '.', ',') }}
+										€ / jour</h6>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.brand.brandName }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.color.colorName }}</button>
 									</div>
+									<small class="text-body-secondary">
+										{% if favori.car.manual %}
+											Manuelle
+										{% else %}
+											Automatique
+										{% endif %}
+									</small>
 								</div>
 							</div>
-						</a>
+						</div>
 					</div>
 				{% endfor %}
 			</div>
-
-			<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Récapitulatif de la réservation</h5>
+		</div>
+		<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Récapitulatif de la réservation</h5>
+					</div>
+					<div class="modal-body">
+						<div>
+							<h4>Informations réservation:</h4>
+							<p>- Date de début :
+								{{ reservation.beginning }}</p>
+							<p>- Date de Fin :
+								{{ reservation.ending }}</p>
+							{% if reservation.protection == true %}
+								{% if reservation.addFees == 10 %}
+									<p>- Protection : Protection Partielle(10€)</p>
+								{% elseif reservation.addFees == 30 %}
+									<p>- Protection : Protection Moyenne(30€)</p>
+								{% else %}
+									<p>- Protection : Protection Total(50€)</p>
+								{% endif %}
+							{% else %}
+								<p>- Protection : Aucune Protection</p>
+							{% endif %}
 						</div>
-						<div class="modal-body"></div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Annuler la réservation</button>
-							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Fermer</button>
+						<div>
+							<h4>Caractéristiques:</h4>
+							<p>- Nom de la voiture :
+								{{ reservation.car.name }}</p>
+							<p>- Nombres de portes :
+								{{ reservation.car.nbDoor }}</p>
+							<p>- Age minimum :
+								{{ reservation.car.minAge }}</p>
+							<p>- Nombres de passagers maximum :
+								{{ reservation.car.passenger.number }}</p>
+							<p>- Marque :
+								{{ reservation.car.brand.brandName }}</p>
+							<p>- Couleur :
+								{{ reservation.car.color.colorName }}</p>
+							{% if reservation.car.manual == true %}
+								<p>- Manuelle / Automatique : Manuelle</p>
+							{% else %}
+								<p>- Manuelle / Automatique : Automatique</p>
+							{% endif %}
+						</div>
+						<div>
+							<h4>Récupération:
+								{{ reservation.car.location }}</h4>
+						</div>
+						<div>
+							<h4>Informations Pilote:</h4>
+							<p>- Nom :
+								{{ reservation.pilote.lastName }}</p>
+							<p>- Prénom :
+								{{ reservation.pilote.firstName }}</p>
+							<p>- Age :
+								{{ reservation.pilote.age }}</p>
+							<p>- Email :
+								{{ reservation.pilote.email }}</p>
+							<p>- Téléphone :
+								{{ reservation.pilote.phone }}</p>
+						</div>
+						<div>
+							<h4>Réservation sous le compte :
+								{{ reservation.user.email }}</h4>
 						</div>
 					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Fermer</button>
+					</div>
 				</div>
+			</div>
+		</div>
+		<div class="modal" id="editModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<form method="post">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Commentaire de la réservation</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="rating">Note sur 5 :</label>
+								<input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+							</div>
+							<div class="form-group">
+								<label for="comment">Commentaire :</label>
+								<textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name"create">Valider</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeReview">Fermer</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		<form method="post">
@@ -252,10 +356,10 @@ var modifAdd = document.getElementById('modifAdd');
 modifNP.addEventListener("click", function (event) {
 if (formNP.classList.contains('hidden')) {
 formNP.classList.remove('hidden');
-if (!formMdp.classList.contains('hidden')) {
+if (! formMdp.classList.contains('hidden')) {
 formMdp.classList.add('hidden');
 }
-if (!formAdd.classList.contains('hidden')) {
+if (! formAdd.classList.contains('hidden')) {
 formAdd.classList.add('hidden');
 }
 } else {
@@ -266,10 +370,10 @@ formNP.classList.add('hidden');
 ModifMdp.addEventListener("click", function (event) {
 if (formMdp.classList.contains('hidden')) {
 formMdp.classList.remove('hidden');
-if (!formNP.classList.contains('hidden')) {
+if (! formNP.classList.contains('hidden')) {
 formNP.classList.add('hidden');
 }
-if (!formAdd.classList.contains('hidden')) {
+if (! formAdd.classList.contains('hidden')) {
 formAdd.classList.add('hidden');
 }
 } else {
@@ -280,28 +384,34 @@ formMdp.classList.add('hidden');
 modifAdd.addEventListener("click", function (event) {
 if (formAdd.classList.contains('hidden')) {
 formAdd.classList.remove('hidden');
-if (!formMdp.classList.contains('hidden')) {
+if (! formMdp.classList.contains('hidden')) {
 formMdp.classList.add('hidden');
 }
-if (!formNP.classList.contains('hidden')) {
+if (! formNP.classList.contains('hidden')) {
 formNP.classList.add('hidden');
 }
 } else {
 formAdd.classList.add('hidden');
 }
-});
-
-var showResa = document.getElementById('showResa');
-showResa.addEventListener("click", function (event) {
-var carFeatures = "Informations réservation:\n- Date de début : 03/03/2003\n- Date de Fin : 03/03/2003\n- Nombres de jours : 0\n\nModèle:\n- Marque : BMW\n- Couleur : Gris\n- Manuelle / Automatique : Manuelle\n\nCaractéristiques:\n- Nombres de portes : 5\n- Age minimum : 21\n- Nombres de passagers maximum : 5\n- Protection : Protection Totale(50€)\n\nRécupération: Lyon Perrache\n\nInformations Pilote:\n- Nom : Doe\n- Prénom : John\n- Age : 21\n- Email : John.Doe@gmail.com\n- Téléphone : 00.00.00.00.00\n\nRéservation sous le compte : Aucun compte";
-document.getElementById('summaryModal').getElementsByClassName('modal-body')[0].innerText = carFeatures;
-$('#summaryModal').modal('show');
-});
-
+});{% if reservation != null %}$('#summaryModal').modal('show');{% endif %};
 
 var closeResa = document.getElementById('closeResa');
 closeResa.addEventListener("click", function (event) {
 $('#summaryModal').modal('hide');
+});{% if opinion != null %}$('#editModal').modal('show');{% endif %}var closeReview = document.getElementById('closeReview');
+closeReview.addEventListener("click", function (event) {
+$('#editModal').modal('hide');
 });
+function test(id) {
+const star = document.getElementById('star' + String(id));
+
+star.classList.remove('yellow');
+
+star.setAttribute('data-value', 0);
+
+document.getElementById('starValue').value = id;
+
+document.getElementById('starValue').click();
+}
 	</script>
 {% endblock %}
