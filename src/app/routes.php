@@ -97,8 +97,16 @@ class Routeur
                     }
                     break;
                 case '/reservation/' . $_SESSION['reservation']->getHash() . '/' . explode("/", $_SERVER['REQUEST_URI'])[3] . '/' . explode("/", $_SERVER['REQUEST_URI'])[4]:
-                    $controller = new OneCarController();
-                    $controller->index();
+                    switch ($method) {
+                        case 'GET':
+                            $controller = new OneCarController();
+                            $controller->index();
+                            break;
+                        case 'POST':
+                            $controller = new OneCarController();
+                            $controller->post();
+                            break;
+                    }
                     break;
                 default:
                     http_response_code(404);

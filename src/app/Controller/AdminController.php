@@ -11,6 +11,7 @@ use Model\CarModel;
 use Model\ColorModel;
 use Model\OpinionModel;
 use Model\PassengerModel;
+use Model\ReservationModel;
 use Model\UserModel;
 
 class AdminController
@@ -29,12 +30,20 @@ class AdminController
         $passengers = null;
         $oneUser = null;
         $opinions = null;
-
+        $reservations = null;
 
         if ($type == 'Marques' || $type == 'Couleurs' || $type == 'Passagers') {
             $loadTemp = $twig->load('/templates/adminSee.twig');
         } elseif ($type == 'Utilisateurs' || $type == 'OneUser') {
             $loadTemp = $twig->load('/templates/adminSee2.twig');
+        } elseif ($type == 'reservationFilter' || $type == 'reservation' || $type == 'reservationCar') {
+            $brandModel = new BrandModel();
+            $brands = $brandModel->getAllBrand();
+            $colorModel = new ColorModel();
+            $colors = $colorModel->getAllColor();
+            $passengerModel = new PassengerModel();
+            $passengers = $passengerModel->getAllPassenger();
+            $loadTemp = $twig->load('/templates/seeReservation.twig');
         } elseif ($type == 'opinionFilter' || $type == 'opinionCar' || $type == 'opinion') {
             $brandModel = new BrandModel();
             $brands = $brandModel->getAllBrand();
@@ -105,6 +114,23 @@ class AdminController
                 $data = $carModel->getAllCar(true, null);
                 $type = 'Opinions';
                 break;
+            case 'reservationFilter':
+                $carModel = new CarModel();
+                $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
+                $type = 'Reservations';
+                break;
+            case 'reservation':
+                $carModel = new CarModel();
+                $data = $carModel->getAllCar(true, null);
+                $type = 'Reservations';
+                break;
+            case 'reservationCar':
+                $reservationModel = new ReservationModel();
+                $reservations = $reservationModel->getReservationsByCarId($_POST['seeReservation']);
+                $carModel = new CarModel();
+                $data = $carModel->getAllCar(true, null);
+                $type = 'Reservations';
+                break;
         }
 
         $seeTemp = $loadTemp->render([
@@ -118,7 +144,8 @@ class AdminController
             'error3' => $err3,
             'oneCar' => $oneCar,
             'oneUser' => $oneUser,
-            'opinions' => $opinions
+            'opinions' => $opinions,
+            'reservations' => $reservations
         ]);
 
         $see = $loadSee->render(['see' => $seeTemp]);
@@ -225,14 +252,24 @@ class AdminController
             ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         } elseif (isset($_POST['allResa'])) {
-            $loadTemp = $twig->load('/templates/reservation.twig');
+            $loadTemp = $twig->load('/templates/seeReservation.twig');
+            $brandModel = new BrandModel();
+            $brands = $brandModel->getAllBrand();
+            $colorModel = new ColorModel();
+            $colors = $colorModel->getAllColor();
+            $passengerModel = new PassengerModel();
+            $passengers = $passengerModel->getAllPassenger();
+            $carModel = new CarModel();
+            $data = $carModel->getAllCar(true, null);
             $seeTemp = $loadTemp->render([
-                'type' => "Reservations",
-                'car' => $twig->render('/templates/carCard.twig')
+                'data' => $data,
+                'type' => 'Reservations',
+                'brands' => $brands,
+                'colors' => $colors,
+                'passengers' => $passengers
             ]);
             $see = $loadSee->render(['see' => $seeTemp]);
         }
-
         echo $see;
     }
 
@@ -328,6 +365,8 @@ class AdminController
             self::index("filter");
         } elseif (isset($_POST['opinionLaunch'])) {
             self::index("opinionFilter");
+        } elseif (isset($_POST['reservationLaunch'])) {
+            self::index("reservationFilter");
         } elseif (isset($_POST['modifCar'])) {
             $carModel = new CarModel();
             $oneCar = $carModel->getOneCar($_POST['modifCar']);
@@ -395,13 +434,13 @@ class AdminController
             $opinionModel = new OpinionModel();
             $opinionModel->deleteOpinion($_POST['suppOpinion']);
             self::index("opinion");
-            // } elseif (isset($_POST['suppResa'])) {
-            //     $carModel = new CarModel();
-            //     if ($carModel->deleteReservation($_POST['suppResa'])) {
-            //         self::index("Reservations");
-            //     } else {
-            //         self::index("Reservations", null, "error");
-            //     }
+        } elseif (isset($_POST['seeReservation'])) {
+            self::index("reservationCar");
+        } elseif (isset($_POST['suppReservation'])) {
+            $reservationModel = new ReservationModel();
+            $result = explode("-", $_POST['suppReservation']);
+            $reservationModel->deleteReservation($result[0], $result[1]);
+            self::index("reservation");
         } else {
             self::index();
         }
