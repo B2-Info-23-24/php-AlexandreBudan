@@ -1,0 +1,146 @@
+<div class="album" style="margin-bottom:100px;">
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+				<h1 id="type1" class="fw-light">Reservations</h1>
+			</div>
+		</div>
+	</section>
+	<p></p>
+	<form method="post">
+		<div id="container-filter">
+			<input type="text" id="search-bar" name="search" placeholder="Recherche...">
+			<p></p>
+			<div class="filter-container">
+				<div class="filters">
+					<label id="texte" , type="price">Prix :</label>
+					<select id="price" name="price">
+						<option value="1000">Tout</option>
+						<option value="0-50">0€ - 50€</option>
+						<option value="50-100">50€ - 100€</option>
+						<option value="100-150">100€ - 150€</option>
+						<option value="150-200">150€ - 200€</option>
+					</select>
+
+					<label id="texte" for="brand">Marque :</label>
+					<select id="brand" name="brand">
+						<option value="0">Tout</option>
+						{% for brand in brands %}
+							<option value="{{ brand.id }}">{{ brand.brandName }}</option>
+						{% endfor %}
+					</select>
+
+					<label id="texte" for="color">Couleur :</label>
+					<select id="color" name="color">
+						<option value="0">Tout</option>
+						{% for color in colors %}
+							<option value="{{ color.id }}">{{ color.colorName }}</option>
+						{% endfor %}
+					</select>
+
+					<label id="texte" for="passengers">Nombre de passagers :</label>
+					<select id="passengers" name="passengers">
+						<option value="0">Tout</option>
+						{% for passenger in passengers %}
+							<option value="{{ passenger.id }}">{{ passenger.number }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<p></p>
+			<div class="save-btn" style="display:flex; justify-content:center;">
+				<button type="submit" name="reservationLaunch" class="btn btn-primary">Rechercher</button>
+			</div>
+		</div>
+	</form>
+	<p></p>
+	<div class="container bg">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+			{% for one in data %}
+				<div class="admin-card">
+					<div class="col">
+						<div class="card shadow-sm">
+							<img class="bd-placeholder-img card-img-top" width="100%" height="275" src="{{ one.picture }}"/>
+							<div class="card-body">
+								<h5>Caractéristiques</h5>
+								<p class="card-text">- Nombres de portes :
+									{{ one.nbDoor }}</p>
+								<p class="card-text">- Age minimum :
+									{{ one.minAge }}</p>
+								<p class="card-text">
+									<h6>- A partir de
+										{{ one.price }}€ / jour</h6>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.brand.brandName }}
+											{{ one.name }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.color.colorname }}</button>
+									</div>
+									<small class="text-body-secondary">
+										{% if one.manual %}
+											Manuelle
+										{% else %}
+											Automatique
+										{% endif %}
+									</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<p></p>
+					<form method="post" style="width:100%">
+						<div class="btn-admin">
+							<button id="seeReservation" name="seeReservation" style="background-color:blue;width:75%" value="{{ one.id }}">Voir les Reservations</button>
+						</div>
+					</form>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form action="" method="post">
+				<div class="modal-header">
+					<h5 id="type2" class="modal-title">Réservations</h5>
+				</div>
+				{% for reservation in reservations %}
+					<p></p>
+					<div class="modal-body">
+						<div class="reservation-details">
+							<div class="top-left">
+								<span class="email">{{ reservation.user.email }}</span>
+							</div>
+							<p></p>
+							<div class="top-right">
+								<span class="dates">{{ reservation.beginning }} - {{ reservation.ending }}</span>
+							</div>
+							<p></p>
+							<div class="middle">
+								<span>Prix: {{ reservation.price }} €</span><br>
+								<p></p>
+								<span>État début: {{ reservation.beginningState }}</span><br>
+								<p></p>
+								<span>État fin: {{ reservation.endingState }}</span>
+							</div>
+						</div>
+						<p></p>
+						<button type="submit" name="suppReservation" class="btn btn-danger" value="{{ reservation.id }}-{{ reservation.car.id }}">Supprimer</button>
+					</div>
+				{% endfor %}
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Fermer</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+	{% if reservations != null %}
+$('#summaryModal').modal('show');{% endif %}function closeSummaryModal() {
+$('#summaryModal').modal('hide');
+}
+</script>

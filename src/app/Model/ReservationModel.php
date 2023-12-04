@@ -10,6 +10,7 @@ use Entity\Color;
 use Entity\Passenger;
 use Entity\Pilote;
 use Entity\Reservation;
+use Entity\User;
 use PDO;
 use PDOException;
 
@@ -71,6 +72,15 @@ class ReservationModel
 
             $stmtPilote->execute();
 
+            $stmtUnvailableDate = self::$conn->prepare("INSERT INTO UnvailableDate (carId, beginning, ending, status) 
+                                            VALUES (:carId, :beginning, :ending, 1)");
+            
+            $stmtUnvailableDate->bindParam(":carId", $carId);
+            $stmtUnvailableDate->bindParam(":beginning", $beginning);
+            $stmtUnvailableDate->bindParam(":ending", $ending);
+
+            $stmtUnvailableDate->execute();
+
             $reservationId = self::$conn->query("SELECT MAX(id) FROM Reservation")->fetchColumn();
 
             return $reservationId;
@@ -119,18 +129,75 @@ class ReservationModel
         }
     }
 
-    public function deleteReservation(int $id)
+    public function getReservationsByCarId(int $carId)
+    {
+        try {
+            $query = "SELECT 'id', Reservation.id,
+                                (SELECT JSON_OBJECT('id', Car.id, 'name', Car.name, 
+                                        'brand', JSON_OBJECT('id', Brand.id, 'brandName', Brand.brandName),
+                                        'color', JSON_OBJECT('id', Color.id, 'colorName', Color.colorName),
+                                        'passenger', JSON_OBJECT('id', Passenger.id, 'number', Passenger.number),
+                                        'picture', Car.picture, 'price', Car.price, 'manual', Car.manual, 'type', Car.type, 'minAge', Car.minAge, 'nbDoor', Car.nbDoor, 'location', Car.location)
+                                    FROM Car
+                                    LEFT JOIN Brand ON Car.brandId = Brand.id
+                                    LEFT JOIN Color ON Car.colorId = Color.id
+                                    LEFT JOIN Passenger ON Car.passengerId = Passenger.id
+                                    WHERE Car.id = Reservation.carId
+                                ) AS car,
+                                (SELECT JSON_OBJECT('id', User.id, 'email', User.email)
+                                FROM User
+                                WHERE User.id = Reservation.userId
+                                ) AS user,
+                                JSON_OBJECT('id', Pilote.id, 'reservationId', Pilote.reservationId, 'firstName', Pilote.firstName, 'lastName', Pilote.lastName, 'age', Pilote.age, 'email', Pilote.email, 'phone', Pilote.phone) AS pilote,
+                                'hash', Reservation.hash, 'protection', Reservation.protection, 'price', Reservation.price, 'beginning', Reservation.beginning, 'ending', Reservation.ending, 'finish', Reservation.finish, 'beginningState', Reservation.beginningState, 'endingState', Reservation.endingState, 'addFees', Reservation.addFees
+                                FROM Reservation
+                                JOIN Pilote ON Pilote.reservationId = Reservation.id
+                                WHERE Reservation.carId = $carId";
+            $stmt = self::$conn->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $reservations = [];
+
+            foreach ($result as $reservation) {
+                $reservation['car'] = json_decode($reservation['car'], true);
+                $reservation['pilote'] = new Pilote(...get_object_vars(json_decode($reservation['pilote'])));
+                $reservation['car']['brand'] = new Brand(...$reservation['car']['brand']);
+                $reservation['car']['color'] = new Color(...$reservation['car']['color']);
+                $reservation['car']['passenger'] = new Passenger(...$reservation['car']['passenger']);
+                $reservation['car'] = new Car(...$reservation['car']);
+                $reservation['user'] = new User(...get_object_vars(json_decode($reservation['user'])));
+                $reservation = new Reservation(...$reservation);
+                array_push($reservations, $reservation);
+            }
+
+            return $reservations;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function deleteReservation(int $id, int $carId)
     {
         try {
             $stmtPilote = self::$conn->prepare("DELETE FROM Pilote WHERE reservationId = :id");
             $stmtPilote->bindParam(":id", $id);
             $stmtPilote->execute();
 
+            $stmtUnvailableDate = self::$conn->prepare("DELETE FROM UnvailableDate WHERE carId = :carId");
+            $stmtUnvailableDate->bindParam(":carId", $carId);
+            $stmtUnvailableDate->execute();
+
+            $stmtOpinion = self::$conn->prepare("DELETE FROM Opinion WHERE carId = :carId");
+            $stmtOpinion->bindParam(":carId", $carId);
+            $stmtOpinion->execute();
+
             $stmtReservation = self::$conn->prepare("DELETE FROM Reservation WHERE id = :id");
             $stmtReservation->bindParam(":id", $id);
             $stmtReservation->execute();
             return true;
         } catch (PDOException $e) {
+            echo $e->getMessage();
             return false;
         }
     }
