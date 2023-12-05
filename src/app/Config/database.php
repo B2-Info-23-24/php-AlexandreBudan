@@ -33,10 +33,10 @@ class DataBase
             // Chemin vers le fichier SQL
             $sqlFile = 'db.sql';
 
-            // Lit le contenu du fichier SQL
+            // Lire le contenu du fichier SQL
             $sql = file_get_contents($sqlFile);
 
-            // Exécute les requêtes SQL
+            // Exécuter les requêtes SQL
             $conn->exec($sql);
 
             error_log("\033[34mTables created successfully\033[0m");

@@ -230,7 +230,7 @@ class DataFixtures
         }
 
         $beginDate = new DateTime();
-        $beginDate->modify('+1 month');
+        $beginDate->modify('+' . strval(rand(3, 14)) . ' days');
         $beginningString = $beginDate->format('Y-m-d H:i:s');
 
 
@@ -241,7 +241,6 @@ class DataFixtures
             $userId = $db->query("SELECT id FROM User ORDER BY rand() LIMIT 1")->fetchColumn();
             self::makeReservation($db, $faker, $id, $userId, $price, $beginDate, $endDate);
             self::makeUnvailableDate($db, $id, $beginningString, $endingString);
-            $beginDate->modify('+' . strval(rand(3, 7)) . ' days');
         }
 
         for ($i = 0; $i < rand(2, 5); $i++) {

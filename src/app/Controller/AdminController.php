@@ -24,112 +24,85 @@ class AdminController
 
         $loadSee = $twig->load('admin.twig');
 
-        $data = null;
-        $brands = null;
-        $colors = null;
-        $passengers = null;
-        $oneUser = null;
-        $opinions = null;
-        $reservations = null;
+        $brandModel = new BrandModel();
+        $colorModel = new ColorModel();
+        $passengerModel = new PassengerModel();
+        $carModel = new CarModel();
+        $userModel = new UserModel();
+        $opinionModel = new OpinionModel();
+        $reservationModel = new ReservationModel();
 
-        if ($type == 'Marques' || $type == 'Couleurs' || $type == 'Passagers') {
-            $loadTemp = $twig->load('/templates/adminSee.twig');
-        } elseif ($type == 'Utilisateurs' || $type == 'OneUser') {
-            $loadTemp = $twig->load('/templates/adminSee2.twig');
-        } elseif ($type == 'reservationFilter' || $type == 'reservation' || $type == 'reservationCar') {
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $loadTemp = $twig->load('/templates/seeReservation.twig');
-        } elseif ($type == 'opinionFilter' || $type == 'opinionCar' || $type == 'opinion') {
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $loadTemp = $twig->load('/templates/seeOpinion.twig');
-        } elseif ($type == 'newUser') {
-            $type = "Ajouter un User";
-            $loadTemp = $twig->load('/templates/addUser.twig');
-        } elseif ($type == 'Cars' || $type == 'filter') {
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $loadTemp = $twig->load('/templates/seeAllCar.twig');
-        }
+        $data = $brands = $colors = $passengers = $oneUser = $opinions = $reservations = null;
 
         switch ($type) {
             case 'Marques':
-                $brandModel = new BrandModel();
+                $loadTemp = $twig->load('/templates/adminSee.twig');
                 $data = $brandModel->getAllBrand();
                 break;
             case 'Couleurs':
-                $colorModel = new ColorModel();
+                $loadTemp = $twig->load('/templates/adminSee.twig');
                 $data = $colorModel->getAllColor();
                 break;
             case 'Passagers':
-                $passengerModel = new PassengerModel();
+                $loadTemp = $twig->load('/templates/adminSee.twig');
                 $data = $passengerModel->getAllPassenger();
                 break;
             case 'Cars':
-                $carModel = new CarModel();
+                $loadTemp = $twig->load('/templates/seeAllCar.twig');
                 $data = $carModel->getAllCar(true, null);
                 break;
             case 'filter':
-                $carModel = new CarModel();
+                $loadTemp = $twig->load('/templates/seeAllCar.twig');
                 $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
-                $type = 'Cars';
                 break;
             case 'Utilisateurs':
-                $userModel = new UserModel();
+                $loadTemp = $twig->load('/templates/adminSee2.twig');
                 $data = $userModel->getAllUser();
                 break;
             case 'OneUser':
-                $type = 'Utilisateurs';
-                $userModel = new UserModel();
+                $loadTemp = $twig->load('/templates/adminSee2.twig');
                 $data = $userModel->getAllUser();
                 $oneUser = $userModel->getOneUser($_POST['modifUser']);
                 break;
             case 'opinionFilter':
-                $carModel = new CarModel();
+                $loadTemp = $twig->load('/templates/seeOpinion.twig');
                 $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
-                $type = 'Opinions';
                 break;
             case 'opinion':
-                $carModel = new CarModel();
+                $loadTemp = $twig->load('/templates/seeOpinion.twig');
                 $data = $carModel->getAllCar(true, null);
-                $type = 'Opinions';
                 break;
             case 'opinionCar':
-                $opinionModel = new OpinionModel();
+                $loadTemp = $twig->load('/templates/seeOpinion.twig');
                 $opinions = $opinionModel->getOpinionsByCarId($_POST['seeOpinion']);
-                $carModel = new CarModel();
                 $data = $carModel->getAllCar(true, null);
-                $type = 'Opinions';
                 break;
             case 'reservationFilter':
-                $carModel = new CarModel();
+                $loadTemp = $twig->load('/templates/seeReservation.twig');
                 $data = $carModel->getCarsByFilter($_POST['search'], $_POST['price'], $_POST['brand'], $_POST['color'], $_POST['passengers'], "none", true);
-                $type = 'Reservations';
                 break;
             case 'reservation':
-                $carModel = new CarModel();
+                $loadTemp = $twig->load('/templates/seeReservation.twig');
                 $data = $carModel->getAllCar(true, null);
-                $type = 'Reservations';
                 break;
             case 'reservationCar':
-                $reservationModel = new ReservationModel();
+                $loadTemp = $twig->load('/templates/seeReservation.twig');
                 $reservations = $reservationModel->getReservationsByCarId($_POST['seeReservation']);
-                $carModel = new CarModel();
                 $data = $carModel->getAllCar(true, null);
-                $type = 'Reservations';
+                break;
+            case 'newUser':
+                $loadTemp = $twig->load('/templates/addUser.twig');
+                break;
+            case 'newCar':
+                $loadTemp = $twig->load('/templates/addCar.twig');
+                break;
+        }
+
+        switch ($type) {
+            case 'Cars' || 'filter' || 'reservationFilter' || 'reservation' || 'reservationCar' || 'opinionFilter' || 'opinion' || 'opinionCar' || 'newCar':
+                $brands = $brandModel->getAllBrand();
+                $colors = $colorModel->getAllColor();
+                $passengers = $passengerModel->getAllPassenger();
                 break;
         }
 
@@ -150,132 +123,30 @@ class AdminController
 
         $see = $loadSee->render(['see' => $seeTemp]);
 
-        if (isset($_POST['allCar'])) {
-            $loadTemp = $twig->load('/templates/seeAllCar.twig');
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $carModel = new CarModel();
-            $data = $carModel->getAllCar(true, null);
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => 'Cars',
-                'brands' => $brands,
-                'colors' => $colors,
-                'passengers' => $passengers,
-                'error3' => $err3,
-                'oneCar' => $oneCar
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['seeBrand'])) {
-            $loadTemp = $twig->load('/templates/adminSee.twig');
-            $brandModel = new BrandModel();
-            $data = $brandModel->getAllBrand();
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => "Marques",
-                'error' => $err,
-                'error2' => $err2
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['seeColor'])) {
-            $loadTemp = $twig->load('/templates/adminSee.twig');
-            $colorModel = new ColorModel();
-            $data = $colorModel->getAllColor();
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => "Couleurs",
-                'error' => $err,
-                'error2' => $err2
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['seePassenger'])) {
-            $loadTemp = $twig->load('/templates/adminSee.twig');
-            $passengerModel = new PassengerModel();
-            $data = $passengerModel->getAllPassenger();
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => "Passagers",
-                'error' => $err,
-                'error2' => $err2
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['allUsers'])) {
-            $loadTemp = $twig->load('/templates/adminSee2.twig');
-            $userModel = new UserModel();
-            $data = $userModel->getAllUser();
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => "Utilisateurs"
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['allOpinion'])) {
-            $loadTemp = $twig->load('/templates/seeOpinion.twig');
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $carModel = new CarModel();
-            $data = $carModel->getAllCar(true, null);
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => 'Opinions',
-                'brands' => $brands,
-                'colors' => $colors,
-                'passengers' => $passengers
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['addCar'])) {
-            $loadTemp = $twig->load('/templates/addCar.twig');
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $seeTemp = $loadTemp->render([
-                'type' => "Ajouter une voiture",
-                'brands' => $brands,
-                'colors' => $colors,
-                'passengers' => $passengers
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['addUser'])) {
-            $loadTemp = $twig->load('/templates/addUser.twig');
-            $seeTemp = $loadTemp->render([
-                'type' => "Ajouter un User"
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        } elseif (isset($_POST['allResa'])) {
-            $loadTemp = $twig->load('/templates/seeReservation.twig');
-            $brandModel = new BrandModel();
-            $brands = $brandModel->getAllBrand();
-            $colorModel = new ColorModel();
-            $colors = $colorModel->getAllColor();
-            $passengerModel = new PassengerModel();
-            $passengers = $passengerModel->getAllPassenger();
-            $carModel = new CarModel();
-            $data = $carModel->getAllCar(true, null);
-            $seeTemp = $loadTemp->render([
-                'data' => $data,
-                'type' => 'Reservations',
-                'brands' => $brands,
-                'colors' => $colors,
-                'passengers' => $passengers
-            ]);
-            $see = $loadSee->render(['see' => $seeTemp]);
-        }
         echo $see;
     }
 
     public function post()
     {
-        if (isset($_POST['supp'])) {
+        if (isset($_POST['allCar'])) {
+            self::index("Cars");
+        } elseif (isset($_POST['seeBrand'])) {
+            self::index("Marques");
+        } elseif (isset($_POST['seeColor'])) {
+            self::index("Couleurs");
+        } elseif (isset($_POST['seePassenger'])) {
+            self::index("Passagers");
+        } elseif (isset($_POST['allUsers'])) {
+            self::index("Utilisateurs");
+        } elseif (isset($_POST['allOpinion'])) {
+            self::index("opinion");
+        } elseif (isset($_POST['addCar'])) {
+            self::index("newCar");
+        } elseif (isset($_POST['addUser'])) {
+            self::index("newUser");
+        } elseif (isset($_POST['allResa'])) {
+            self::index("reservation");
+        } elseif (isset($_POST['supp'])) {
             $array = explode("-", $_POST['supp']);
             switch ($array[0]) {
                 case 'brand':

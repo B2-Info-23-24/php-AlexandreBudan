@@ -11,16 +11,25 @@ stop:
 
 initP:
 	cd .. && touch Dockerfile
-	echo 'FROM php:8.2-apache' >> ../Dockerfile \
+	echo 'FROM php:8.1-apache' >> ../Dockerfile \
     && echo 'RUN docker-php-ext-install pdo pdo_mysql' >> ../Dockerfile \
     && echo 'RUN chmod -R 777 /var/www' >> ../Dockerfile \
     && echo 'WORKDIR /var/www/html' >> ../Dockerfile \
-    && echo 'RUN apt-get update \ && apt-get install -y unzip \ && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer' >> ../Dockerfile \
-    && echo 'RUN cd /var/www/html \ && composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fakerphp/faker:^1.9"' >> ../Dockerfile \
-    && echo 'RUN pecl install xdebug \ && apt update \ && apt install libzip-dev -y \ && docker-php-ext-enable xdebug \ && a2enmod rewrite \ && docker-php-ext-install zip \ && service apache2 restart' >> ../Dockerfile \
+    && echo 'RUN apt-get update && \' >> ../Dockerfile \
+    && echo '    apt-get install -y unzip && \' >> ../Dockerfile \
+    && echo '    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer' >> ../Dockerfile \
+    && echo 'RUN cd /var/www/html && \' >> ../Dockerfile \
+    && echo '    composer require "vlucas/phpdotenv:^5.0" "twig/twig:^3.0" "fakerphp/faker:^1.9"' >> ../Dockerfile \
+    && echo 'RUN pecl install xdebug && \' >> ../Dockerfile \
+    && echo '    apt update && \' >> ../Dockerfile \
+    && echo '    apt install libzip-dev -y && \' >> ../Dockerfile \
+    && echo '    docker-php-ext-enable xdebug && \' >> ../Dockerfile \
+    && echo '    a2enmod rewrite && \' >> ../Dockerfile \
+    && echo '    docker-php-ext-install zip && \' >> ../Dockerfile \
+    && echo '    service apache2 restart' >> ../Dockerfile \
     && echo 'ENV APACHE_DOCUMENT_ROOT=/var/www/html/public' >> ../Dockerfile \
-    && echo 'RUN sed -ri -e '\''s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g'\'' /etc/apache2/sites-available/*.conf' >> ../Dockerfile \
-    && echo 'RUN sed -ri -e '\''s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g'\'' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf' >> ../Dockerfile \
+    && echo 'RUN sed -ri -e '\''s!/var/www/html!$${APACHE_DOCUMENT_ROOT}!g'\'' /etc/apache2/sites-available/*.conf' >> ../Dockerfile \
+    && echo 'RUN sed -ri -e '\''s!/var/www/html!$${APACHE_DOCUMENT_ROOT}!g'\'' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf' >> ../Dockerfile \
     && echo 'COPY . /var/www/html/' >> ../Dockerfile
 
 	cd .. && touch docker-compose.yml
@@ -66,7 +75,7 @@ initP:
 	echo 'DB_SERVERNAME= mysql' >> .env \
 	&& echo 'DB_USERNAME=PTG_user' >> .env \
 	&& echo 'DB_PASSWORD=PTG_password' >> .env \
-	&& echo 'DB_NAME=prendsTaGoDb' >> .env \
+	&& echo 'DB_NAME=prendsTaGoDb' >> .env
 
 	touch composer.json \
 	&& echo '{' >> composer.json \
@@ -84,6 +93,5 @@ initP:
     && echo '        	"Entity\\\": "app/Entity/"' >> composer.json \
     && echo '    	}' >> composer.json \
     && echo '	}' >> composer.json \
-	&& echo '}' >> composer.json \
-	&& composer install
-
+	&& echo '}' >> composer.json
+	composer install

@@ -9,7 +9,7 @@
 
 {% block content %}
 	<div class="containerBox bg">
-		{% if error is defined %}
+		{% if error == "error" %}
 			L'email existe déjà sous un autre compte ->
 			<a href="/connexion">Se connecter</a>
 		{% endif %}
