@@ -5,3 +5,7 @@
 composer.json
 composer.lock
 vendor/
+
+# fichiers docker
+../docker-compose.yml
+../Dockerfile
