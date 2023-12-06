@@ -1,5 +1,5 @@
 run:
-	docker-compose up -d && chmod 777 public/img; \
+	docker-compose --env-file .env up -d && chmod 777 public/img; \
     echo 'Waiting for mysql to be ready...' && sleep 25; \
 	docker-compose exec web php -r "require 'public/db.php'; createDb();"
 
@@ -38,10 +38,10 @@ initP:
     && echo '  mysql:' >> ../docker-compose.yml \
     && echo '    image: mysql:latest' >> ../docker-compose.yml \
     && echo '    environment:' >> ../docker-compose.yml \
-    && echo '      MYSQL_ROOT_PASSWORD: my-secret-pw' >> ../docker-compose.yml \
-    && echo '      MYSQL_DATABASE: prendsTaGoDb' >> ../docker-compose.yml \
-    && echo '      MYSQL_USER: PTG_user' >> ../docker-compose.yml \
-    && echo '      MYSQL_PASSWORD: PTG_password' >> ../docker-compose.yml \
+    && echo '      MYSQL_ROOT_PASSWORD: $${DB_ROOT_PASSWORD}' >> ../docker-compose.yml \
+    && echo '      MYSQL_DATABASE: $${DB_NAME}' >> ../docker-compose.yml \
+    && echo '      MYSQL_USER: $${DB_USERNAME}' >> ../docker-compose.yml \
+    && echo '      MYSQL_PASSWORD: $${DB_PASSWORD}' >> ../docker-compose.yml \
     && echo '    volumes:' >> ../docker-compose.yml \
     && echo '      - db_data:/var/lib/mysql' >> ../docker-compose.yml \
     && echo '    ports:' >> ../docker-compose.yml \
@@ -50,7 +50,7 @@ initP:
     && echo '    image: phpmyadmin/phpmyadmin:latest' >> ../docker-compose.yml \
     && echo '    container_name: phpmyadmin_container' >> ../docker-compose.yml \
     && echo '    environment:' >> ../docker-compose.yml \
-    && echo '      PMA_HOST: mysql' >> ../docker-compose.yml \
+    && echo '      PMA_HOST: $${DB_SERVERNAME}' >> ../docker-compose.yml \
     && echo '      PMA_PORT: 3306' >> ../docker-compose.yml \
     && echo '      MYSQL_ROOT_PASSWORD: root' >> ../docker-compose.yml \
     && echo '    ports:' >> ../docker-compose.yml \
@@ -72,7 +72,8 @@ initP:
     && echo '  db_data:' >> ../docker-compose.yml
 
 	touch .env
-	echo 'DB_SERVERNAME= mysql' >> .env \
+	echo 'DB_SERVERNAME=mysql' >> .env \
+    && echo 'DB_ROOT_PASSWORD=PTG_root_password' >> .env \
 	&& echo 'DB_USERNAME=PTG_user' >> .env \
 	&& echo 'DB_PASSWORD=PTG_password' >> .env \
 	&& echo 'DB_NAME=prendsTaGoDb' >> .env
