@@ -35,7 +35,7 @@ class UserModel
         $gender = $user->getGender();
         $creationDate = $user->getCreationDate();
         $address = $user->getAddress();
-        $isAdmin = $user->getIsAdmin();
+        $isAdmin = $user->getIsAdmin() ? 1 : 0;
 
         try {
             $stmtUser = self::$conn->prepare("INSERT INTO User (email, password, firstName, lastName, phone, age, gender, addressId, creationDate, newsLetter, verified, isAdmin, status) 
@@ -60,6 +60,8 @@ class UserModel
             }
 
             $stmtUser->execute();
+
+            $user->setId(self::$conn->query("SELECT MAX(id) FROM User")->fetchColumn());
 
             return $user;
         } catch (PDOException $e) {

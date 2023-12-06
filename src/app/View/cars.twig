@@ -85,60 +85,62 @@
 								{% endif %}
 								{% if user == null %}
 									<a href="/connexion">
-									{% else %}
-										<a href="{{ request[0] }}/vehicule/{{ one.id }}?{{ request[1] }}">
-										{% endif %}
-										<img class="bd-placeholder-img card-img-top" width="100%" height="275" src="{{ one.picture }}"/>
-										<div class="card-body">
-											<h5>Caractéristiques</h5>
-											<p class="card-text">- Nombres de portes :
-												{{ one.nbDoor }}</p>
-											<p class="card-text">- Age minimum :
-												{{ one.minAge }}</p>
-											<p class="card-text">
-												<h6>- A partir de
-													{{ one.price }}€ / jour</h6>
-											</p>
-											<div class="d-flex justify-content-between align-items-center">
-												<div class="btn-group">
-													<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.brand.brandName }}
-														{{ one.name }}</button>
-													<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.color.colorname }}</button>
+									{% elseif 'none' in request[1] %}
+										<a href="/">
+										{% else %}
+											<a href="{{ request[0] }}/vehicule/{{ one.id }}?{{ request[1] }}">
+											{% endif %}
+											<img class="bd-placeholder-img card-img-top" width="100%" height="275" src="{{ one.picture }}"/>
+											<div class="card-body">
+												<h5>Caractéristiques</h5>
+												<p class="card-text">- Nombres de portes :
+													{{ one.nbDoor }}</p>
+												<p class="card-text">- Age minimum :
+													{{ one.minAge }}</p>
+												<p class="card-text">
+													<h6>- A partir de
+														{{ one.price }}€ / jour</h6>
+												</p>
+												<div class="d-flex justify-content-between align-items-center">
+													<div class="btn-group">
+														<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.brand.brandName }}
+															{{ one.name }}</button>
+														<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.color.colorname }}</button>
+													</div>
+													<small class="text-body-secondary">
+														{% if one.manual %}
+															Manuelle
+														{% else %}
+															Automatique
+														{% endif %}
+													</small>
 												</div>
-												<small class="text-body-secondary">
-													{% if one.manual %}
-														Manuelle
-													{% else %}
-														Automatique
-													{% endif %}
-												</small>
 											</div>
-										</div>
-									</a>
+										</a>
+									</div>
 								</div>
 							</div>
-						</div>
-					{% endfor %}
+						{% endfor %}
+					</div>
 				</div>
 			</div>
-		</div>
-		<div>
-			<div style="display:flex;justify-content:center;">
-				<form method="post">
-					{% if count != null %}
-						{% for i in 1..count %}
-							<input type="submit" class="btn btn-primary" name="pagination" value="{{ i }}">
-						{% endfor %}
-					{% endif %}
-				</form>
+			<div>
+				<div style="display:flex;justify-content:center;">
+					<form method="post">
+						{% if count != null %}
+							{% for i in 1..count %}
+								<input type="submit" class="btn btn-primary" name="pagination" value="{{ i }}">
+							{% endfor %}
+						{% endif %}
+					</form>
+				</div>
 			</div>
-		</div>
-		<p></p>
-	{% endblock %}
+			<p></p>
+		{% endblock %}
 
-	{% block script %}
-		<script>
-			function test(id) {
+		{% block script %}
+			<script>
+				function test(id) {
 const star = document.getElementById('star' + String(id));
 
 if (star.getAttribute('data-value') == 1) {
@@ -157,5 +159,5 @@ document.getElementById('starValue').value = "1/" + id;
 
 document.getElementById('starValue').click();
 }
-		</script>
-	{% endblock %}
+			</script>
+		{% endblock %}

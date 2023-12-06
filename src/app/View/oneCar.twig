@@ -189,8 +189,8 @@
 {% block script %}
 	<script>
 		function initMap() {
-var myLat = parseFloat("{{ data.location|split(':')[0] }}");
-var myLng = parseFloat("{{ data.location|split(':')[1] }}");
+var myLat = parseFloat("{{ data.location|split(',')[0] }}");
+var myLng = parseFloat("{{ data.location|split(',')[1] }}");
 
 var myLatLng = {
 lat: myLat,
@@ -207,7 +207,7 @@ var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 var marker = new google.maps.Marker({position: myLatLng, map: map, title: 'Localisation'});
 }
 
-{% if reservation != null %}
+{% if reservation.pilote != null %}
 $('#summaryModal').modal('show');{% endif %}
 
 

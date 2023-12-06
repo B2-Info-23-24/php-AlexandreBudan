@@ -9,6 +9,7 @@ use Model\CarModel;
 use Model\ColorModel;
 use Model\FavoriModel;
 use Model\PassengerModel;
+use Model\UserModel;
 
 class CarsController
 {
@@ -28,6 +29,7 @@ class CarsController
         $seeLoad = $twig->load('cars.twig');
 
         $carModel = new CarModel();
+        $userModel = new UserModel();
         $favoriModel = new FavoriModel();
         $brandModel = new BrandModel();
         $colorModel = new ColorModel();
@@ -44,11 +46,6 @@ class CarsController
         } else {
             $data = $carModel->getAllCar();
             $count = ceil(self::$conn->query("SELECT COUNT(*) AS total FROM Car")->fetchColumn() / 9);
-        }
-
-        if (isset($_SESSION['user'])) {
-            $user = $_SESSION['user'];
-            $userFavories = $favoriModel->getAllFavoriOfUser($_SESSION['user']->getId());
         }
 
         switch ($type) {
@@ -74,6 +71,11 @@ class CarsController
         $brands = $brandModel->getAllBrand();
         $colors = $colorModel->getAllColor();
         $passengers = $passengerModel->getAllPassenger();
+
+        if (isset($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+            $userFavories = $favoriModel->getAllFavoriOfUser($_SESSION['user']->getId());
+        }
 
         $see = $seeLoad->render([
             'user' => $user,
