@@ -1,13 +1,13 @@
 run:
-	cd .. && docker-compose up -d --build
-	chmod 777 public/img
-	cd .. && docker-compose exec web php -r "require 'public/db.php'; createDb();"
+	docker-compose up -d && chmod 777 public/img; \
+    echo 'Waiting for mysql to be ready...' && sleep 25; \
+	docker-compose exec web php -r "require 'public/db.php'; createDb();"
 
 initData:
-	cd .. && docker-compose exec web php -r "require 'public/db.php'; createDataFixtures();"
+	docker-compose exec web php -r "require 'public/db.php'; createDataFixtures();"
 
 stop:
-	cd .. && docker-compose down
+	docker-compose down
 
 initP:
 	cd .. && touch Dockerfile
@@ -76,22 +76,4 @@ initP:
 	&& echo 'DB_USERNAME=PTG_user' >> .env \
 	&& echo 'DB_PASSWORD=PTG_password' >> .env \
 	&& echo 'DB_NAME=prendsTaGoDb' >> .env
-
-	touch composer.json \
-	&& echo '{' >> composer.json \
-    && echo '	"require": {' >> composer.json \
-    && echo '    	"vlucas/phpdotenv": "^5.0",' >> composer.json \
-    && echo '    	"twig/twig": "^3.0",' >> composer.json \
-    && echo '    	"fakerphp/faker": "^1.9"' >> composer.json \
-    && echo '	},' >> composer.json \
-    && echo '	"autoload": {' >> composer.json \
-    && echo '    	"psr-4": {' >> composer.json \
-    && echo '        	"Config\\\": "app/Config/",' >> composer.json \
-    && echo '        	"Model\\\": "app/Model/",' >> composer.json \
-    && echo '        	"Controller\\\": "app/Controller/",' >> composer.json \
-    && echo '        	"View\\\": "app/View/",' >> composer.json \
-    && echo '        	"Entity\\\": "app/Entity/"' >> composer.json \
-    && echo '    	}' >> composer.json \
-    && echo '	}' >> composer.json \
-	&& echo '}' >> composer.json
 	composer install
