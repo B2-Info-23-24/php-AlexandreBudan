@@ -30,6 +30,7 @@ Puis lancez votre projet en executant la commande:
 ```bash
 make run
 ```
+Si jamais dans des cas très rare la commande "make run" ne marche pas du premier coup, relancez la une deuxieme fois
 
 Si vous souhaitez generer des Fakes Datas, executez la commande:
 
