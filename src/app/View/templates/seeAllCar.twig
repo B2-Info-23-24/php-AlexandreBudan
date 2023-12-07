@@ -1,0 +1,256 @@
+<div class="album" style="margin-bottom:100px;">
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+				<h1 id="type1" class="fw-light">Véhicules</h1>
+			</div>
+		</div>
+	</section>
+	<p></p>
+	<form method="post">
+		<div id="container-filter">
+			<input type="text" id="search-bar" name="search" placeholder="Recherche...">
+			<p></p>
+			<div class="filter-container">
+				<div class="filters">
+					<label id="texte" , type="price">Prix :</label>
+					<select id="price" name="price">
+						<option value="1000">Tout</option>
+						<option value="0-50">0€ - 50€</option>
+						<option value="50-100">50€ - 100€</option>
+						<option value="100-150">100€ - 150€</option>
+						<option value="150-200">150€ - 200€</option>
+					</select>
+
+					<label id="texte" for="brand">Marque :</label>
+					<select id="brand" name="brand">
+						<option value="0">Tout</option>
+						{% for brand in brands %}
+							<option value="{{ brand.id }}">{{ brand.brandName }}</option>
+						{% endfor %}
+					</select>
+
+					<label id="texte" for="color">Couleur :</label>
+					<select id="color" name="color">
+						<option value="0">Tout</option>
+						{% for color in colors %}
+							<option value="{{ color.id }}">{{ color.colorName }}</option>
+						{% endfor %}
+					</select>
+
+					<label id="texte" for="passengers">Nombre de passagers :</label>
+					<select id="passengers" name="passengers">
+						<option value="0">Tout</option>
+						{% for passenger in passengers %}
+							<option value="{{ passenger.id }}">{{ passenger.number }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<p></p>
+			<div class="save-btn" style="display:flex; justify-content:center;">
+				<button type="submit" name="launch" class="btn btn-primary">Rechercher</button>
+			</div>
+		</div>
+	</form>
+	<p></p>
+	<div class="container bg">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+			{% for one in data %}
+				<div class="admin-card">
+					<div class="col">
+						<div class="card shadow-sm">
+							<img class="bd-placeholder-img card-img-top" width="100%" height="275" src="{{ one.picture }}"/>
+							<div class="card-body">
+								<h5>Caractéristiques</h5>
+								<p class="card-text">- Nombres de portes :
+									{{ one.nbDoor }}</p>
+								<p class="card-text">- Age minimum :
+									{{ one.minAge }}</p>
+								<p class="card-text">
+									<h6>- A partir de
+										{{ one.price }}€ / jour</h6>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.brand.brandName }}
+											{{ one.name }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ one.color.colorname }}</button>
+									</div>
+									<small class="text-body-secondary">
+										{% if one.manual %}
+											Manuelle
+										{% else %}
+											Automatique
+										{% endif %}
+									</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<p></p>
+					<form method="post">
+						<div class="btn-admin">
+							<button name="removeCar" style="background-color:red;" value="{{ one.id }}">Supprimer</button>
+							<button id="modifCar" name="modifCar" style="background-color:blue;" value="{{ one.id }}" onclick="showEditModal()">Modifier</button>
+						</div>
+					</form>
+
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form action="" method="post">
+					<div class="modal-header">
+						<h5 id="type2" class="modal-title">Problème de Suppréssion</h5>
+					</div>
+					<div class="modal-body">
+						Avant de supprimer ce vehicule, veuillez modifier son status et contacter les clients des différentes reservations en cours sur ce véhicule afin de les annuler.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Fermer</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% if error3 == 'error' %}
+		<script>
+			$('#summaryModal').modal('show');
+		</script>
+	{% endif %}
+</div>
+<div class="modal" id="editModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form method="post">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editModalLabel">Modifier les informations</h5>
+				</div>
+				<div class="modal-body">
+					<div id="drop-area" style="border: 2px dashed #ccc; padding: 20px; text-align: center; height: 200px;">
+						<input type="text" class="form-control" name="id" value="{{ oneCar.id }}" style="display:none;"/>
+						<input type="text" class="form-control" name="inputPicture" value="{{ oneCar.picture }}" style="display:none;"/>
+						<input type="file" id="file-input" name="file-input" accept="image/*"/>
+						<img id="preview-image" style="width:100%; height:100%"/>
+					</div>
+
+					<div class="form-group">
+						<label for="name">Nom :</label>
+						<input type="text" class="form-control" id="name" name="name" value="{{ oneCar.name }}">
+					</div>
+
+					<div class="form-group">
+						<label for="nbDoor">Nombre de portes :</label>
+						<input type="number" class="form-control" id="nbDoor" name="nbDoor" value="{{ oneCar.nbDoor }}">
+					</div>
+
+					<div class="form-group">
+						<label for="minAge">Âge minimum :</label>
+						<input type="number" class="form-control" id="minAge" name="minAge" value="{{ oneCar.minAge }}" style="width:100px;">
+					</div>
+
+					<div class="form-group">
+						<label for="passenger">Nombre de passagers maximum :</label>
+						<select class="form-control" id="passenger" name="passenger" style="height:100%">
+							{% for passenger in passengers %}
+								{% if oneCar.passenger.id == passenger.id %}
+									<option value="{{ passenger.id }}" selected>{{ passenger.number }}</option>
+								{% else %}
+									<option value="{{ passenger.id }}">{{ passenger.number }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="brand">Marque :</label>
+						<select class="form-control" id="brand" name="brand" style="height:100%" value="{{ oneCar.brand.brandName }}">
+							{% for brand in brands %}
+								{% if oneCar.brand.id == brand.id %}
+									<option value="{{ brand.id }}" selected>{{ brand.brandName }}</option>
+								{% else %}
+									<option value="{{ brand.id }}">{{ brand.brandName }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="color">Couleur :</label>
+						<select class="form-control" id="color" name="color" style="height:100%" value="{{ oneCar.color.colorName }}">
+							{% for color in colors %}
+								{% if oneCar.color.id == color.id %}
+									<option value="{{ color.id }}" selected>{{ color.colorName }}</option>
+								{% else %}
+									<option value="{{ color.id }}">{{ color.colorName }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="transmition">Transmission :</label>
+						<select class="form-control" id="transmition" name="transmition" style="height:100%">
+							{% if oneCar.manual %}
+								<option value="true" selected>Manuelle</option>
+								<option value="false">Automatique</option>
+							{% else %}
+								<option value="true">Manuelle</option>
+								<option value="false" selected>Automatique</option>
+							{% endif %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="price">Prix à la journée :</label>
+						<input type="number" class="form-control" id="price" name="price" value="{{ oneCar.price }}" style="width:100px;">
+					</div>
+
+					<div class="form-group">
+						<label for="type">Type :</label>
+						<input type="text" class="form-control" id="type" name="type" value="{{ oneCar.type }}">
+					</div>
+
+					<div class="form-group">
+						<label for="location">Location : (En Longitude et Latitude)</label>
+						<input type="text" class="form-control" id="location" name="location" value="{{ oneCar.location }}">
+					</div>
+
+					<div class="form-group">
+						<label for="status">Status :</label>
+						<select class="form-control" id="status" name="status" style="height:100%">
+							{% if oneCar.status == "1" %}
+								<option value="true" selected>True</option>
+								<option value="false">False</option>
+							{% else %}
+								<option value="true">True</option>
+								<option value="false" selected>False</option>
+							{% endif %}
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEditModal()">Fermer</button>
+					<button type="submit" id="saveCar" name="saveCar" class="btn btn-primary">Enregistrer</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	{% if oneCar != null %}
+$('#editModal').modal('show');{% endif %}document.addEventListener('DOMContentLoaded', function () {
+const statusCheckbox = document.getElementById('statuscheck');
+
+// Mettre à jour la valeur lors du changement de l'état de la case
+statusCheckbox.addEventListener('change', function () {
+const statusValue = document.getElementById('status');
+const value = this.checked ? 'true' : 'false';
+statusValue.value = value;
+});
+});
+</script>

@@ -2,6 +2,8 @@
 src/.env
 
 # fichiers et dossiers composer
-src/composer.json
-src/composer.lock
 src/vendor/
+
+# fichiers docker
+docker-compose.yml
+Dockerfile

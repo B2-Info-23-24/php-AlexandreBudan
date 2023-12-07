@@ -1,0 +1,218 @@
+{% extends '/templates/default.html.twig' %}
+
+{% block title %}PrendsTaGo - Une Voiture
+{% endblock %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" href="/assets/onecar.css">
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeq2hPzggF1UpPuHe8A3qao36F9OuAlvc&callback=initMap" defer></script>
+{% endblock %}
+
+{% block content %}
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+				<h1 class="fw-light">{{ data.name }}</h1>
+			</div>
+		</div>
+	</section>
+	<div class="col bg">
+		<div class="card shadow-sm">
+			<img class="bd-placeholder-img card-img-top" src="{{ data.picture }}" alt="Car Photo">
+			<div class="card-body">
+				<form method="post">
+					<h5>Caractéristiques</h5>
+					<p class="card-text">- Nombres de portes :
+						{{ data.nbDoor }}</p>
+					<p class="card-text">- Age minimum :
+						{{ data.minAge }}</p>
+					<p class="card-text">- Nombres de passagers maximum :
+						{{ data.passenger.number }}</p>
+					<div class="d-flex justify-content-between align-items-center">
+						<div class="btn-group">
+							<button type="button" class="btn btn-sm btn-outline-secondary">{{ data.brand.brandName }}</button>
+							<button type="button" class="btn btn-sm btn-outline-secondary">{{ data.color.colorName }}</button>
+						</div>
+						<small class="text-body-secondary">
+							{% if data.manual %}
+								Manuelle
+							{% else %}
+								Automatique
+							{% endif %}
+							-
+							{{ data.type }}</small>
+					</div>
+					<p></p>
+					<h5>Options</h5>
+					<div class="radio-group">
+						<p></p>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="options" id="radio1" value="0" checked>
+							<label class="form-check-label" for="radio1">
+								Pas de protection
+							</label>
+						</div>
+						<p></p>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="options" id="radio2" value="10">
+							<label class="form-check-label" for="radio2">
+								Protection partiel (10 €)
+							</label>
+						</div>
+						<p></p>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="options" id="radio3" value="30">
+							<label class="form-check-label" for="radio3">
+								Protection moyenne (30 €)
+							</label>
+						</div>
+						<p></p>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="options" id="radio4" value="50">
+							<label class="form-check-label" for="radio4">
+								Protection totale (50 €)
+							</label>
+						</div>
+						<p></p>
+					</div>
+					<p></p>
+					<h5>Point de Récupération</h5>
+					<div id="map"></div>
+					<p></p>
+					<h5>Informations du pilote</h5>
+					<div class="form-group">
+						<label for="lname">Nom :</label>
+						<input type="text" id="lname" name="lname" required>
+					</div>
+					<div class="form-group">
+						<label for="fname">Prénom :</label>
+						<input type="text" id="fname" name="fname" required>
+					</div>
+					<div class="form-group">
+						<label for="age">Age :</label>
+						<input type="text" id="age" name="age" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email :</label>
+						<input type="text" id="email" name="email" required>
+					</div>
+					<div class="form-group">
+						<label for="phone">Téléphone :
+						</label>
+						<input type="text" id="phone" name="phone" required>
+					</div>
+					<p></p>
+					<div class="reserv">
+						<button type="submit" class="btn btn-secondary" name="newReservation" data-dismiss="modal">Reserver</button>
+					</div>
+				</form>
+
+				<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Récapitulatif de la réservation</h5>
+							</div>
+							<div class="modal-body">
+								<div>
+									<h4>Informations réservation:</h4>
+									<p>- Date de début :
+										{{ reservation.beginning }}</p>
+									<p>- Date de Fin :
+										{{ reservation.ending }}</p>
+									{% if reservation.protection != true %}
+										{% if reservation.addFees == 10 %}
+											<p>- Protection : Protection Partielle(10€)</p>
+										{% elseif reservation.addFees == 30 %}
+											<p>- Protection : Protection Moyenne(30€)</p>
+										{% elseif reservation.addFees == 50 %}
+											<p>- Protection : Protection Totale(50€)</p>
+										{% endif %}
+									{% endif %}
+								</div>
+								<div>
+									<h4>Caractéristiques:</h4>
+									<p>- Nom de la voiture :
+										{{ reservation.car.name }}</p>
+									<p>- Nombres de portes :
+										{{ reservation.car.nbDpor }}</p>
+									<p>- Age minimum :
+										{{ reservation.car.minAge }}</p>
+									<p>- Nombres de passagers maximum :
+										{{ reservation.car.passenger.number }}</p>
+									<p>- Marque :
+										{{ reservation.car.brand.brandName }}</p>
+									<p>- Couleur :
+										{{ reservation.car.color.colorName }}</p>
+									{% if reservation.car.manual == true %}
+										<p>- Manuelle / Automatique : Manuelle</p>
+									{% else %}
+										<p>- Manuelle / Automatique : Automatique</p>
+									{% endif %}
+								</div>
+								<div>
+									<h4>Récupération:
+										{{ reservation.car.location }}</h4>
+								</div>
+								<div>
+									<h4>Informations Pilote:</h4>
+									<p>- Nom :
+										{{ reservation.pilote.firstName }}</p>
+									<p>- Prénom :
+										{{ reservation.pilote.lastName }}</p>
+									<p>- Age :
+										{{ reservation.pilote.age }}</p>
+									<p>- Email :
+										{{ reservation.pilote.email }}</p>
+									<p>- Téléphone :
+										{{ reservation.pilote.phone }}</p>
+								</div>
+								<div>
+									<h4>Réservation sous le compte :
+										{{ reservation.user.email }}</h4>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<form method="post">
+									<button type="submit" class="btn btn-secondary" name="payer">Payer</button>
+								</form>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Fermer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script>
+		function initMap() {
+var myLat = parseFloat("{{ data.location|split(',')[0] }}");
+var myLng = parseFloat("{{ data.location|split(',')[1] }}");
+
+var myLatLng = {
+lat: myLat,
+lng: myLng
+};
+
+var mapOptions = {
+center: myLatLng,
+zoom: 15
+};
+
+var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+var marker = new google.maps.Marker({position: myLatLng, map: map, title: 'Localisation'});
+}
+
+{% if reservation.pilote != null %}
+$('#summaryModal').modal('show');{% endif %}
+
+
+function closeSummaryModal() {
+$('#summaryModal').modal('hide');
+}
+	</script>
+{% endblock %}

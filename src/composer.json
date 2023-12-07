@@ -1,0 +1,16 @@
+{
+	"require": {
+		"vlucas/phpdotenv": "^5.0",
+		"twig/twig": "^3.0",
+		"fakerphp/faker": "^1.9"
+	},
+	"autoload": {
+		"psr-4": {
+			"Config\\": "app/Config/",
+			"Model\\": "app/Model/",
+			"Controller\\": "app/Controller/",
+			"View\\": "app/View/",
+			"Entity\\": "app/Entity/"
+		}
+	}
+}

@@ -1,0 +1,132 @@
+<section class="py-5 text-center container">
+	<div class="row py-lg-5">
+		<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+			<h1 id="type1" class="fw-light">Ajouter une voiture</h1>
+		</div>
+	</div>
+</section>
+<div class="col bg" style="margin-left:50px; margin-right:50px; margin-bottom:100px;">
+	<form action="" method="post" enctype="multipart/form-data">
+		<div class="card shadow-sm">
+			<div id="drop-area" style="border: 2px dashed #ccc; padding: 20px; text-align: center; height:1000px;">
+				<input type="file" id="file-input" name="file-input" accept="image/*"/>
+				<img id="preview-image" style="width:100%; height:100%"/>
+			</div>
+			<div class="card-body">
+				<h5>Caractéristiques</h5>
+				<div class="form-group">
+					<label for="name">Nom :</label>
+					<input type="text" class="form-control" id="name" name="name" value="M3">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="nbDoor">Nombre de portes :</label>
+					<input type="number" class="form-control" id="nbDoor" name="nbDoor" value="5">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="minAge">Âge minimum :</label>
+					<input type="number" class="form-control" id="minAge" name="minAge" value="21">
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="passenger">Nombre de passagers maximum :</label>
+					<select class="form-control" id="passenger" name="passenger" style="height:100%">
+						{% for passenger in passengers %}
+							<option value="{{ passenger.id }}">{{ passenger.number }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="brand">Marque :</label>
+					<select class="form-control" id="brand" name="brand" style="height:100%">
+						{% for brand in brands %}
+							<option value="{{ brand.id }}">{{ brand.brandName }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="color">Couleur :</label>
+					<select class="form-control" id="color" name="color" style="height:100%">
+						{% for color in colors %}
+							<option value="{{ color.id }}">{{ color.colorName }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="transmition">Transmission :</label>
+					<select class="form-control" id="transmition" name="transmition" style="height:100%">
+						<option value="true">Manuelle</option>
+						<option value="false">Automatique</option>
+					</select>
+				</div>
+				<p></p>
+				<div class="form-group">
+					<label for="price">Prix à la journée :</label>
+					<input type="number" class="form-control" id="price" name="price" value="50">
+				</div>
+				<div class="form-group">
+					<label for="type">Type :</label>
+					<input type="text" class="form-control" id="type" name="type" value="Sportive">
+				</div>
+				<div class="form-group">
+					<label for="location">Location : (En Longitude et Latitude)</label>
+					<input type="text" class="form-control" id="location" name="location" value="-70.700639,-24.414263">
+				</div>
+				<div class="form-group">
+					<label for="status">Status :</label>
+					<select class="form-control" id="status" name="status" style="height:100%">
+						<option value="true" selected>True</option>
+						<option value="false">False</option>
+					</select>
+				</div>
+				<p></p>
+				<div class="save-btn" style="display:flex; justify-content:center;">
+					<button type="submit" name="saveButton" class="btn btn-primary">Enregistrer</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+var fileInput = document.getElementById('file-input');
+var previewImage = document.getElementById('preview-image');
+
+fileInput.addEventListener('change', function () {
+var files = fileInput.files;
+
+if (files.length > 0) {
+var reader = new FileReader();
+
+reader.onload = function (event) {
+var img = new Image();
+img.src = event.target.result;
+img.style.width = '100%';
+img.style.height = '100%';
+
+previewImage.src = img.src;
+
+// Masquer l'input
+fileInput.style.display = 'none';
+};
+
+reader.readAsDataURL(files[0]);
+}
+});
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+const statusCheckbox = document.getElementById('statuscheck');
+const statusValue = document.getElementById('statusValue');
+
+// Mettre à jour la valeur lors du changement de l'état de la case
+statusCheckbox.addEventListener('change', function () {
+statusValue.value = this.checked ? 'true' : 'false';
+});
+});
+</script>

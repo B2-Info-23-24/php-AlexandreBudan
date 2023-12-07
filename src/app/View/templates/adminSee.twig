@@ -1,0 +1,68 @@
+<div>
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+				<h1 id="type1" class="fw-light">{{ type }}</h1>
+			</div>
+		</div>
+	</section>
+	<div id="data-container">
+
+		{% if error == 'error' %}
+			{{ type }}
+			attribué à un véhicule, impossible de le supprimer.
+		{% endif %}
+		<p></p>
+		<ul id="data-list">
+			<form method="post" style="width:100%;">
+				{% for one in data %}
+					<div class="mini-box">
+						{% if one.brandName is defined %}
+							<h5>{{ one.brandName }}</h5>
+							<button type="submit" name="supp" value="brand-{{ one.id }}">❌</button>
+						{% elseif one.colorName is defined %}
+							<h5>{{ one.colorName }}</h5>
+							<button type="submit" name="supp" value="color-{{ one.id }}">❌</button>
+						{% elseif one.number is defined %}
+							<h5>{{ one.number }}</h5>
+							<button type="submit" name="supp" value="passenger-{{ one.id }}">❌</button>
+						{% endif %}
+					</div>
+					<p></p>
+				{% endfor %}
+			</form>
+			<button class="btn-add" onclick="showSummaryModal()">Ajouter</button>
+		</ul>
+	</div>
+	<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form action="" method="post">
+					<div class="modal-header">
+						<h5 id="type2" class="modal-title">Ajouter
+							{{ type }}</h5>
+					</div>
+					<div class="modal-body">
+						<input type="text" name="val" id="summaryModalTitle" class="form-control" aria-describedby="basic-addon1" required>
+					</div>
+					{% if error2 == 'error' %}
+						Déja existant !
+						<script>
+							$('#summaryModal').modal('show');
+						</script>
+					{% endif %}
+					<div class="modal-footer">
+						{% if data[0].brandName is defined %}
+							<button id="btnValue" type="submit" class="btn btn-secondary" data-dismiss="modal" name="add" value="brand">Ajouter</button>
+						{% elseif data[0].colorName is defined %}
+							<button id="btnValue" type="submit" class="btn btn-secondary" data-dismiss="modal" name="add" value="color">Ajouter</button>
+						{% elseif data[0].number is defined %}
+							<button id="btnValue" type="submit" class="btn btn-secondary" data-dismiss="modal" name="add" value="passenger">Ajouter</button>
+						{% endif %}
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeSummaryModal()">Fermer</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

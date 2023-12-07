@@ -1,0 +1,108 @@
+<div>
+	<section class="py-5 text-center container">
+		<div class="row py-lg-5">
+			<div id="texte" class="col-lg-6 col-md-8 mx-auto">
+				<h1 id="type1" class="fw-light">Utilisateurs</h1>
+			</div>
+		</div>
+	</section>
+	<div id="data-container">
+		<ul id="data-list">
+			{% for one in data %}
+				<form method="post" style="width:100%">
+					{% if one.status == true %}
+						<div class="mini-box">
+							<h5>{{ one.email }}</h5>
+							<button type="submit" id="modifUser" name="modifUser" value="{{ one.id }}">Modifier</button>
+							<h6 style="color:green">Status : 1</h6>
+							<button type="submit" name="suppUser" value="{{ one.id }}">❌</button>
+						</div>
+						<p></p>
+					{% else %}
+						<div class="mini-box">
+							<h5>{{ one.email }}</h5>
+							<button type="submit" id="modifUser" name="modifUser" value="{{ one.id }}">Modifier</button>
+							<h6 style="color:red">Status : 0</h6>
+							<button type="submit" name="unSuppUser" value="{{ one.id }}">✅</button>
+						</div>
+						<p></p>
+					{% endif %}
+				</form>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content userModal">
+				<h1>Informations Personnelles</h1>
+				<div class="box">
+					<div class="box-body">
+						<label for="fname">Prénom :</label>
+						<label class="box-label" for="fname">{{ oneUser.firstName }}</label>
+					</div>
+					<div class="box-body">
+						<label for="lname">Nom :</label>
+						<label class="box-label" for="lname">{{ oneUser.lastName }}</label>
+					</div>
+				</div>
+				<p></p>
+				<div class="box">
+					<div class="box-body">
+						<label for="fname">Email :</label>
+						<label class="box-label" for="fname">{{ oneUser.email }}</label>
+					</div>
+				</div>
+				<p></p>
+				<div class="box">
+					<button id="modifNP" name="ModifMdp">Modifier Nom et Prénom</button>
+				</div>
+				<p></p>
+				<div id="form-NP" class="hidden">
+					<form method="post">
+						<h2>Modifier nom et prénom</h2>
+						<div class="form-group">
+							<label for="firstName">Prénom :</label>
+							<input type="text" id="firstName" name="firstName" value="{{ oneUser.firstName }}" required>
+						</div>
+						<div class="form-group">
+							<label for="lastName">Nom :</label>
+							<input type="text" id="lastName" name="lastName" value="{{ oneUser.lastName }}" required>
+						</div>
+						<button type="submit" name="NP" value="{{ oneUser.id }}">Enregistrer</button>
+					</form>
+				</div>
+				<p></p>
+				<div class="box">
+					<div class="box-body">
+						<label for="phone">Téléphone :</label>
+						<label class="box-label" for="phone">{{ oneUser.phone }}</label>
+					</div>
+					<div class="box-body">
+						<label for="gender">Genre :</label>
+						<label class="box-label" for="gender">{{ oneUser.gender }}</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var formNP = document.getElementById('form-NP');
+var modifNP = document.getElementById('modifNP');
+var formAdd = document.getElementById('form-add');
+var modifAdd = document.getElementById('modifAdd');
+
+modifNP.addEventListener("click", function (event) {
+if (formNP.classList.contains('hidden')) {
+formNP.classList.remove('hidden');
+if (!formMdp.classList.contains('hidden')) {
+formMdp.classList.add('hidden');
+}
+if (! formAdd.classList.contains('hidden')) {
+formAdd.classList.add('hidden');
+}
+} else {
+formNP.classList.add('hidden');
+}
+});{% if oneUser != null %}$('#summaryModal').modal('show');{% endif %}
+</script>

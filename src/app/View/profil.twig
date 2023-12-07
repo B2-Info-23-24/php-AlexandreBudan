@@ -1,0 +1,417 @@
+{% extends '/templates/default.html.twig' %}
+
+{% block title %}
+	PrendsTaGo - Profil
+{% endblock %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" href="/assets/profil.css">
+{% endblock %}
+
+{% block content %}
+	<div class="containerBox bg">
+		<h1>Informations Personnelles</h1>
+		<div class="box">
+			<div class="box-body">
+				<label for="fname">Prénom :</label>
+				<label class="box-label" for="fname">{{ user.firstName }}</label>
+			</div>
+			<div class="box-body">
+				<label for="lname">Nom :</label>
+				<label class="box-label" for="lname">{{ user.lastName }}</label>
+			</div>
+		</div>
+		<p></p>
+		<div class="box">
+			<div class="box-body">
+				<label for="fname">Email :</label>
+				<label class="box-label" for="fname">{{ user.email }}</label>
+			</div>
+		</div>
+		<p></p>
+		<div class="box">
+			<button id="modifNP" name="ModifMdp">Modifier Nom et Prénom</button>
+		</div>
+		<p></p>
+		<div id="form-NP" class="hidden">
+			<form action="" method="post">
+				<h2>Modifier nom et prénom</h2>
+				<div class="form-group">
+					<label for="firstName">Prénom :</label>
+					<input type="text" id="firstName" name="firstName" value="{{ user.firstName }}" required>
+				</div>
+				<div class="form-group">
+					<label for="lastName">Nom :</label>
+					<input type="text" id="lastName" name="lastName" value="{{ user.lastName }}" required>
+				</div>
+				<button type="submit" name="NP">Enregistrer</button>
+			</form>
+		</div>
+		<p></p>
+		<div class="box">
+			<div class="box-body">
+				<label for="phone">Téléphone :</label>
+				<label class="box-label" for="phone">{{ user.phone }}</label>
+			</div>
+			<div class="box-body">
+				<label for="gender">Genre :</label>
+				<label class="box-label" for="gender">{{ user.gender }}</label>
+			</div>
+		</div>
+		<p></p>
+		<div class="box">
+			<button id="ModifMdp" name="ModifMdp">Modifier Mot de passe</button>
+		</div>
+		{% if error == "error" %}
+			Mauvais Mot De Passe
+		{% endif %}
+		<p></p>
+		<div id="form-mdp" class="hidden">
+			<form action="" method="post">
+				<h2>Modifier mot de passe</h2>
+				<div class="form-group">
+					<label for="currentPass">Mot de passe actuel :</label>
+					<input type="password" id="currentPass" name="currentPass" required>
+				</div>
+				<div class="form-group">
+					<label for="newPass">Nouveau mot de passe :</label>
+					<input type="password" id="newPass" name="newPass" required>
+				</div>
+				<button type="submit" name="mdp">Enregistrer</button>
+			</form>
+		</div>
+		<p></p>
+		<div class="address">
+			<h2>Adresse enregistrée</h2>
+			<div class="box">
+				<div class="box-body">
+					<label for="address">Adresse :</label>
+					<label class="box-label" for="address">{{ user.address.address }}</label>
+				</div>
+				<div class="box-body">
+					<label for="city">Ville :</label>
+					<label class="box-label" for="city">{{ user.address.city }}</label>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-body">
+					<label for="postalCode">Code Postal :</label>
+					<label class="box-label" for="postalCode">{{ user.address.code }}</label>
+				</div>
+				<div class="box-body">
+					<label for="country">Pays :</label>
+					<label class="box-label" for="country">{{ user.address.country }}</label>
+				</div>
+			</div>
+			<p></p>
+			<div class="box">
+				<button id="modifAdd" name="modifAdd">Modifier Adresse</button>
+			</div>
+			<p></p>
+			<div id="form-add" class="hidden">
+				<form method="post">
+					<h2>Modifier adresse</h2>
+					<div class="form-group">
+						<label for="address">Adresse :</label>
+						<input type="text" id="address" name="address" required>
+					</div>
+					<div class="form-group">
+						<label for="city">Ville :</label>
+						<input type="text" id="city" name="city" required>
+					</div>
+					<div class="form-group">
+						<label for="postalCode">Code postal :</label>
+						<input type="text" id="postalCode" name="postalCode" required>
+					</div>
+					<div class="form-group">
+						<label for="country">Pays :</label>
+						<input type="text" id="country" name="country" required>
+					</div>
+					<button type="submit" name="add">Enregistrer</button>
+				</form>
+			</div>
+		</div>
+		<p></p>
+		<div class="reservation">
+			<p></p>
+			<h2>Réservations</h2>
+			<div class="container-fav">
+				{% for reservation in user.reservations %}
+					<div class="boxbox">
+						<div class="card shadow-sm">
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ reservation.car.picture }}">
+							<div class="card-body">
+								<h5>Informations Reservation</h5>
+								<p class="card-text">- Début :
+									{{ reservation.beginning }}</p>
+								<p class="card-text">- Fin :
+									{{ reservation.ending }}</p>
+								<p class="card-text">
+									<h6>- Coût :
+										{{ reservation.price | number_format(2, '.', ',') }}
+										€</h6>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ reservation.car.brand.brandName }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ reservation.car.color.colorName }}</button>
+									</div>
+									<small class="text-body-secondary">
+										{% if reservation.ending > "now"|date %}
+											Terminé
+										{% elseif reservation.beginning < "now"|date %}
+											Pas commencé
+										{% else %}
+											En cours
+										{% endif %}
+									</small>
+								</div>
+								<p></p>
+								<form method="post">
+									{% if reservation.ending > "now"|date %}
+										{% set hasOpinion = false %}
+										{% for opinion in user.opinions %}
+											{% if opinion.reservationId == reservation.id %}
+												{% set hasOpinion = true %}
+											{% endif %}
+										{% endfor %}
+										{% if not hasOpinion %}
+											<div class="ctr">
+												<button type="submit" id="createOpinion" name="createOpinion" value="{{ reservation.id }}-{{ reservation.car.id }}">Laisser un commentaire</button>
+											</div>
+										{% endif %}
+									{% elseif reservation.beginning < "now"|date %}
+										<div class="ctr">
+											<button type="submit" name="deleteResa" value="{{ reservation.id }}-{{ reservation.car.id }}">Annuler la reservation (Irreversible)</button>
+										</div>
+									{% endif %}
+									<p></p>
+									<div class="ctr">
+										<button id="showResa" name="showResa" value="{{ reservation.id }}">Voir la réservation</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<p></p>
+		<div class="favoris">
+			<h2>Favoris</h2>
+			<div class="container-fav">
+				<form method="post" id="starForm" style="display:none;">
+					<input type="submit" id="starValue" name="starValue" value="0">
+				</form>
+				{% for favori in user.favoris %}
+					<div class="boxbox">
+						<div class="card shadow-sm">
+							<div class="star yellow" id="star{{ favori.car.id }}" onclick="test({{ favori.car.id }})" data-value="1">&#9733;</div>
+							<img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ favori.car.picture }}">
+							<div class="card-body">
+								<h5>Caractéristiques</h5>
+								<p class="card-text">- Nombres de portes :
+									{{ favori.car.nbDoor }}</p>
+								<p class="card-text">- Age minimum :
+									{{ favori.car.minAge }}</p>
+								<p class="card-text">
+									<h6>- A partir de
+										{{ favori.car.price | number_format(2, '.', ',') }}
+										€ / jour</h6>
+								</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.brand.brandName }}</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary">{{ favori.car.color.colorName }}</button>
+									</div>
+									<small class="text-body-secondary">
+										{% if favori.car.manual %}
+											Manuelle
+										{% else %}
+											Automatique
+										{% endif %}
+									</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="modal" id="summaryModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Récapitulatif de la réservation</h5>
+					</div>
+					<div class="modal-body">
+						<div>
+							<h4>Informations réservation:</h4>
+							<p>- Date de début :
+								{{ reservation.beginning }}</p>
+							<p>- Date de Fin :
+								{{ reservation.ending }}</p>
+							{% if reservation.protection == true %}
+								{% if reservation.addFees == 10 %}
+									<p>- Protection : Protection Partielle(10€)</p>
+								{% elseif reservation.addFees == 30 %}
+									<p>- Protection : Protection Moyenne(30€)</p>
+								{% else %}
+									<p>- Protection : Protection Total(50€)</p>
+								{% endif %}
+							{% else %}
+								<p>- Protection : Aucune Protection</p>
+							{% endif %}
+						</div>
+						<div>
+							<h4>Caractéristiques:</h4>
+							<p>- Nom de la voiture :
+								{{ reservation.car.name }}</p>
+							<p>- Nombres de portes :
+								{{ reservation.car.nbDoor }}</p>
+							<p>- Age minimum :
+								{{ reservation.car.minAge }}</p>
+							<p>- Nombres de passagers maximum :
+								{{ reservation.car.passenger.number }}</p>
+							<p>- Marque :
+								{{ reservation.car.brand.brandName }}</p>
+							<p>- Couleur :
+								{{ reservation.car.color.colorName }}</p>
+							{% if reservation.car.manual == true %}
+								<p>- Manuelle / Automatique : Manuelle</p>
+							{% else %}
+								<p>- Manuelle / Automatique : Automatique</p>
+							{% endif %}
+						</div>
+						<div>
+							<h4>Récupération:
+								{{ reservation.car.location }}</h4>
+						</div>
+						<div>
+							<h4>Informations Pilote:</h4>
+							<p>- Nom :
+								{{ reservation.pilote.lastName }}</p>
+							<p>- Prénom :
+								{{ reservation.pilote.firstName }}</p>
+							<p>- Age :
+								{{ reservation.pilote.age }}</p>
+							<p>- Email :
+								{{ reservation.pilote.email }}</p>
+							<p>- Téléphone :
+								{{ reservation.pilote.phone }}</p>
+						</div>
+						<div>
+							<h4>Réservation sous le compte :
+								{{ reservation.user.email }}</h4>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeResa">Fermer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal" id="editModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<form method="post">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Commentaire de la réservation</h5>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="rating">Note sur 5 :</label>
+								<input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+							</div>
+							<div class="form-group">
+								<label for="comment">Commentaire :</label>
+								<textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary" name"create">Valider</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeReview">Fermer</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<form method="post">
+			<div style="display:flex; justify-content:center;">
+				<button type="submit" style="background-color:red;">Deconnecter</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script>
+		var formNP = document.getElementById('form-NP');
+var modifNP = document.getElementById('modifNP');
+var formMdp = document.getElementById('form-mdp');
+var modifMdp = document.getElementById('modifMdp');
+var formAdd = document.getElementById('form-add');
+var modifAdd = document.getElementById('modifAdd');
+
+modifNP.addEventListener("click", function (event) {
+if (formNP.classList.contains('hidden')) {
+formNP.classList.remove('hidden');
+if (! formMdp.classList.contains('hidden')) {
+formMdp.classList.add('hidden');
+}
+if (! formAdd.classList.contains('hidden')) {
+formAdd.classList.add('hidden');
+}
+} else {
+formNP.classList.add('hidden');
+}
+});
+
+ModifMdp.addEventListener("click", function (event) {
+if (formMdp.classList.contains('hidden')) {
+formMdp.classList.remove('hidden');
+if (! formNP.classList.contains('hidden')) {
+formNP.classList.add('hidden');
+}
+if (! formAdd.classList.contains('hidden')) {
+formAdd.classList.add('hidden');
+}
+} else {
+formMdp.classList.add('hidden');
+}
+});
+
+modifAdd.addEventListener("click", function (event) {
+if (formAdd.classList.contains('hidden')) {
+formAdd.classList.remove('hidden');
+if (! formMdp.classList.contains('hidden')) {
+formMdp.classList.add('hidden');
+}
+if (! formNP.classList.contains('hidden')) {
+formNP.classList.add('hidden');
+}
+} else {
+formAdd.classList.add('hidden');
+}
+});{% if reservation != null %}$('#summaryModal').modal('show');{% endif %};
+
+var closeResa = document.getElementById('closeResa');
+closeResa.addEventListener("click", function (event) {
+$('#summaryModal').modal('hide');
+});{% if opinion != null %}$('#editModal').modal('show');{% endif %}var closeReview = document.getElementById('closeReview');
+closeReview.addEventListener("click", function (event) {
+$('#editModal').modal('hide');
+});
+function test(id) {
+const star = document.getElementById('star' + String(id));
+
+star.classList.remove('yellow');
+
+star.setAttribute('data-value', 0);
+
+document.getElementById('starValue').value = id;
+
+document.getElementById('starValue').click();
+}
+	</script>
+{% endblock %}

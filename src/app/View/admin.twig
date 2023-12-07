@@ -1,0 +1,151 @@
+{% extends "/templates/default.html.twig" %}
+
+{% block title %}PrendsTaGo - DashBoard
+{% endblock %}
+
+{% block style %}style="overflow: hidden;"
+{% endblock %}
+
+{% block stylesheet %}<link rel="stylesheet" href="/assets/admin.css">
+{% endblock %}
+
+{% block content %}
+	<div class="container-box">
+		<div class="flex-shrink-0 p-3 bg-dark" style="width: 250px; height: 100%;">
+			<a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+				<img src="/img/logo.png" width="30" height="24">
+				<p></p>
+				<span id="texte" class="fs-5 fw-semibold" style="margin-left: 5px;">Menu</span>
+			</a>
+			<ul class="list-unstyled ps-0">
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#brand-collapse" aria-expanded="true">
+						Marques
+					</button>
+					<div class="collapse show" id="brand-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="seeBrand">Tout voir</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#color-collapse" aria-expanded="true">
+						Couleurs
+					</button>
+					<div class="collapse show" id="color-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="seeColor">Tout voir</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#passenger-collapse" aria-expanded="true">
+						Passagers
+					</button>
+					<div class="collapse show" id="passenger-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="seePassenger">Tout voir</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#vehicle-collapse" aria-expanded="true">
+						Vehicules
+					</button>
+					<div class="collapse show" id="vehicle-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="allCar">Tout voir</button>
+								</li>
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="addCar">Ajouter</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#user-collapse" aria-expanded="true">
+						Utilisateurs
+					</button>
+					<div class="collapse show" id="user-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="allUsers">Tout voir</button>
+								</li>
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="addUser">Ajouter</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#opinion-collapse" aria-expanded="true">
+						Avis
+					</button>
+					<div class="collapse show" id="opinion-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="allOpinion">Tout voir</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+				<li class="mb-1">
+					<button id="texte" class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#reservation-collapse" aria-expanded="true">
+						Reservations
+					</button>
+					<div class="collapse show" id="reservation-collapse">
+						<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+							<form method="post" action="">
+								<li>
+									<button id="texte" class="bg-dark" type="submit" name="allResa">Tout voir</button>
+								</li>
+							</form>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="body-container" style="overflow: auto;">
+			{{ see|raw }}
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script>
+		function showSummaryModal() {
+$('#summaryModal').modal('show');
+}
+
+function showEditModal() {
+$('#editModal').modal('show');
+}
+function closeEditModal() {
+$('#editModal').modal('hide');
+}
+
+function closeSummaryModal() {
+$('#summaryModal').modal('hide');
+}
+	</script>
+{% endblock %}

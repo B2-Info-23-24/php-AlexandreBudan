@@ -1,0 +1,47 @@
+{% extends '/templates/default.html.twig' %}
+
+{% block title %}PrendsTaGo - Home
+{% endblock %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" href="/assets/home.css">
+{% endblock %}
+
+{% block content %}
+	<div class="bg">
+		<div class="reservation-form">
+			<h2>Réserver une voiture</h2>
+			<form method="post">
+				<div class="form-group">
+					<label for="start-date">Date de début :</label>
+					<input type="datetime-local" id="start-date" name="beginning" min="<?= date('Y-m-d\TH:i', strtotime('+1 day')) ?>" required>
+					{% if error1 == "error" %}
+						<p class="error">La date de début doit être supérieure à la date actuelle et un jour</p>
+					{% endif %}
+				</div>
+				<div class="form-group">
+					<label for="end-date">Date de fin :</label>
+					<input type="datetime-local" id="end-date" name="ending" min="<?= date('Y-m-d\TH:i', strtotime('+2 day')) ?>" required>
+					{% if error2 == "error" %}
+						<p class="error">La date de fin doit être supérieure à la date de début et un jour</p>
+					{% endif %}
+				</div>
+				<div class="form-group">
+					<label for="location">Lieu (format : 45.7485434,4.8231329) :</label>
+					<input type="text" id="location" name="location" pattern="\d{1,2}\.\d+, ?\d{1,2}\.\d+" title="Format attendu : latitude,longitude" placeholder="Entrez votre lieu de réservation" required>
+				</div>
+				<div class="form-group">
+					<label for="param">Perimetre de Recherche :</label>
+					<select class="form-control" id="param" name="param" style="height:100%; width:80px">
+						<option value="10" selected>10 km</option>
+						<option value="50">50 km</option>
+						<option value="100">100 km</option>
+						<option value="200">200 km</option>
+						<option value="500">500 km</option>
+					</select>
+				</div>
+				<input type="submit" value="Réserver">
+			</form>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends '/templates/default.html.twig' %}
+
+{% block title %}PrendsTaGo - Inscription
+{% endblock %}
+
+{% block stylesheet %}
+	<link rel="stylesheet" href="/assets/register.css">
+{% endblock %}
+
+{% block content %}
+	<div class="containerBox bg">
+		{% if error == "error" %}
+			L'email existe déjà sous un autre compte ->
+			<a href="/connexion">Se connecter</a>
+		{% endif %}
+		<h1>Inscription</h1>
+		<form method="post">
+			<div class="form-group">
+				<label for="firstName">Prénom :</label>
+				<input type="text" id="firstName" name="firstName" pattern="[A-Z][a-z]{,20}" required>
+			</div>
+			<div class="form-group">
+				<label for="lastName">Nom :</label>
+				<input type="text" id="lastName" name="lastName" pattern="[A-Z][a-z]{,20}" required>
+			</div>
+			<div class="form-group">
+				<label for="email">Email :</label>
+				<input type="email" id="email" name="email" required>
+			</div>
+			<div class="form-group">
+				<label for="password">Mot de passe :</label>
+				<input type="password" id="password" name="password" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$" required>
+				<ul>
+					<li>Au moins une Lettre, un chiffre</li>
+					<li>Au moins un caractère spécial</li>
+					<li>Minimum 8 charactères</li>
+				</ul>
+			</div>
+			<div class="form-group">
+				<label for="phone">Téléphone :</label>
+				<input type="phone" id="phone" name="phone" pattern="^0[1-9] \d{2} \d{2} \d{2} \d{2}$" placeholder="00 00 00 00 00" required>
+				<ul>
+					<li>Respectez le format: 00 00 00 00 00</li>
+				</ul>
+			</div>
+			<div class="form-group">
+				<label for="age">Âge :</label>
+				<input type="age" id="age" name="age" pattern="[0-9]{,3}" required>
+			</div>
+			<div class="form-group">
+				<label for="gender">Genre :</label>
+				<select type="gender" id="gender" name="gender" required>
+					<option value="homme">Homme</option>
+					<option value="femme">Femme</option>
+					<option value="autre">Autre</option>
+				</select>
+			</div>
+			<h2>Adresse</h2>
+			<div class="form-group">
+				<label for="address">Adresse :</label>
+				<input type="text" id="address" name="address" required>
+			</div>
+			<div class="form-group">
+				<label for="city">Ville :</label>
+				<input type="text" id="city" name="city" required>
+			</div>
+			<div class="form-group">
+				<label for="postalCode">Code postal :</label>
+				<input type="text" id="postalCode" name="postalCode" required>
+			</div>
+			<div class="form-group">
+				<label for="country">Pays :</label>
+				<input type="text" id="country" name="country" required>
+			</div>
+			<button type="submit">S'inscrire</button>
+		</form>
+	</div>
+{% endblock %}

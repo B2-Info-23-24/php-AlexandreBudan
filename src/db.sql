@@ -2,13 +2,24 @@
 -- Base de données : `prendsTaGoDb`
 --
 
+DROP TABLE IF EXISTS `Pilote`;
+DROP TABLE IF EXISTS `Opinion`;
+DROP TABLE IF EXISTS `Favori`;
+DROP TABLE IF EXISTS `UnvailableDate`;
+DROP TABLE IF EXISTS `Reservation`;
+DROP TABLE IF EXISTS `User`;
+DROP TABLE IF EXISTS `Car`;
+DROP TABLE IF EXISTS `Address`;
+DROP TABLE IF EXISTS `Brand`;
+DROP TABLE IF EXISTS `Color`;
+DROP TABLE IF EXISTS `Passenger`;
+
 -- --------------------------------------------------------
 
 --
 -- Structure de la table `Adress`
 --
 
-DROP TABLE IF EXISTS `Address`;
 CREATE TABLE IF NOT EXISTS `Address` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `address` VARCHAR(255) NOT NULL,
@@ -24,13 +35,12 @@ CREATE TABLE IF NOT EXISTS `Address` (
 -- Structure de la table `User`
 --
 
-DROP TABLE IF EXISTS `User`;
 CREATE TABLE IF NOT EXISTS `User` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `email` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `firstName` VARCHAR(255) NOT NULL,
-    `lastName` VARCHAR(255) NOT NULL,
+    `firstName` VARCHAR(20) NOT NULL,
+    `lastName` VARCHAR(20) NOT NULL,
     `phone` VARCHAR(20) NOT NULL,
     `age` INT NOT NULL,
     `gender` VARCHAR(10) NOT NULL,
@@ -49,10 +59,9 @@ CREATE TABLE IF NOT EXISTS `User` (
 -- Structure de la table `Brand`
 --
 
-DROP TABLE IF EXISTS `Brand`;
 CREATE TABLE IF NOT EXISTS `Brand` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL
+    `brandName` VARCHAR(50) NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -61,10 +70,9 @@ CREATE TABLE IF NOT EXISTS `Brand` (
 -- Structure de la table `Color`
 --
 
-DROP TABLE IF EXISTS `Color`;
 CREATE TABLE IF NOT EXISTS `Color` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL
+    `colorName` VARCHAR(50) NOT NULL
 );
 
 -- --------------------------------------------------------
@@ -73,7 +81,6 @@ CREATE TABLE IF NOT EXISTS `Color` (
 -- Structure de la table `Passenger`
 --
 
-DROP TABLE IF EXISTS `Passenger`;
 CREATE TABLE IF NOT EXISTS `Passenger` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `number` INT NOT NULL
@@ -85,19 +92,19 @@ CREATE TABLE IF NOT EXISTS `Passenger` (
 -- Structure de la table `Car`
 --
 
-DROP TABLE IF EXISTS `Car`;
 CREATE TABLE IF NOT EXISTS `Car` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
     `brandId` INT NOT NULL,
     `colorId` INT NOT NULL,
     `passengerId` INT NOT NULL,
-    `price` INT NOT NULL,
+    `picture` VARCHAR(255) NOT NULL,
+    `price` FLOAT NOT NULL,
     `manual` TINYINT NOT NULL,
-    `type` VARCHAR(255) NOT NULL,
+    `type` VARCHAR(20) NOT NULL,
     `minAge` INT,
     `nbDoor` INT NOT NULL,
-    `location` VARCHAR(255),
+    `location` VARCHAR(50),
     `status` TINYINT NOT NULL,
     FOREIGN KEY (`brandId`) REFERENCES `Brand`(`id`),
     FOREIGN KEY (`colorId`) REFERENCES `Color`(`id`),
@@ -110,7 +117,6 @@ CREATE TABLE IF NOT EXISTS `Car` (
 -- Structure de la table `UnvailableDate`
 --
 
-DROP TABLE IF EXISTS `UnvailableDate`;
 CREATE TABLE IF NOT EXISTS `UnvailableDate` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `carId` INT NOT NULL,
@@ -125,7 +131,6 @@ CREATE TABLE IF NOT EXISTS `UnvailableDate` (
 -- Structure de la table `Favori`
 --
 
-DROP TABLE IF EXISTS `Favori`;
 CREATE TABLE IF NOT EXISTS `Favori` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `carId` INT NOT NULL,
@@ -138,40 +143,21 @@ CREATE TABLE IF NOT EXISTS `Favori` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Commentary`
---
-
-DROP TABLE IF EXISTS `Commentary`;
-CREATE TABLE IF NOT EXISTS `Commentary` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `carId` INT NOT NULL,
-    `userId` INT NOT NULL,
-    `commentary` TEXT NOT NULL,
-    `rank` INT NOT NULL,
-    `creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    `status` TINYINT NOT NULL,
-    FOREIGN KEY (`carId`) REFERENCES `Car`(`id`),
-    FOREIGN KEY (`userId`) REFERENCES `User`(`id`)
-);
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `Reservation`
 --
 
-DROP TABLE IF EXISTS `Reservation`;
 CREATE TABLE IF NOT EXISTS `Reservation` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `carId` INT NOT NULL,
     `userId` INT NOT NULL,
+    `hash` VARCHAR(255) NOT NULL,
     `protection` TINYINT NOT NULL,
-    `price` INT NOT NULL,
+    `price` FLOAT NOT NULL,
     `beginning` DATE NOT NULL,
     `ending` DATE NOT NULL,
     `finish` TINYINT NOT NULL,
-    `beginningState` VARCHAR(255) NOT NULL,
-    `endingState` VARCHAR(255) NOT NULL,
+    `beginningState` VARCHAR(255),
+    `endingState` VARCHAR(255),
     `addFees` FLOAT,
     `status` TINYINT NOT NULL,
     FOREIGN KEY (`carId`) REFERENCES `Car`(`id`),
@@ -181,16 +167,37 @@ CREATE TABLE IF NOT EXISTS `Reservation` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `Opinion`
+--
+
+CREATE TABLE IF NOT EXISTS `Opinion` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `carId` INT NOT NULL,
+    `userId` INT NOT NULL,
+    `reservationId` INT NOT NULL,
+    `commentary` TEXT NOT NULL,
+    `rank` INT NOT NULL,
+    `creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    `status` TINYINT NOT NULL,
+    FOREIGN KEY (`carId`) REFERENCES `Car`(`id`),
+    FOREIGN KEY (`userId`) REFERENCES `User`(`id`),
+    FOREIGN KEY (`reservationId`) REFERENCES `Reservation`(`id`)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `Pilote`
 --
 
-DROP TABLE IF EXISTS `Pilote`;
 CREATE TABLE IF NOT EXISTS `Pilote` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `reservationId` INT NOT NULL,
-    `firstName` VARCHAR(255) NOT NULL,
-    `lastName` VARCHAR(255) NOT NULL,
+    `firstName` VARCHAR(20) NOT NULL,
+    `lastName` VARCHAR(20) NOT NULL,
+    `age` INT NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(20) NOT NULL,
+    `phone` VARCHAR(25) NOT NULL,
+    `status` TINYINT NOT NULL,
     FOREIGN KEY (`reservationId`) REFERENCES `Reservation`(`id`)
 );
